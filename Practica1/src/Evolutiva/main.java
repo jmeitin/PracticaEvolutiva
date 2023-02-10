@@ -7,7 +7,12 @@ import org.math.plot.*;
 public class main {
 	
 	public static void main(String args[]) {
-		//System.out.println("Practica 1");
+		//System.out.println("Practica 1 Ejecuto correctamente");
+		
+		// TEORIA PARA LA NOMENCLATURA:
+		// n GENERACIONES, s DESCENDIENTES por iteracion
+		// El Cromosoma (0010) tiene 4 GENES, con LOCUS/posiciones (0, 1, 2, 3) & ALELOS/valores (0, 1, 0, 0)
+		// El FENOTIPO de 0100 es 4
 		
 //		double[] generaciones = { 1, 2, 3, 4, 5, 6, 7, 8, 9 ,10 };
 //		double[] fitness = { 12, 25, 32, 45, 65, 67 , 70, 72, 73, 76};
@@ -24,18 +29,46 @@ public class main {
 //		frame.setVisible(true);
 		
 		run();
+		System.out.println("Practica 1 Ejecuto correctamentee");
 	}
 	
 	private static void run()
 	{
-//		Iniciar poblacion
-//		Evaluar población
-//		Para cada generación {
-		//Seleccion
-		//Cruce
-		//Mutacion
-//		evaluar población
-//		}
-//		Devolver mejor
+		
+		int t=0;
+		int MAX_NUM_GENERACIONES = 10;
+		Boolean condicion = false;
+		//igual no tiene que ser en paralelo? seria un array p [t]
+		// Generar poblacion =  inicial(P(t));
+		// Evaluar población(P(t)) en paralelo;
+		
+		// Para cada generacion
+		while ((t < MAX_NUM_GENERACIONES) && !condicion) {
+			t++;
+			//Selecccion---------------------
+//			Poblacion(t) = Selección(P(t-1));
+//			//Cruce---------------------
+//			Reproducción(P(t));;
+//			//Mutacion---------------------
+//			Mutacion(P(t));
+//			//Evaluar---------------------
+//			Evaluar población(P(t)) en paralelo;
+		}
+		
+		//Devolver mejor
 	}
+	
+	
+//	public void mutacion(double probMutacion, Random r) {
+//		boolean cambios = false;
+//		for (int i=0; i < cromosoma.length; i++) {
+//			if (r.nextDouble() < probMutacion) {
+//				bits[i] = r.nextBoolean();
+//				cambios = true;
+//			}
+//		}
+//		if (cambios) {
+//			refrescaFenotipo();
+//		}
+//	}
 }
