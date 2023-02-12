@@ -28,14 +28,18 @@ public class GeneticAlgorithm<T, U> {
 		this.poblation = new Chromosome[poblation_size];
 	}
 
-	public void InitializePoblation() {
+	public void initializePoblation() {
 		for (int i = 0; i < poblation_size; i++)
 			poblation[i] = createChromosome();
 	}
-	
+
 	// Shorthand to ChromosomeFactory
-	private Chromosome<T, U> createChromosome()
-	{
+	private Chromosome<T, U> createChromosome() {
 		return chromosomeFactory.createChromosome(tolerance, dimensions);
+	}
+	
+	public void run()
+	{
+		System.out.println("Practica 1 Ejecuto correctamentee");
 	}
 }

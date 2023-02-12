@@ -11,9 +11,10 @@ import java.util.List;
  */
 public abstract class Chromosome<T,U> {
 	protected List<Gene<T>> genes;
-	protected List<U> fenotypes;
+	protected U fenotype;
 	
 	protected double fitness;
+	protected double brute_fitness;
 	protected double score;
 	protected double scoreAccumulated;
 	
@@ -78,4 +79,14 @@ public abstract class Chromosome<T,U> {
 	public void setFitness(double fitness) {
 		this.fitness = fitness;
 	}
+	
+	public double getBruteFitness() {
+		return brute_fitness;
+	}
+
+	public void setBruteFitness(double brute_fitness) {
+		this.brute_fitness = brute_fitness;
+	}
+
+	public abstract U getFenotype();
 }

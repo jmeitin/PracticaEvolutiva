@@ -4,6 +4,11 @@ import javax.swing.JFrame;
 
 import org.math.plot.*;
 
+import Chromosomes.ChromosomeP1F1;
+import GeneticAlgorithm.Chromosome;
+import GeneticAlgorithm.ChromosomeFactory;
+import GeneticAlgorithm.GeneticAlgorithm;
+
 public class main {
 	
 	public static void main(String args[]) {
@@ -29,7 +34,12 @@ public class main {
 //		frame.setVisible(true);
 		
 		run();
-		System.out.println("Practica 1 Ejecuto correctamentee");
+		ChromosomeFactory<Boolean, Double> chromosomeFactory = (double tolerance, int dimensions) -> {
+			return new ChromosomeP1F1(10, tolerance);
+		};
+		
+		GeneticAlgorithm<Boolean, Double> ag = new GeneticAlgorithm<Boolean, Double>(100, 100, 0.2, 0.05, 1, true, 1, chromosomeFactory);
+		ag.run();
 	}
 	
 	private static void run()
