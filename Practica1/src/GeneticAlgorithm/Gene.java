@@ -27,4 +27,37 @@ public class Gene<T> {
 		return alleles.get(pos);
 	}
 	
+	public final List<T> getAlleles()
+	{
+		return this.alleles;
+	}
+
+	// Sets allele at pos if it exists and returns true. Otherwise returns false.
+	public boolean setAllele(int pos, T allele)
+	{
+		if(pos >= alleles.size())
+			return false;
+		
+		alleles.set(pos, allele);
+		return true;
+	}
+	
+	// Adds an allele to the gene.
+	public void addAllele(T allele)
+	{
+		alleles.add(allele);
+	}
+
+	// Returns the gene as a string
+	public String toString()
+	{
+		String gene = "";
+		
+		for(T allele : alleles)
+		{
+			gene += allele.toString();
+		}
+		
+		return gene;
+	}
 }
