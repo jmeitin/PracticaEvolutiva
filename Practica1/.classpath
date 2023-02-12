@@ -11,7 +11,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Rioni/Documents/Universidad/Evolutiva/Prácticas/PracticaEvolutiva/Practica1/flatlaf-3.0.jar">
+	<classpathentry kind="lib" path="flatlaf-3.0.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
