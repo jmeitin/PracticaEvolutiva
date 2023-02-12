@@ -8,6 +8,7 @@ import Chromosomes.ChromosomeP1F1;
 import GeneticAlgorithm.Chromosome;
 import GeneticAlgorithm.ChromosomeFactory;
 import GeneticAlgorithm.GeneticAlgorithm;
+import View.MainView;
 
 public class main {
 	
@@ -40,6 +41,9 @@ public class main {
 		
 		GeneticAlgorithm<Boolean, Double> ag = new GeneticAlgorithm<Boolean, Double>(100, 100, 0.2, 0.05, 1, true, 1, chromosomeFactory);
 		ag.run();
+		
+		MainView view = new MainView();
+		view.setVisible(true);
 	}
 	
 	private static void run()
