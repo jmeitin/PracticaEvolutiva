@@ -236,20 +236,20 @@ public class MainView extends JFrame {
 					.addContainerGap()
 					.addComponent(solutionLabel)
 					.addGap(18)
-					.addComponent(solutionTextField, GroupLayout.PREFERRED_SIZE, 909, GroupLayout.PREFERRED_SIZE)
+					.addComponent(solutionTextField, GroupLayout.DEFAULT_SIZE, 899, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		gl_solutionPanel.setVerticalGroup(
 			gl_solutionPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_solutionPanel.createSequentialGroup()
+					.addContainerGap()
 					.addGroup(gl_solutionPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_solutionPanel.createSequentialGroup()
-							.addGap(8)
-							.addComponent(solutionLabel))
+							.addComponent(solutionTextField, GroupLayout.PREFERRED_SIZE, 14, Short.MAX_VALUE)
+							.addContainerGap())
 						.addGroup(gl_solutionPanel.createSequentialGroup()
-							.addGap(5)
-							.addComponent(solutionTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addComponent(solutionLabel, GroupLayout.DEFAULT_SIZE, 14, Short.MAX_VALUE)
+							.addGap(11))))
 		);
 		solutionPanel.setLayout(gl_solutionPanel);
 		
