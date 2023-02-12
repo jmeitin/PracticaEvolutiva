@@ -13,6 +13,10 @@ import java.awt.GridLayout;
 
 import javax.swing.JToolBar;
 import java.awt.TextField;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -21,14 +25,22 @@ import java.awt.Button;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.border.TitledBorder;
 
 import org.math.plot.Plot2DPanel;
+import org.math.plot.plots.LinePlot;
+
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 import javax.swing.BoxLayout;
@@ -38,6 +50,12 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Frame;
+
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import java.awt.SystemColor;
 
 public class MainView extends JFrame {
 
@@ -49,6 +67,13 @@ public class MainView extends JFrame {
 	NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
 	DecimalFormat decimalFormat = (DecimalFormat) numberFormat;
 	private JTextField solutionTextField;
+	private final Color lightBlue = new Color(34,235,249);
+	private final Color lightGreen = new Color(67,249,34);
+	private final Color lightRed = new Color(249,34,34);
+	private final Color darkBlue = new Color(25,111,160);
+	private final Color darkGreen = new Color(39,160,25);
+	private final Color darkRed = new Color(160,36,25);
+	private boolean isDarkTheme = false;
 
 	/**
 	 * Launch the application.
@@ -66,10 +91,26 @@ public class MainView extends JFrame {
 		});
 	}
 
+	private void showInformationDialog( String message, Exception ex ) {
+		JOptionPane.showMessageDialog( SwingUtilities.windowForComponent( this ),
+			message + "\n\n" + ex.getMessage(),
+			"FlatLaf", JOptionPane.INFORMATION_MESSAGE );
+	}
+	
+	private void replot()
+	{
+		plot.resetMapData();
+		double[][] xy = {{1, 2, 3, 4, 5}, {2, 3, 2, 3, 2}};
+	    
+	    plot.addLinePlot("Test Plot", isDarkTheme ? lightBlue : darkBlue, xy);
+	}
+	
 	/**
 	 * Create the frame.
 	 */
 	public MainView() {
+		FlatLightLaf.setup();
+		
 		this.setTitle("Practica 1 - PEV");
 		this.setResizable(false);
 		this.setMinimumSize(new Dimension(1280,720));
@@ -96,7 +137,7 @@ public class MainView extends JFrame {
 		selectionPanel.setBorder(new TitledBorder(null, "Selecci\u00F3n", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		selectionPanel.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		JLabel selectionTypeLabel = new JLabel("Tipo de seleección");
+		JLabel selectionTypeLabel = new JLabel("Tipo de selección");
 		selectionTypeLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		selectionPanel.add(selectionTypeLabel);
 		
@@ -105,7 +146,7 @@ public class MainView extends JFrame {
 		selectionPanel.add(selectionTypeComboBox);
 		
 		JPanel crossPanel = new JPanel();
-		crossPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Cruce", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		crossPanel.setBorder(new TitledBorder("Cruce"));
 		crossPanel.setLayout(new GridLayout(0, 2, 0, 0));
 		
 		JLabel crossTypeLabel = new JLabel("Tipo de cruce");
@@ -125,7 +166,7 @@ public class MainView extends JFrame {
 		crossProbabilityTextField.setColumns(10);
 		
 		JPanel mutationPanel = new JPanel();
-		mutationPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Mutaci\u00F3n", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		mutationPanel.setBorder(new TitledBorder("Mutaci\u00F3n"));
 		mutationPanel.setLayout(new GridLayout(0, 2, 0, 0));
 		
 		JLabel mutationTypeLabel = new JLabel("Tipo de mutación");
@@ -149,7 +190,7 @@ public class MainView extends JFrame {
 		JButton restartButton = new JButton("Reiniciar");
 		
 		JPanel problemPanel = new JPanel();
-		problemPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Problema", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		problemPanel.setBorder(new TitledBorder("Problema"));
 		problemPanel.setLayout(new GridLayout(0, 2, 0, 0));
 		
 		JLabel lblSeleccionaProblema = new JLabel("Selecciona problema");
@@ -159,22 +200,55 @@ public class MainView extends JFrame {
 		JComboBox selectionTypeComboBox_1 = new JComboBox();
 		selectionTypeComboBox_1.setModel(new DefaultComboBoxModel(new String[] {"P1 - Funcion 1", "P1 - Funcion 2", "P1 - Funcion 3", "P1 - Funcion 4", "P1 - Funcion 5"}));
 		problemPanel.add(selectionTypeComboBox_1);
+		
+		JPanel themePanel = new JPanel();
+		themePanel.setBorder(new TitledBorder("Tema"));
+		themePanel.setLayout(new GridLayout(0, 2, 0, 0));
+		
+		JLabel themeLabel = new JLabel("Selecciona Tema");
+		themeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		themePanel.add(themeLabel);
+		
+		JComboBox themeComboBox = new JComboBox();
+		themeComboBox.setModel(new DefaultComboBoxModel(new String[] {"Claro", "Oscuro"}));
+		themeComboBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    String theme = (String) e.getItem();
+                    if (theme.equals("Claro")) {
+						FlatLightLaf.setup();
+						isDarkTheme = false;
+						replot();
+                    } else {
+						FlatDarkLaf.setup();
+						isDarkTheme = true;
+						replot();
+                    }
+
+                    FlatLaf.updateUI();
+                    window.repaint();
+                }
+            }
+        });;
+		themePanel.add(themeComboBox);
 		GroupLayout gl_westPanel = new GroupLayout(westPanel);
 		gl_westPanel.setHorizontalGroup(
-			gl_westPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_westPanel.createSequentialGroup()
+			gl_westPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_westPanel.createSequentialGroup()
 					.addGap(10)
-					.addGroup(gl_westPanel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(restartButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-						.addComponent(mutationPanel, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-						.addComponent(crossPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(selectionPanel, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-						.addComponent(numGenTextField, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-						.addComponent(numGenLabel, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-						.addComponent(genSizeTextField, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-						.addComponent(genSizeLabel, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-						.addComponent(executeButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-						.addComponent(problemPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
+					.addGroup(gl_westPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(themePanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+						.addComponent(restartButton, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+						.addComponent(mutationPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+						.addComponent(crossPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(selectionPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+						.addComponent(numGenTextField, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+						.addComponent(numGenLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+						.addComponent(genSizeTextField, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+						.addComponent(genSizeLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+						.addComponent(executeButton, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+						.addComponent(problemPanel, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
 					.addGap(10))
 		);
 		gl_westPanel.setVerticalGroup(
@@ -196,7 +270,9 @@ public class MainView extends JFrame {
 					.addComponent(mutationPanel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(problemPanel, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(themePanel, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(executeButton)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(restartButton)
@@ -212,7 +288,11 @@ public class MainView extends JFrame {
 		eastPanel.setLayout(new BoxLayout(eastPanel, BoxLayout.Y_AXIS));
 		
 		plot = new Plot2DPanel();
+		plot.plotCanvas.setAutoBounds(1);
+		plot.plotCanvas.setAxisLabels(new String[] {"X", "Y"});
+		plot.plotCanvas.setBackground(UIManager.getColor("Button.light"));
 		eastPanel.add(plot);
+		replot();
 		
 		JPanel solutionPanel = new JPanel();
 		eastPanel.add(solutionPanel);
@@ -237,15 +317,12 @@ public class MainView extends JFrame {
 		);
 		gl_solutionPanel.setVerticalGroup(
 			gl_solutionPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_solutionPanel.createSequentialGroup()
+				.addGroup(Alignment.TRAILING, gl_solutionPanel.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_solutionPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_solutionPanel.createSequentialGroup()
-							.addComponent(solutionTextField, GroupLayout.PREFERRED_SIZE, 14, Short.MAX_VALUE)
-							.addContainerGap())
-						.addGroup(gl_solutionPanel.createSequentialGroup()
-							.addComponent(solutionLabel, GroupLayout.DEFAULT_SIZE, 14, Short.MAX_VALUE)
-							.addGap(11))))
+					.addGroup(gl_solutionPanel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(solutionTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(solutionLabel, GroupLayout.DEFAULT_SIZE, 14, Short.MAX_VALUE))
+					.addGap(11))
 		);
 		solutionPanel.setLayout(gl_solutionPanel);
 		
