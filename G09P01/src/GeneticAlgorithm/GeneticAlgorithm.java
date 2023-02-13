@@ -1,23 +1,36 @@
 package GeneticAlgorithm;
 
 public class GeneticAlgorithm<T, U> {
-	Chromosome<T, U>[] poblation;
-	int poblation_size;
-	int max_gen_num;
-	Chromosome<T, U> best_chromosome;
-	int best_pos;
-	double cross_chance;
-	double mutation_chance;
+	private Chromosome<T, U>[] poblation; //clase individuo?
+	private double[] fitness;//NICO NO LO USA?
+	
+	//PROBABILIDADES-------
+	private double cross_chance;
+	private double mutation_chance;
+	
+	// TAMANYOS------------
+	private int max_gen_num; //max generaciones
+	private int poblation_size;
+	private int tamTorneo; //NICO NO LO USA?
+	
+	private Chromosome<T, U> best_chromosome;
+	private int best_pos;
+	
 	double tolerance;
 	double best_absolute_fitness;
 	boolean maximize;
 	int dimensions;
 	ChromosomeFactory<T, U> chromosomeFactory;
 
-	public GeneticAlgorithm(int poblation_size, int max_gen_num, double cross_chance, double mutation_chance,
+	public GeneticAlgorithm(
+			int poblation_size, int max_gen_num, double cross_chance, double mutation_chance,
 			double tolerance, boolean maximize, int dimensions, ChromosomeFactory<T, U> chromosomeFactory) {
-		this.poblation_size = poblation_size;
+		//POBLACION
+		this.poblation = new Chromosome[poblation_size];
+		//TAMANYOS
+		this.poblation_size = poblation_size;		
 		this.max_gen_num = max_gen_num;
+		//PROBABILIDADES
 		this.cross_chance = cross_chance;
 		this.mutation_chance = mutation_chance;
 		this.tolerance = tolerance;
@@ -25,7 +38,7 @@ public class GeneticAlgorithm<T, U> {
 		this.best_absolute_fitness = maximize ? Double.MIN_VALUE : Double.MAX_VALUE;
 		this.dimensions = dimensions;
 		this.chromosomeFactory = chromosomeFactory;
-		this.poblation = new Chromosome[poblation_size];
+		
 	}
 
 	public void initializePoblation() {
@@ -40,6 +53,6 @@ public class GeneticAlgorithm<T, U> {
 	
 	public void run()
 	{
-		System.out.println("Practica 1 Ejecuto correctamentee");
+		System.out.println("Run GeneticAlgorithm");
 	}
 }
