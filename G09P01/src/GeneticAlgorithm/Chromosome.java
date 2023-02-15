@@ -1,5 +1,6 @@
 package GeneticAlgorithm;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -23,13 +24,18 @@ public abstract class Chromosome<T,U> {
 	protected double adaptation;
 	protected double escalation;
 
-	public Chromosome(int chromosomeLenght, double tolerance) {
-		this.chromosomeLenght = chromosomeLenght;
+	public Chromosome(int geneLenght, double tolerance) {
+		this.chromosomeLenght = geneLenght;
 		this.tolerance = tolerance;
+		
+		initGenes();
+		calculateFenotypes();
 	}
+	
 	//OVERRIDE METHODS------------------------------------------------
 	public abstract void calculateFenotypes();
 	public abstract void calculateFitness();
+	protected abstract void initGenes();
 	
 	//UTILITY--------------------------------------------------------
 	//Converts the chromosome to its decimal representation.

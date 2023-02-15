@@ -7,7 +7,6 @@ public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 
 	public ChromosomeP1F1(int chromosomeLenght, double tolerance) {
 		super(chromosomeLenght, tolerance);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -27,11 +26,17 @@ public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 			final double x1 = fenotypes.get(0);
 			final double x2 = fenotypes.get(1);
 			
-			fitness = 21.5 + Math.sin(4 * Math.PI * x1) + Math.cos(20 * Math.PI * x2);
+			fitness = (21.5 + x1 * Math.sin(4 * Math.PI * x1)) + x2 * Math.cos(20 * Math.PI * x2);
 		}
 		else {
 			fitness = Double.MIN_VALUE; //default value,if fails, wortst value
 			System.out.println("Ejer 1: Wrong number of fitness params.");
 		}		
+	}
+
+	@Override
+	protected void initGenes() {
+		// TODO Auto-generated method stub
+		
 	}
 }
