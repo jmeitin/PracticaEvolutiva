@@ -328,5 +328,7 @@ public class MainView extends JFrame {
 		
 		window = new JPanel();
 		window.setLayout(new BorderLayout());
+		
+		this.setVisible(true);
 	}
 }

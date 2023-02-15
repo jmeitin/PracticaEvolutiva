@@ -24,13 +24,13 @@ public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 	@Override 
 	public void calculateFitness() {
 		if(fenotypes.size() == 2) { // X1 && X2
-			double x1 = fenotypes.get(0);
-			double x2 = fenotypes.get(1);
+			final double x1 = fenotypes.get(0);
+			final double x2 = fenotypes.get(1);
 			
 			fitness = 21.5 + Math.sin(4 * Math.PI * x1) + Math.cos(20 * Math.PI * x2);
 		}
 		else {
-			fitness = 0; //default value
+			fitness = Double.MIN_VALUE; //default value,if fails, wortst value
 			System.out.println("Ejer 1: Wrong number of fitness params.");
 		}		
 	}

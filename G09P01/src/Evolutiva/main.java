@@ -56,7 +56,6 @@ public class main {
 		ag.run();
 		
 		MainView view = new MainView();
-		view.setVisible(true);
 	}
 	
 	private static void run()
