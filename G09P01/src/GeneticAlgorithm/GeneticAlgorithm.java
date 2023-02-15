@@ -40,6 +40,23 @@ public class GeneticAlgorithm<T, U> {
 		this.chromosomeFactory = chromosomeFactory;
 		
 	}
+	
+	public GeneticAlgorithm(GeneticAlgorithmData algorithmData) {
+		//POBLACION
+		this.poblation = new Chromosome[algorithmData.poblation_size];
+		//TAMANYOS
+		this.poblation_size = algorithmData.poblation_size;		
+		this.max_gen_num = algorithmData.max_gen_num;
+		//PROBABILIDADES
+		this.cross_chance = algorithmData.cross_chance;
+		this.mutation_chance = algorithmData.mutation_chance;
+		this.tolerance = algorithmData.tolerance;
+		this.maximize = algorithmData.maximize;
+		this.best_absolute_fitness = algorithmData.maximize ? Double.MIN_VALUE : Double.MAX_VALUE;
+		this.dimensions = algorithmData.dimensions;
+		this.chromosomeFactory = algorithmData.chromosomeFactory;
+		
+	}
 
 	public void initializePoblation() {
 		for (int i = 0; i < poblation_size; i++)

@@ -8,6 +8,7 @@ import Chromosomes.ChromosomeP1F1;
 import GeneticAlgorithm.Chromosome;
 import GeneticAlgorithm.ChromosomeFactory;
 import GeneticAlgorithm.GeneticAlgorithm;
+import GeneticAlgorithm.GeneticAlgorithmData;
 import View.MainView;
 
 public class main {
@@ -39,7 +40,19 @@ public class main {
 			return new ChromosomeP1F1(10, tolerance);
 		};
 		
-		GeneticAlgorithm<Boolean, Double> ag = new GeneticAlgorithm<Boolean, Double>(100, 100, 0.2, 0.05, 1, true, 1, chromosomeFactory);
+		GeneticAlgorithmData algorithmData = new GeneticAlgorithmData();
+		
+		algorithmData.poblation_size = 100;
+		algorithmData.max_gen_num = 100;
+		algorithmData.cross_chance = 0.2;
+		algorithmData.mutation_chance = 0.05;
+		algorithmData.tolerance = 1;
+		algorithmData.maximize = true;
+		algorithmData.dimensions = 1;
+		algorithmData.chromosomeFactory = chromosomeFactory;
+	
+		
+		GeneticAlgorithm<Boolean, Double> ag = new GeneticAlgorithm<Boolean, Double>(algorithmData);
 		ag.run();
 		
 		MainView view = new MainView();
