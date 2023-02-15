@@ -11,7 +11,7 @@ import java.util.List;
  */
 public abstract class Chromosome<T,U> {
 	protected List<Gene<T>> genes;
-	protected U fenotype;
+	protected List<U> fenotypes;
 	
 	protected double fitness;
 	protected double brute_fitness;
@@ -27,11 +27,27 @@ public abstract class Chromosome<T,U> {
 		this.chromosomeLenght = chromosomeLenght;
 		this.tolerance = tolerance;
 	}
-
-	public int getLenght() 
+	//OVERRIDE METHODS------------------------------------------------
+	public abstract void calculateFenotypes();
+	public abstract void calculateFitness();
+	
+	//UTILITY--------------------------------------------------------
+	//Converts the chromosome to its decimal representation.
+	public double bin_Dec(Gene<T> gen)
 	{
-		return this.chromosomeLenght;
+		double dec = 0;
+		int i = 0;
+		for(T allele : gen.getAlleles())
+		{
+			if(allele.toString().equals("1"))
+				dec += Math.pow(2, i);
+			i++;
+		}
+		return dec;
 	}
+	
+	//GET & SET--------------------------------------------------
+	public int getLenght() 	{ return this.chromosomeLenght;	}
 
 	// Returns gene at pos if it exists and null otherwise.
 	public Gene<T> getGene(int pos)
@@ -53,40 +69,15 @@ public abstract class Chromosome<T,U> {
 	}
 
 	// Adds a gene to the chromosome.
-	public void addGene(Gene<T> gene)
-	{
-		genes.add(gene);
-	}
+	public void addGene(Gene<T> gene) { genes.add(gene);	}	
 
-	//Converts the chromosome to its decimal representation.
-	public double bin_Dec(Gene<T> gen)
-	{
-		double dec = 0;
-		int i = 0;
-		for(T allele : gen.getAlleles())
-		{
-			if(allele.toString().equals("1"))
-				dec += Math.pow(2, i);
-			i++;
-		}
-		return dec;
-	}
+	public double getFitness() { return fitness;	}
 
-	public double getFitness() {
-		return fitness;
-	}
-
-	public void setFitness(double fitness) {
-		this.fitness = fitness;
-	}
+	public void setFitness(double fitness) { this.fitness = fitness;}
 	
-	public double getBruteFitness() {
-		return brute_fitness;
-	}
+	public double getBruteFitness() { return brute_fitness; }
 
-	public void setBruteFitness(double brute_fitness) {
-		this.brute_fitness = brute_fitness;
-	}
+	public void setBruteFitness(double brute_fitness) { this.brute_fitness = brute_fitness; }
 
-	public abstract U getFenotype();
+	public List<U> getFenotypes(){ return fenotypes; }
 }
