@@ -1,5 +1,7 @@
 package Chromosomes;
 
+import java.util.Random;
+
 import GeneticAlgorithm.Chromosome;
 import GeneticAlgorithm.Gene;
 
@@ -13,7 +15,6 @@ public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
     public void calculateFenotypes(){
 		//ONLY CALCULATES ONCE
 		if(fenotypes.length == 0) {
-			fenotypes = new Double[this.chromosomeLenght];
 			int i = 0;
 			for (Gene<Boolean> gene : genes) {
 				fenotypes[i] = binaryToDecimal(gene);
@@ -38,20 +39,33 @@ public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 		return brute_fitness;
 	}
 
-	@Override
-	protected void initGenes() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Chromosome getCopy() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	protected Chromosome getNewInstance() {
 		return new ChromosomeP1F1(this.chromosomeLenght, this.tolerance);
+	}
+	
+	@Override
+	protected void initGenes() {
+		final double min_x1 = -3.000;
+		final double min_x2 = 4.100;
+		
+		final double max_x1 = 12.100;
+		final double max_x2 = 5.800;
+		
+		final int tam_genes_x1 = this.calculateGenSize(this.tolerance, min_x1, max_x1);
+		final int tam_genes_x2 = this.calculateGenSize(this.tolerance, min_x2, max_x2);
+		
+		this.genes[0] = new Gene<Boolean>(tam_genes_x1);
+		this.genes[1] = new Gene<Boolean>(tam_genes_x2);
+
+		Random rand = new Random();
+		
+		// Random init each gene
+		for (int i = 0; i < this.chromosomeLenght; i++) {
+			for (int j = 0; j < this.genes[i].getLenght(); j++) {
+				this.genes[i].setAllele(j, rand.nextBoolean());
+			}
+		}
 	}
 }
