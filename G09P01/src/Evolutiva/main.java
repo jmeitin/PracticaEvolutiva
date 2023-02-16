@@ -27,7 +27,7 @@ public class main {
 		algorithmData.max_gen_num = 100;
 		algorithmData.cross_chance = 0.2;
 		algorithmData.mutation_chance = 0.05;
-		algorithmData.tolerance = 1;
+		algorithmData.tolerance = 0.025;
 		algorithmData.maximize = true;
 		algorithmData.dimensions = 1;
 		algorithmData.chromosomeFactory = chromosomeFactory;

@@ -53,7 +53,7 @@ public abstract class Chromosome<T,U> {
 		int i = 0;
 		for(T allele : gen.getAlleles())
 		{
-			if(allele.toString().equals("1"))
+			if(allele.toString().equals("true"))
 				dec += Math.pow(2, i);
 			i++;
 		}
