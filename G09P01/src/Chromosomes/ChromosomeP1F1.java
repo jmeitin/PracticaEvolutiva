@@ -7,18 +7,21 @@ import GeneticAlgorithm.Gene;
 
 public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 
+	final double min_x1 = -3.000;
+	final double min_x2 = 4.100;
+
+	final double max_x1 = 12.100;
+	final double max_x2 = 5.800;
+	
 	public ChromosomeP1F1(int chromosomeLenght, double tolerance) {
 		super(chromosomeLenght, tolerance);
 	}
 
 	@Override
 	public void calculateFenotypes() {
-		int i = 0;
-		fenotypes = new Double[chromosomeLenght];
-		for (Gene<Boolean> gene : genes) {
-			fenotypes[i] = binaryToDecimal(gene);
-			i++;
-		}
+		fenotypes = new Double[num_of_genes];
+		fenotypes[0] = min_x1 + (max_x1 - min_x1) * (binaryToDecimal(genes[0]) / (Math.pow(2, genes[0].getLenght()) - 1));
+		fenotypes[1] = min_x2 + (max_x2 - min_x2) * (binaryToDecimal(genes[1]) / (Math.pow(2, genes[1].getLenght()) - 1));
 	}
 
 	@Override
@@ -38,17 +41,11 @@ public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 
 	@Override
 	protected Chromosome getNewInstance() {
-		return new ChromosomeP1F1(this.chromosomeLenght, this.tolerance);
+		return new ChromosomeP1F1(this.num_of_genes, this.tolerance);
 	}
 
 	@Override
 	protected void initGenes() {
-		final double min_x1 = -3.000;
-		final double min_x2 = 4.100;
-
-		final double max_x1 = 12.100;
-		final double max_x2 = 5.800;
-
 		final int tam_genes_x1 = this.calculateGenSize(this.tolerance, min_x1, max_x1);
 		final int tam_genes_x2 = this.calculateGenSize(this.tolerance, min_x2, max_x2);
 
@@ -58,7 +55,7 @@ public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 		Random rand = new Random();
 
 		// Random init each gene
-		for (int i = 0; i < this.chromosomeLenght; i++) {
+		for (int i = 0; i < this.num_of_genes; i++) {
 			for (int j = 0; j < this.genes[i].getLenght(); j++) {
 				this.genes[i].setAllele(j, rand.nextBoolean());
 			}

@@ -19,13 +19,13 @@ public abstract class Chromosome<T,U> {
 	protected double score;
 	protected double scoreAccumulated;
 	
-	protected int chromosomeLenght;
+	protected int num_of_genes;
 	protected double tolerance;
 	protected double adaptation;
 	protected double escalation;
 
 	public Chromosome(int geneLenght, double tolerance) {
-		this.chromosomeLenght = geneLenght;
+		this.num_of_genes = geneLenght;
 		this.tolerance = tolerance;
 		genes = (Gene<T>[]) new Gene[geneLenght];
 		
@@ -69,7 +69,7 @@ public abstract class Chromosome<T,U> {
 		chromosome.setScore(this.score);
 		chromosome.setAccumulatedScore(this.scoreAccumulated);
 		chromosome.fenotypes = this.fenotypes;
-		chromosome.chromosomeLenght = this.chromosomeLenght;
+		chromosome.num_of_genes = this.num_of_genes;
 
 		for(int i = 0; i < genes.length; i++)
 			chromosome.setGene(i, genes[i].getCopy());
@@ -78,7 +78,7 @@ public abstract class Chromosome<T,U> {
 	};
 	
 	//GET & SET--------------------------------------------------
-	public int getLenght() 	{ return this.chromosomeLenght;	}
+	public int getLenght() 	{ return this.num_of_genes;	}
 
 	// Returns gene at pos if it exists and null otherwise.
 	public Gene<T> getGene(int pos)
