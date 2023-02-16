@@ -1,5 +1,7 @@
 package GeneticAlgorithm;
 
+import SelectionAlgorithms.SelectionAlgorithm;
+
 public class GeneticAlgorithmData {
 	public int poblation_size;
 	public int max_gen_num;
@@ -8,5 +10,7 @@ public class GeneticAlgorithmData {
 	public double tolerance;
 	public boolean maximize;
 	public int dimensions;
+	public int tournament_size;
 	public ChromosomeFactory chromosomeFactory;
+	public SelectionAlgorithm selectionAlgorithm;
 }

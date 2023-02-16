@@ -12,31 +12,41 @@ public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 	@Override
     public void calculateFenotypes(){
 		//ONLY CALCULATES ONCE
-		if(fenotypes.isEmpty()) {
+		if(fenotypes.length == 0) {
+			fenotypes = new Double[this.chromosomeLenght];
+			int i = 0;
 			for (Gene<Boolean> gene : genes) {
-				double fenotype = bin_Dec(gene); 
-				fenotypes.add(fenotype);
+				fenotypes[i] = binary_to_decimal(gene);
+				i++;
 			}			
 		}		
 	}
 	
 	@Override 
-	public void calculateFitness() {
-		if(fenotypes.size() == 2) { // X1 && X2
-			final double x1 = fenotypes.get(0);
-			final double x2 = fenotypes.get(1);
+	public double evaluate() {
+		if(fenotypes.length == 2) { // X1 && X2
+			final double x1 = fenotypes[0];
+			final double x2 = fenotypes[1];
 			
-			fitness = (21.5 + x1 * Math.sin(4 * Math.PI * x1)) + x2 * Math.cos(20 * Math.PI * x2);
+			brute_fitness = (21.5 + x1 * Math.sin(4 * Math.PI * x1)) + x2 * Math.cos(20 * Math.PI * x2);
 		}
 		else {
-			fitness = Double.MIN_VALUE; //default value,if fails, wortst value
+			brute_fitness = Double.MIN_VALUE; //default value,if fails, wortst value
 			System.out.println("Ejer 1: Wrong number of fitness params.");
-		}		
+		}
+		
+		return brute_fitness;
 	}
 
 	@Override
 	protected void initGenes() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Chromosome getCopy() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

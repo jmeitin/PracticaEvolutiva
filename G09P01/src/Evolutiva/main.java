@@ -9,33 +9,14 @@ import GeneticAlgorithm.Chromosome;
 import GeneticAlgorithm.ChromosomeFactory;
 import GeneticAlgorithm.GeneticAlgorithm;
 import GeneticAlgorithm.GeneticAlgorithmData;
+import SelectionAlgorithms.*;
 import View.MainView;
 
 public class main {
 	
 	public static void main(String args[]) {
-		//System.out.println("Practica 1 Ejecuto correctamente");
-		
-		// TEORIA PARA LA NOMENCLATURA:
-		// n GENERACIONES, s DESCENDIENTES por iteracion
-		// El Cromosoma (0010) tiene 4 GENES, con LOCUS/posiciones (0, 1, 2, 3) & ALELOS/valores (0, 1, 0, 0)
-		// El FENOTIPO de 0100 es 4
-		
-//		double[] generaciones = { 1, 2, 3, 4, 5, 6, 7, 8, 9 ,10 };
-//		double[] fitness = { 12, 25, 32, 45, 65, 67 , 70, 72, 73, 76};
-//		// create your PlotPanel (you can use it as a JPanel)
-//		Plot2DPanel plot = new Plot2DPanel();
-//		// define the legend position
-//		plot.addLegend("SOUTH");
-//		// add a line plot to the PlotPanel
-//		plot.addLinePlot("EVOLUCIÓN", generaciones, fitness);
-//		// put the PlotPanel in a JFrame like a JPanel
-//		JFrame frame = new JFrame("a plot panel");
-//		frame.setSize(600, 600);
-//		frame.setContentPane(plot);
-//		frame.setVisible(true);
-		
-		run();
+		MainView view = new MainView();
+
 		ChromosomeFactory<Boolean, Double> chromosomeFactory = (double tolerance, int dimensions) -> {
 			return new ChromosomeP1F1(10, tolerance);
 		};
@@ -50,12 +31,11 @@ public class main {
 		algorithmData.maximize = true;
 		algorithmData.dimensions = 1;
 		algorithmData.chromosomeFactory = chromosomeFactory;
+		algorithmData.selectionAlgorithm = new RouletteSelection();
 	
 		
 		GeneticAlgorithm<Boolean, Double> ag = new GeneticAlgorithm<Boolean, Double>(algorithmData);
-		ag.run();
-		
-		MainView view = new MainView();
+		//ag.run();
 	}
 	
 	private static void run()

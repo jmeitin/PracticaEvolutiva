@@ -11,8 +11,8 @@ import java.util.List;
  * @param <U> Fenotype type
  */
 public abstract class Chromosome<T,U> {
-	protected List<Gene<T>> genes;
-	protected List<U> fenotypes;
+	protected Gene<T>[] genes;
+	protected U[] fenotypes;
 	
 	protected double fitness;
 	protected double brute_fitness;
@@ -34,12 +34,12 @@ public abstract class Chromosome<T,U> {
 	
 	//OVERRIDE METHODS------------------------------------------------
 	public abstract void calculateFenotypes();
-	public abstract void calculateFitness();
+	public abstract double evaluate();
 	protected abstract void initGenes();
 	
 	//UTILITY--------------------------------------------------------
 	//Converts the chromosome to its decimal representation.
-	public double bin_Dec(Gene<T> gen)
+	public double binary_to_decimal(Gene<T> gen)
 	{
 		double dec = 0;
 		int i = 0;
@@ -58,24 +58,21 @@ public abstract class Chromosome<T,U> {
 	// Returns gene at pos if it exists and null otherwise.
 	public Gene<T> getGene(int pos)
 	{
-		if(pos >= genes.size())
+		if(pos >= genes.length)
 			return null;
 		
-		return genes.get(pos);
+		return genes[pos];
 	}
 
 	// Sets gene at pos if it exists and returns true. Otherwise returns false.
 	public boolean setGene(int pos, Gene<T> gene)
 	{
-		if(pos >= genes.size())
+		if(pos >= genes.length)
 			return false;
 		
-		genes.set(pos, gene);
+		genes[pos] = gene;
 		return true;
 	}
-
-	// Adds a gene to the chromosome.
-	public void addGene(Gene<T> gene) { genes.add(gene);	}	
 
 	public double getFitness() { return fitness;	}
 
@@ -85,5 +82,15 @@ public abstract class Chromosome<T,U> {
 
 	public void setBruteFitness(double brute_fitness) { this.brute_fitness = brute_fitness; }
 
-	public List<U> getFenotypes(){ return fenotypes; }
+	public U[] getFenotypes(){ return fenotypes; }
+
+	public double getScore() { return score; }
+
+	public void setScore(double score) { this.score = score; }
+
+	public double getAccumulatedScore() { return scoreAccumulated; }
+
+	public void setAccumulatedScore(double scoreAccumulated) { this.scoreAccumulated = scoreAccumulated; }
+	
+	public abstract Chromosome getCopy();
 }
