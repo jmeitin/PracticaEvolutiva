@@ -9,23 +9,25 @@ public class RouletteSelection extends SelectionAlgorithm {
 
 	@Override
 	public Chromosome[] select(Chromosome[] poblation, int poblation_size) {
-		int[] sel_super = new int[poblation_size];
-		double prob;
-		Random rnd = new Random();
-		int pos_super;
-		
-		for(int i = 0; i < poblation_size; i++)
-		{
-			pos_super = 0;
-			prob = rnd.nextDouble();
-			while(prob > poblation[pos_super].getAccumulatedScore() && pos_super < poblation_size) pos_super++;
-			sel_super[i] = pos_super;
+		double total_sum = 0.0;
+		for (Chromosome cromosoma : poblation) {
+			total_sum += cromosoma.getAccumulatedScore();
 		}
-		
-		Chromosome[] newPob = new Chromosome[poblation_size];
-		for(int i = 0; i < poblation_size; i++) newPob[i] = poblation[sel_super[i]];
-		for(int i = 0; i < poblation_size; i++) poblation[i] = newPob[i].getCopy();
-		return poblation;
-	}
 
+		Chromosome[] new_population = new Chromosome[poblation_size];
+		Random rand = new Random();
+		for (int i = 0; i < poblation_size; i++) {
+			double random_point = rand.nextDouble() * total_sum;
+			double partial_sum = 0.0;
+			for (Chromosome cromosoma : poblation) {
+				partial_sum += cromosoma.getAccumulatedScore();
+				if (partial_sum > random_point) {
+					new_population[i] = cromosoma.getCopy();
+					break;
+				}
+			}
+		}
+
+		return new_population;
+	}
 }

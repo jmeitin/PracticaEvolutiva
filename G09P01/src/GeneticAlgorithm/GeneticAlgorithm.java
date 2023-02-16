@@ -20,6 +20,10 @@ public class GeneticAlgorithm<T, U> {
 
 	final double tolerance;
 	double best_absolute_fitness;
+	/**
+	 * Boolean flag that indicates whether the genetic algorithm is configured to maximize or minimize the fitness function
+	 * @value True if the algorithm is maximizing the fitness function, false if it is minimizing
+	 */
 	final boolean maximize;
 	final int dimensions;
 
@@ -56,6 +60,9 @@ public class GeneticAlgorithm<T, U> {
 		return chromosomeFactory.createChromosome(tolerance, dimensions);
 	}
 
+	/**
+	 * Runs the genetic algorithm. It prints the fenotypes of the best chromosomes and the result of evaluating this one.
+	 */
 	public void run() {
 		System.out.println("Run GeneticAlgorithm");
 		initializePoblation();
@@ -78,6 +85,9 @@ public class GeneticAlgorithm<T, U> {
 		System.out.println("Best chromosome fenotypes:");
 		for (U fenotype : best_chromosome.getFenotypes())
 			System.out.println(fenotype);
+		
+		System.out.print("Evaluation: ");
+		System.out.println(best_chromosome.evaluate());
 	}
 
 	public void select() {
@@ -92,21 +102,23 @@ public class GeneticAlgorithm<T, U> {
 
 	}
 
+	/**
+	 * Evaluates each chromosome, updates its scores and selects the best one.
+	 */
 	public void evaluate() {
+		double fitness_sum = recalculateFitness();
 		double accumulated_score = 0;
 		double best_fitness = maximize ? Double.MIN_VALUE : Double.MAX_VALUE;
-		double brute_fitness_sum = 0;
 
 		for (int i = 0; i < poblation_size; i++) {
 			double brute_fitness = poblation[i].evaluate();
-			brute_fitness_sum += brute_fitness;
 			if (compareFitness(brute_fitness, best_fitness))
 			{
 				best_fitness = brute_fitness;
 				best_pos = i;
 			}
 
-			poblation[i].setScore(poblation[i].getFitness() / brute_fitness_sum);
+			poblation[i].setScore(poblation[i].getFitness() / fitness_sum);
 			accumulated_score += poblation[i].getScore();
 			poblation[i].setAccumulatedScore(accumulated_score);
 		}
@@ -116,6 +128,49 @@ public class GeneticAlgorithm<T, U> {
 			this.best_absolute_fitness = best_fitness;
 	}
 	
+	/**
+	 * Recalculates the fitness of each chromosome and updates its score.
+	 * The fitness of each chromosome is evaluated and the maximum or minimum value is determined
+	 * (this demends on the class member maximize. 
+	 * After that we use this value to adjust the fitness of each chromosome and make sure that all
+	 * fitness values are positive
+	 * @see GeneticAlgorithm#maximize
+	 * @return The sum of all adjusted fitness values
+	 */
+	private double recalculateFitness()
+	{
+		double extreme_value = maximize ? Double.MIN_VALUE : Double.MAX_VALUE;
+		for(int i = 0; i < poblation_size; i++)
+		{
+			double brute_fitness = poblation[i].evaluate();
+			if(compareFitness(brute_fitness, extreme_value))
+				extreme_value = brute_fitness;
+		}
+
+		double fitness_sum = 0;
+		for(int i = 0; i < poblation_size; i++)
+		{
+			double adjusted_fitness = (extreme_value * (maximize ? 1 : -1)) + poblation[i].getBruteFitness();
+			fitness_sum += adjusted_fitness;
+			poblation[i].setFitness(adjusted_fitness);
+		}
+
+		return fitness_sum;
+	}
+
+	/**
+	 * If the genetic algorithm is configured to maximize the fitness function, this function will
+	 * return true if the first fitness value is greater than the second fitness value. If the genetic
+	 * algorithm is configured to minimize the fitness function, this function will return true if the
+	 * first fitness value is less than the second fitness value.
+	 * 
+	 * This method can be also used to compare any pair of double values being aware of the maximize value.
+	 * 
+	 * @param best_fitness The fitness value of the chromosome with the best fitness so far
+	 * @param other The fitness value of the other chromosome to compare
+	 * @see GeneticAlgorithm#maximize
+	 * @return True if the first fitness value is better than the second fitness value based on the maximize value
+	 */
 	private boolean compareFitness(double best_fitness, double other)
 	{
 		if(maximize)
