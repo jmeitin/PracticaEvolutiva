@@ -15,10 +15,10 @@ import View.MainView;
 public class main {
 	
 	public static void main(String args[]) {
-		MainView view = new MainView();
+		// MainView view = new MainView();
 
 		ChromosomeFactory<Boolean, Double> chromosomeFactory = (double tolerance, int dimensions) -> {
-			return new ChromosomeP1F1(10, tolerance);
+			return new ChromosomeP1F1(2, tolerance);
 		};
 		
 		GeneticAlgorithmData algorithmData = new GeneticAlgorithmData();
@@ -35,7 +35,7 @@ public class main {
 	
 		
 		GeneticAlgorithm<Boolean, Double> ag = new GeneticAlgorithm<Boolean, Double>(algorithmData);
-		//ag.run();
+		ag.run();
 	}
 	
 	private static void run()

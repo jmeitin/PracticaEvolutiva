@@ -28,7 +28,6 @@ public abstract class Chromosome<T,U> {
 		this.chromosomeLenght = geneLenght;
 		this.tolerance = tolerance;
 		genes = (Gene<T>[]) new Gene[geneLenght];
-		fenotypes = (U[]) new Object[geneLenght];
 		
 		initGenes();
 		calculateFenotypes();
