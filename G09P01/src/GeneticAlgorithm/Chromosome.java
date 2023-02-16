@@ -36,10 +36,17 @@ public abstract class Chromosome<T,U> {
 	public abstract void calculateFenotypes();
 	public abstract double evaluate();
 	protected abstract void initGenes();
+	protected abstract Chromosome getNewInstance();
 	
 	//UTILITY--------------------------------------------------------
+	// Gets Lenght for a given gen
+	public int calculateGenSize(double tolerance, double min, double max)
+	{
+		return (int) (Math.log10(((max - min) / tolerance) + 1) / Math.log10(2));
+	}
+	
 	//Converts the chromosome to its decimal representation.
-	public double binary_to_decimal(Gene<T> gen)
+	public double binaryToDecimal(Gene<T> gen)
 	{
 		double dec = 0;
 		int i = 0;
@@ -51,6 +58,23 @@ public abstract class Chromosome<T,U> {
 		}
 		return dec;
 	}
+	
+	// Returns a copy of this Chromosome
+	public Chromosome getCopy()
+	{
+		Chromosome chromosome = getNewInstance();
+		chromosome.setFitness(this.fitness);
+		chromosome.setBruteFitness(this.brute_fitness);
+		chromosome.setScore(this.score);
+		chromosome.setAccumulatedScore(this.scoreAccumulated);
+		chromosome.fenotypes = this.fenotypes;
+		chromosome.chromosomeLenght = this.chromosomeLenght;
+
+		for(int i = 0; i < genes.length; i++)
+			chromosome.setGene(i, genes[i].getCopy());
+		
+		return chromosome;
+	};
 	
 	//GET & SET--------------------------------------------------
 	public int getLenght() 	{ return this.chromosomeLenght;	}
@@ -91,6 +115,4 @@ public abstract class Chromosome<T,U> {
 	public double getAccumulatedScore() { return scoreAccumulated; }
 
 	public void setAccumulatedScore(double scoreAccumulated) { this.scoreAccumulated = scoreAccumulated; }
-	
-	public abstract Chromosome getCopy();
 }

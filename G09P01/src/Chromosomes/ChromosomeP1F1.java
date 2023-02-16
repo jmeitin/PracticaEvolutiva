@@ -16,7 +16,7 @@ public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 			fenotypes = new Double[this.chromosomeLenght];
 			int i = 0;
 			for (Gene<Boolean> gene : genes) {
-				fenotypes[i] = binary_to_decimal(gene);
+				fenotypes[i] = binaryToDecimal(gene);
 				i++;
 			}			
 		}		
@@ -48,5 +48,10 @@ public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 	public Chromosome getCopy() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected Chromosome getNewInstance() {
+		return new ChromosomeP1F1(this.chromosomeLenght, this.tolerance);
 	}
 }
