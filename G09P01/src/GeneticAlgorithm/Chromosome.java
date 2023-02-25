@@ -89,7 +89,19 @@ public abstract class Chromosome<T,U> {
 		return genes[pos];
 	}
 
-	// Sets gene at pos if it exists and returns true. Otherwise returns false.
+	// EXCHANGE GENES WITH OTHER CHROMOSOME. CALLED FROM CROSS FUNCTION
+	public boolean swapGene(int pos, Chromosome<T,U> other_chromosome)
+	{
+		if(pos >= genes.length)
+			return false;
+		
+		Gene<T> g = genes[pos];
+		genes[pos] = other_chromosome.getGene(pos);
+		other_chromosome.setGene(pos, g);
+		
+		return true;
+	}
+	
 	public boolean setGene(int pos, Gene<T> gene)
 	{
 		if(pos >= genes.length)
@@ -98,6 +110,8 @@ public abstract class Chromosome<T,U> {
 		genes[pos] = gene;
 		return true;
 	}
+	
+	
 
 	public double getFitness() { return fitness;	}
 

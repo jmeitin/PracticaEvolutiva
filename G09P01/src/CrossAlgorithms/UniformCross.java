@@ -20,23 +20,21 @@ public class UniformCross extends CrossAlgorithm {
 			//CROSS HAPPENS
 			if(chance <= cross_chance && i < poblation_size - 1) {
 				
-				Chromosome parentA = poblation[i];
-				Chromosome parentB = poblation[i+1];
+				Chromosome childA = poblation[i].getCopy();
+				Chromosome childB = poblation[i+1].getCopy();
 				
-//				for(genes in chromosome) {
-//					chance = rand.nextDouble();
-//					if(chance <= 0.5) {
-//						parte A
-//					}
-//					else {
-//						parte B
-//					}
-//				}
-
+				for (int g = 0; g < childA.getLenght(); g++) {
+					double exchange = rand.nextDouble(); // [0, 1]
+					
+					if (exchange < 0.5) {
+						childA.swapGene(g, childB);
+					}
+					//else stays the same
+				}
 				
-				new_population[i] = parentA;
+				new_population[i] = childA;
 				i++;
-				new_population[i] = parentB;	
+				new_population[i] = childB;		
 			}
 			
 			//CROSS DOESN'T HAPPEN

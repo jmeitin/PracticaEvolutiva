@@ -5,6 +5,8 @@ import java.util.Random;
 
 import GeneticAlgorithm.Chromosome;
 
+//ASUME QUE LAS PARTICIONES SON DEL MISMO TAMANYO
+
 public class MultiPointCross extends CrossAlgorithm {
 
 	@Override
@@ -14,41 +16,42 @@ public class MultiPointCross extends CrossAlgorithm {
 		Chromosome[] new_population = new Chromosome[poblation_size];
 		Random rand = new Random();
 		
+		int part = 1;
 		for (int i = 0; i < poblation_size; i++) {
 			double chance = rand.nextDouble(); // [0, 1]
 			
 			//CROSS HAPPENS
 			if(chance <= cross_chance && i < poblation_size - 1) {
 				
-				Chromosome parentA = poblation[i];
-				Chromosome parentB = poblation[i+1];
-
-				int point = 1;
+				Chromosome childA = poblation[i].getCopy();
+				Chromosome childB = poblation[i+1].getCopy();
 				
-//				// numPOints = 3
-//				// Chromosome = 0000 1111 1010
-//				// point1 = 0000, point2 = 1111, point 3 = 1010
-//				// num_genes = 12
-//				for(genes in chromosome) {
-//					// ADVANCE TO NEXT POINT
-//					// gene = value from [0, 11]
-//					// if 4 >= 1 / 12 ==> point = 2
-//					if(gene > point/num_genes) {
-//						point ++;
-//						chance = rand.nextDouble();
-//					}			
-//					
-//					if(chance <= cross_chance) {
-//						ARRIBA
-//					}
-//					else {
-//						ABAJO
-//					}
-//				}
+				int length = childA.getLenght();
+				int point = calculateNextPoint(rand, 1, (length - 1) / numPoints);
 				
-				new_population[i] = parentA;
+				// numPOints = 3
+				// Chromosome = 0000 1111 1010
+				// point1 = 0000, point2 = 1111, point 3 = 1010
+				// num_genes = 12
+				Boolean swap = true;
+				for (int g = 0; g < length; g++) {
+					
+					if (swap) {
+						childA.swapGene(g, childB);
+					}
+					//else stays the same
+					
+				    if(g + 1 == point) {
+						if(swap) swap = false;
+						else swap = true;
+						part++;
+						point = calculateNextPoint(rand, point, part * (length - 1) / numPoints);
+					}
+				}
+				
+				new_population[i] = childA;
 				i++;
-				new_population[i] = parentB;	
+				new_population[i] = childB;			
 			}
 			
 			//CROSS DOESN'T HAPPEN
@@ -59,5 +62,15 @@ public class MultiPointCross extends CrossAlgorithm {
 		}
 
 		return new_population;	
+	}
+	
+	private int calculateNextPoint(Random rand, int start, int end) {
+		//Point belongs to [1, length - 1]
+		// if length = 10 & point = 0.3 ==> 1 + 0.3 * (10 - 2) = 2.7 ==> 2nd gene
+		// if point 1.0 ==> 1 + 1 * 8 = 9 ==> 9th gene
+		double aux = start + rand.nextDouble() * (end - start); 
+		int point = (int)aux;
+		
+		return point;
 	}
 }
