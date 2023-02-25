@@ -1,6 +1,7 @@
 package GeneticAlgorithm;
 
 import SelectionAlgorithms.SelectionAlgorithm;
+import CrossAlgorithms.CrossAlgorithm;
 
 public class GeneticAlgorithmData {
 	public int poblation_size;
@@ -13,4 +14,5 @@ public class GeneticAlgorithmData {
 	public int tournament_size;
 	public ChromosomeFactory chromosomeFactory;
 	public SelectionAlgorithm selectionAlgorithm;
+	public CrossAlgorithm crossAlgorithm;
 }

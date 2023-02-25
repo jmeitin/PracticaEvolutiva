@@ -15,6 +15,25 @@ public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 	
 	public ChromosomeP1F1(int chromosomeLenght, double tolerance) {
 		super(chromosomeLenght, tolerance);
+		//Chromosome calls initGenes & calculateFenotypes
+	}
+	
+	@Override
+	protected void initGenes() {
+		final int tam_genes_x1 = this.calculateGenSize(this.tolerance, min_x1, max_x1);
+		final int tam_genes_x2 = this.calculateGenSize(this.tolerance, min_x2, max_x2);
+
+		this.genes[0] = new Gene<Boolean>(tam_genes_x1);
+		this.genes[1] = new Gene<Boolean>(tam_genes_x2);
+
+		Random rand = new Random();
+
+		// Random init each gene
+		for (int i = 0; i < this.num_of_genes; i++) {
+			for (int j = 0; j < this.genes[i].getLenght(); j++) {
+				this.genes[i].setAllele(j, rand.nextBoolean());
+			}
+		}
 	}
 
 	@Override
@@ -44,21 +63,5 @@ public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 		return new ChromosomeP1F1(this.num_of_genes, this.tolerance);
 	}
 
-	@Override
-	protected void initGenes() {
-		final int tam_genes_x1 = this.calculateGenSize(this.tolerance, min_x1, max_x1);
-		final int tam_genes_x2 = this.calculateGenSize(this.tolerance, min_x2, max_x2);
-
-		this.genes[0] = new Gene<Boolean>(tam_genes_x1);
-		this.genes[1] = new Gene<Boolean>(tam_genes_x2);
-
-		Random rand = new Random();
-
-		// Random init each gene
-		for (int i = 0; i < this.num_of_genes; i++) {
-			for (int j = 0; j < this.genes[i].getLenght(); j++) {
-				this.genes[i].setAllele(j, rand.nextBoolean());
-			}
-		}
-	}
+	
 }

@@ -16,6 +16,9 @@ public class Gene<T> {
 	{
 		return this.geneLenght;
 	}
+	//public int tamGen(double valorError, double min, double max) {
+		//   return (int) (Math.log10(((max - min) / precision) + 1) / Math.log10(2));
+		//}
 	
 	// Returns allele at pos if it exists and null otherwise.
 	public T getAllele(int pos)

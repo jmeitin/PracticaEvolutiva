@@ -1,6 +1,7 @@
 package GeneticAlgorithm;
 
 import SelectionAlgorithms.SelectionAlgorithm;
+import CrossAlgorithms.CrossAlgorithm;
 
 public class GeneticAlgorithm<T, U> {
 	private Chromosome<T, U>[] poblation; // clase individuo?
@@ -30,6 +31,7 @@ public class GeneticAlgorithm<T, U> {
 	// Strategy
 	final ChromosomeFactory<T, U> chromosomeFactory;
 	final SelectionAlgorithm selectionAlgorithm;
+	final CrossAlgorithm crossAlgorithm;
 
 	public GeneticAlgorithm(GeneticAlgorithmData algorithmData) {
 		// POBLACION
@@ -37,6 +39,7 @@ public class GeneticAlgorithm<T, U> {
 		// TAMANYOS
 		this.poblation_size = algorithmData.poblation_size;
 		this.max_gen_num = algorithmData.max_gen_num;
+		this.tournament_size = algorithmData.tournament_size;
 		// PROBABILIDADES
 		this.cross_chance = algorithmData.cross_chance;
 		this.mutation_chance = algorithmData.mutation_chance;
@@ -45,9 +48,10 @@ public class GeneticAlgorithm<T, U> {
 		this.best_absolute_fitness = algorithmData.maximize ? Double.MIN_VALUE : Double.MAX_VALUE;
 		this.dimensions = algorithmData.dimensions;
 		this.chromosomeFactory = algorithmData.chromosomeFactory;
+		
+		//ALGORITHMS:
 		this.selectionAlgorithm = algorithmData.selectionAlgorithm;
-		this.tournament_size = algorithmData.tournament_size;
-
+		this.crossAlgorithm = algorithmData.crossAlgorithm;
 	}
 
 	public void initializePoblation() {
@@ -68,9 +72,10 @@ public class GeneticAlgorithm<T, U> {
 		initializePoblation();
 		evaluate();
 
-		for (int i = 0; i < this.max_gen_num; i++) {
+		for (int i = 0; i < this.max_gen_num; i++) { //generations
 			if (true) // elitism select
 			{
+				
 
 			}
 
@@ -89,19 +94,7 @@ public class GeneticAlgorithm<T, U> {
 		System.out.print("Evaluation: ");
 		System.out.println(best_chromosome.evaluate());
 	}
-
-	public void select() {
-		this.poblation = this.selectionAlgorithm.select(poblation, poblation_size);
-	}
-
-	public void cross() {
-
-	}
-
-	public void mutate() {
-
-	}
-
+	
 	/**
 	 * Evaluates each chromosome, updates its scores and selects the best one.
 	 */
@@ -127,6 +120,21 @@ public class GeneticAlgorithm<T, U> {
 		if (compareFitness(best_fitness, best_absolute_fitness))
 			this.best_absolute_fitness = best_fitness;
 	}
+	
+
+	public void select() {
+		this.poblation = this.selectionAlgorithm.select(poblation, poblation_size);
+	}
+
+	public void cross() { //HE PUESTO NUM_POINTS = 2 POR PONER ALGO. DEBERIA SER UNA VARIABLE
+		this.poblation = this.crossAlgorithm.cross(poblation, poblation_size, cross_chance, 2);
+
+	}
+
+	public void mutate() {
+
+	}
+
 	
 	/**
 	 * Recalculates the fitness of each chromosome and updates its score.

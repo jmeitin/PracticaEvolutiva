@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import org.math.plot.*;
 
 import Chromosomes.ChromosomeP1F1;
+import CrossAlgorithms.*;
 import GeneticAlgorithm.Chromosome;
 import GeneticAlgorithm.ChromosomeFactory;
 import GeneticAlgorithm.GeneticAlgorithm;
@@ -32,6 +33,7 @@ public class main {
 		algorithmData.dimensions = 1;
 		algorithmData.chromosomeFactory = chromosomeFactory;
 		algorithmData.selectionAlgorithm = new RouletteSelection();
+		algorithmData.crossAlgorithm = new OnePointCross();
 	
 		
 		GeneticAlgorithm<Boolean, Double> ag = new GeneticAlgorithm<Boolean, Double>(algorithmData);
