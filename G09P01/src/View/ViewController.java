@@ -1,5 +1,7 @@
 package View;
 
+import java.awt.Color;
+
 import Chromosomes.ChromosomeP1F1;
 import CrossAlgorithms.OnePointCross;
 import GeneticAlgorithm.ChromosomeFactory;
@@ -14,6 +16,7 @@ public class ViewController implements Runnable {
 		public void run() {
 			geneticAlgorithm = new GeneticAlgorithm<Boolean, Double>(algorithmData);
 			geneticAlgorithm.run();
+			updateView();
 		}
 	}
 
@@ -23,6 +26,14 @@ public class ViewController implements Runnable {
 	private GeneticAlgorithmData algorithmData = new GeneticAlgorithmData();
 	private Thread modelThread;
 	private Thread controllerRunThread;
+
+	// Colors
+	private final Color lightBlue = new Color(34, 235, 249);
+	private final Color lightGreen = new Color(67, 249, 34);
+	private final Color lightRed = new Color(249, 34, 34);
+	private final Color darkBlue = new Color(25, 111, 160);
+	private final Color darkGreen = new Color(39, 160, 25);
+	private final Color darkRed = new Color(160, 36, 25);
 
 	public ViewController(final MainView view) {
 		this.view = view;
@@ -43,7 +54,7 @@ public class ViewController implements Runnable {
 	}
 
 	private void runAux() {
-		if(tryStopThread(modelThread)) // Cancel thread if already running
+		if (tryStopThread(modelThread)) // Cancel thread if already running
 			geneticAlgorithm.stop();
 
 		modelThread = new Thread(new ModelRunner());
@@ -51,21 +62,20 @@ public class ViewController implements Runnable {
 
 		while (modelThread.isAlive()) {
 			try {
+				// UpdateView gatheting model data
+				updateView();
 				Thread.sleep(1000); // Wait 1 second
 			} catch (InterruptedException e) {
 				geneticAlgorithm.stop();
 			}
-
-			// UpdateView gatheting model data
-			updateView();
 		}
-		
+
 		System.out.println("Thread end");
 	}
 
 	public void run() {
 		tryStopThread(controllerRunThread);
-		
+
 		controllerRunThread = new Thread(new Runnable() {
 			public void run() {
 				runAux();
@@ -80,12 +90,14 @@ public class ViewController implements Runnable {
 			System.out.println("Stopped");
 			return true;
 		}
-		
+
 		return false;
 	}
 
-	private void updateView() {
-
+	public void updateView() {
+		if (geneticAlgorithm != null)
+			view.updateGraph(this.geneticAlgorithm.getAverageFitnesses(),
+					this.geneticAlgorithm.getBestAbsoluteFitnesses(), this.geneticAlgorithm.getBestFitnesses());
 	}
 
 	private void wait(int miliseconds) {
