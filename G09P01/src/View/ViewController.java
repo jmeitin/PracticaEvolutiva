@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import Chromosomes.ChromosomeP1F1;
 import CrossAlgorithms.OnePointCross;
+import GeneticAlgorithm.Chromosome;
 import GeneticAlgorithm.ChromosomeFactory;
 import GeneticAlgorithm.GeneticAlgorithm;
 import GeneticAlgorithm.GeneticAlgorithmData;
@@ -14,9 +15,10 @@ public class ViewController implements Runnable {
 	private class ModelRunner implements Runnable {
 		@Override
 		public void run() {
-			geneticAlgorithm = new GeneticAlgorithm<Boolean, Double>(algorithmData);
+			geneticAlgorithm = new GeneticAlgorithm<Boolean, Double>(getAlgorithmData());
 			geneticAlgorithm.run();
-			updateView();
+			updateGraphsView();
+			updateSolution();
 		}
 	}
 
@@ -63,7 +65,7 @@ public class ViewController implements Runnable {
 		while (modelThread.isAlive()) {
 			try {
 				// UpdateView gatheting model data
-				updateView();
+				updateGraphsView();
 				Thread.sleep(1000); // Wait 1 second
 			} catch (InterruptedException e) {
 				geneticAlgorithm.stop();
@@ -94,10 +96,24 @@ public class ViewController implements Runnable {
 		return false;
 	}
 
-	public void updateView() {
+	public void updateGraphsView() {
 		if (geneticAlgorithm != null)
 			view.updateGraph(this.geneticAlgorithm.getAverageFitnesses(),
 					this.geneticAlgorithm.getBestAbsoluteFitnesses(), this.geneticAlgorithm.getBestFitnesses());
+	}
+	
+	private void updateSolution()
+	{
+		String solutionText = "";
+		Chromosome chromosome = this.geneticAlgorithm.getBest_chromosome();
+		for (Object fenotype : chromosome.getFenotypes())
+		{
+			solutionText += "Variable X1 = " + fenotype.toString() + ", ";
+		}
+		
+		solutionText += "Valor de la función: " + chromosome.evaluate();
+		
+		this.view.setSolutionText(solutionText);
 	}
 
 	private void wait(int miliseconds) {
@@ -106,5 +122,12 @@ public class ViewController implements Runnable {
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
+	}
+
+	/**
+	 * @return the algorithmData
+	 */
+	public GeneticAlgorithmData getAlgorithmData() {
+		return algorithmData;
 	}
 }

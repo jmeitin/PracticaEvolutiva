@@ -71,6 +71,20 @@ public class GeneticAlgorithm<T, U> {
 		return this.best_absolute_fitness;
 	}
 
+	/**
+	 * @return the best_chromosome
+	 */
+	public Chromosome<T, U> getBest_chromosome() {
+		return best_chromosome;
+	}
+
+	/**
+	 * @param best_chromosome the best_chromosome to set
+	 */
+	public void setBest_chromosome(Chromosome<T, U> best_chromosome) {
+		this.best_chromosome = best_chromosome;
+	}
+
 	public GeneticAlgorithm(GeneticAlgorithmData algorithmData) {
 		// Poblation
 		this.poblation = new Chromosome[algorithmData.poblation_size];
@@ -94,9 +108,9 @@ public class GeneticAlgorithm<T, U> {
 		this.crossAlgorithm = algorithmData.crossAlgorithm;
 
 		// Stats
-		average_fitnesses = new double[this.poblation_size];
-		best_absolute_fitnesses = new double[this.poblation_size];
-		best_fitnesses = new double[this.poblation_size];
+		average_fitnesses = new double[this.max_gen_num];
+		best_absolute_fitnesses = new double[this.max_gen_num];
+		best_fitnesses = new double[this.max_gen_num];
 	}
 
 	public void initializePoblation() {

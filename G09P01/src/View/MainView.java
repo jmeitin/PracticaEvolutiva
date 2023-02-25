@@ -30,6 +30,10 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 import org.math.plot.Plot2DPanel;
 import org.math.plot.plots.LinePlot;
@@ -57,6 +61,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.SystemColor;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class MainView extends JFrame {
 
@@ -104,6 +110,11 @@ public class MainView extends JFrame {
 				"FlatLaf", JOptionPane.INFORMATION_MESSAGE);
 	}
 
+	public void setSolutionText(String solutionText)
+	{
+		this.solutionTextField.setText(solutionText);
+	}
+	
 	public void updateGraph(double[] average_fitnesses, double[] best_absolute_fitnesses, double[] best_fitnesses) {
 		this.average_fitnesses = average_fitnesses;
 		this.best_absolute_fitnesses = best_absolute_fitnesses;
@@ -145,12 +156,24 @@ public class MainView extends JFrame {
 		;
 		JTextField genSizeTextField = new JFormattedTextField(numberFormat);
 		genSizeTextField.setText("100");
+		genSizeTextField.addPropertyChangeListener("value", evt -> {
+			String text =  evt.getNewValue().toString();
+			genSizeTextField.setText(text);
+			controller.getAlgorithmData().poblation_size = Integer.parseInt(text);
+		});
 
 		JLabel numGenLabel = new JLabel("Número de generaciones");
 		numGenLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		numGenTextField = new JTextField();
+		numGenTextField = new JFormattedTextField(numberFormat);
 		numGenTextField.setText("100");
 		numGenTextField.setColumns(10);
+		numGenTextField.addPropertyChangeListener("value", evt -> {
+			String text =  evt.getNewValue().toString();
+			numGenTextField.setText(text);
+			if(this.solutionTextField != null)
+				setSolutionText(text);
+			controller.getAlgorithmData().max_gen_num = Integer.parseInt(text);
+		});
 
 		JPanel selectionPanel = new JPanel();
 		selectionPanel.setBorder(
