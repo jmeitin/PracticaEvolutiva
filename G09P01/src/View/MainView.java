@@ -56,6 +56,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.SystemColor;
+import java.awt.event.ActionListener;
 
 public class MainView extends JFrame {
 
@@ -74,7 +75,9 @@ public class MainView extends JFrame {
 	private final Color darkGreen = new Color(39,160,25);
 	private final Color darkRed = new Color(160,36,25);
 	private boolean isDarkTheme = false;
-
+	private final ViewController controller = new ViewController(this);
+	private Thread controllerThread = new Thread(controller);
+	
 	/**
 	 * Launch the application.
 	 */
@@ -186,6 +189,12 @@ public class MainView extends JFrame {
 		mutationPanel.add(mutationProbabilityTextField);
 		
 		JButton executeButton = new JButton("Ejecutar");
+		executeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				controller.run();
+			}
+		});
 		
 		JButton restartButton = new JButton("Reiniciar");
 		

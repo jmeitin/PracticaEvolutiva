@@ -33,6 +33,12 @@ public class GeneticAlgorithm<T, U> {
 	final SelectionAlgorithm selectionAlgorithm;
 	final CrossAlgorithm crossAlgorithm;
 
+	// External control
+	private boolean isRunning = false;
+	public boolean isRunning() {
+		return isRunning;
+	}
+	
 	public GeneticAlgorithm(GeneticAlgorithmData algorithmData) {
 		// POBLACION
 		this.poblation = new Chromosome[algorithmData.poblation_size];
@@ -64,14 +70,20 @@ public class GeneticAlgorithm<T, U> {
 		return chromosomeFactory.createChromosome(tolerance, dimensions);
 	}
 
+	public void stop()
+	{
+		isRunning = false;
+	}
+	
 	/**
 	 * Runs the genetic algorithm. It prints the fenotypes of the best chromosomes and the result of evaluating this one.
 	 */
 	public void run() {
 		System.out.println("Run GeneticAlgorithm");
+		isRunning = true;
 		initializePoblation();
 		evaluate();
-
+		
 		for (int i = 0; i < this.max_gen_num; i++) { //generations
 			if (true) // elitism select
 			{
@@ -85,7 +97,9 @@ public class GeneticAlgorithm<T, U> {
 
 			evaluate();
 		}
-
+		
+		isRunning = false;
+		
 		// Print fenotypes of best chromosome
 		System.out.println("Best chromosome fenotypes:");
 		for (U fenotype : best_chromosome.getFenotypes())

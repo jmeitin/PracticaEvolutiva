@@ -16,28 +16,11 @@ import View.MainView;
 public class main {
 	
 	public static void main(String args[]) {
-		// MainView view = new MainView();
+		MainView view = new MainView();
 
-		ChromosomeFactory<Boolean, Double> chromosomeFactory = (double tolerance, int dimensions) -> {
-			return new ChromosomeP1F1(2, tolerance);
-		};
-		
-		GeneticAlgorithmData algorithmData = new GeneticAlgorithmData();
-		
-		algorithmData.poblation_size = 100;
-		algorithmData.max_gen_num = 100;
-		algorithmData.cross_chance = 0.2;
-		algorithmData.mutation_chance = 0.05;
-		algorithmData.tolerance = 0.025;
-		algorithmData.maximize = true;
-		algorithmData.dimensions = 1;
-		algorithmData.chromosomeFactory = chromosomeFactory;
-		algorithmData.selectionAlgorithm = new RouletteSelection();
-		algorithmData.crossAlgorithm = new OnePointCross();
 	
 		
-		GeneticAlgorithm<Boolean, Double> ag = new GeneticAlgorithm<Boolean, Double>(algorithmData);
-		ag.run();
+	
 	}
 	
 	private static void run()
