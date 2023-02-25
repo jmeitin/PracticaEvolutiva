@@ -36,6 +36,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
 import org.math.plot.Plot2DPanel;
+import org.math.plot.plotObjects.Axis;
 import org.math.plot.plots.LinePlot;
 
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -119,20 +120,29 @@ public class MainView extends JFrame {
 		this.average_fitnesses = average_fitnesses;
 		this.best_absolute_fitnesses = best_absolute_fitnesses;
 		this.best_fitnesses = best_fitnesses;
-		replot();
+		plotData();
 	}
 
-	private void replot() {
+	public void cleanPlot()
+	{
+		plot.removeAllPlots();
+	}
+	
+	public void cleanPlotData()
+	{
+		average_fitnesses = null;
+		best_fitnesses = null;
+		best_absolute_fitnesses = null;
+	}
+	
+	private void plotData() {
 		if (average_fitnesses == null || best_fitnesses == null || best_absolute_fitnesses == null)
 			return;
 
-		plot.removeAllPlots();
+		cleanPlot();
 		plot.addLinePlot("Mejor Absoluto", isDarkTheme ? lightRed : darkRed, best_absolute_fitnesses);
 		plot.addLinePlot("Mejor Generación", isDarkTheme ? lightBlue : darkBlue, best_fitnesses);
 		plot.addLinePlot("Media Generación", isDarkTheme ? lightGreen : darkGreen, average_fitnesses);
-		plot.addLegend("South");
-		plot.setAxisLabel(0, "Número de generaciones");
-		plot.setAxisLabel(1, "Valor de la función");
 	}
 
 	/**
@@ -170,9 +180,7 @@ public class MainView extends JFrame {
 		numGenTextField.addPropertyChangeListener("value", evt -> {
 			String text =  evt.getNewValue().toString();
 			numGenTextField.setText(text);
-			if(this.solutionTextField != null)
-				setSolutionText(text);
-			controller.getAlgorithmData().max_gen_num = Integer.parseInt(text);
+			controller.setGenSize(Integer.parseInt(text));
 		});
 
 		JPanel selectionPanel = new JPanel();
@@ -185,6 +193,11 @@ public class MainView extends JFrame {
 		selectionPanel.add(selectionTypeLabel);
 
 		JComboBox selectionTypeComboBox = new JComboBox();
+		selectionTypeComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.setSelectionType(selectionTypeComboBox.getSelectedItem().toString().toUpperCase());
+			}
+		});
 		selectionTypeComboBox.setModel(new DefaultComboBoxModel(
 				new String[] { "Ruleta", "Estocástico", "T-Determinístico", "T-Probabilístico" }));
 		selectionPanel.add(selectionTypeComboBox);
@@ -198,13 +211,23 @@ public class MainView extends JFrame {
 		crossPanel.add(crossTypeLabel);
 
 		JComboBox crossTypeComboBox = new JComboBox();
+		crossTypeComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.setCrossType(crossTypeComboBox.getSelectedItem().toString().toUpperCase());
+			}
+		});
 		crossTypeComboBox.setModel(new DefaultComboBoxModel(new String[] { "Cruce Monopunto" }));
 		crossPanel.add(crossTypeComboBox);
 
 		JLabel crossProbabilityLabel = new JLabel("% Cruce");
 		crossPanel.add(crossProbabilityLabel);
 
-		crossProbabilityTextField = new JTextField();
+		crossProbabilityTextField =new JFormattedTextField(numberFormat);
+		crossProbabilityTextField.addPropertyChangeListener("value", evt -> {
+			String text =  evt.getNewValue().toString();
+			crossProbabilityTextField.setText(text);
+			controller.setMutationChance(Double.parseDouble(text));
+		});
 		crossProbabilityTextField.setText("60.0");
 		crossPanel.add(crossProbabilityTextField);
 		crossProbabilityTextField.setColumns(10);
@@ -218,21 +241,31 @@ public class MainView extends JFrame {
 		mutationPanel.add(mutationTypeLabel);
 
 		JComboBox mutationTypeTextField = new JComboBox();
+		mutationTypeTextField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.setMutationType(mutationTypeTextField.getSelectedItem().toString().toUpperCase());
+			}
+		});
 		mutationTypeTextField.setModel(new DefaultComboBoxModel(new String[] { "Mutación básica" }));
 		mutationPanel.add(mutationTypeTextField);
 
 		JLabel mutationProbabilityLabel = new JLabel("% Mutación");
 		mutationPanel.add(mutationProbabilityLabel);
 
-		mutationProbabilityTextField = new JTextField();
+		mutationProbabilityTextField = new JFormattedTextField(numberFormat);
 		mutationProbabilityTextField.setText("60.0");
+		mutationProbabilityTextField.addPropertyChangeListener("value", evt -> {
+			String text =  evt.getNewValue().toString();
+			mutationProbabilityTextField.setText(text);
+			controller.setMutationChance(Double.parseDouble(text));
+		});
 		mutationProbabilityTextField.setColumns(10);
 		mutationPanel.add(mutationProbabilityTextField);
 
 		JButton executeButton = new JButton("Ejecutar");
 		executeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				cleanPlot();
 				controller.run();
 			}
 		});
@@ -240,7 +273,7 @@ public class MainView extends JFrame {
 		JButton restartButton = new JButton("Reiniciar");
 		restartButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				plot.removeAllPlots();
+				cleanPlot();
 			}
 		});
 
@@ -252,10 +285,15 @@ public class MainView extends JFrame {
 		lblSeleccionaProblema.setHorizontalAlignment(SwingConstants.LEFT);
 		problemPanel.add(lblSeleccionaProblema);
 
-		JComboBox selectionTypeComboBox_1 = new JComboBox();
-		selectionTypeComboBox_1.setModel(new DefaultComboBoxModel(new String[] { "P1 - Funcion 1", "P1 - Funcion 2",
+		JComboBox problemSelectionComboBox = new JComboBox();
+		problemSelectionComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.setFunction(problemSelectionComboBox.getSelectedItem().toString().toUpperCase());
+			}
+		});
+		problemSelectionComboBox.setModel(new DefaultComboBoxModel(new String[] { "P1 - Funcion 1", "P1 - Funcion 2",
 				"P1 - Funcion 3", "P1 - Funcion 4", "P1 - Funcion 5" }));
-		problemPanel.add(selectionTypeComboBox_1);
+		problemPanel.add(problemSelectionComboBox);
 
 		JPanel themePanel = new JPanel();
 		themePanel.setBorder(new TitledBorder("Tema"));
@@ -275,11 +313,11 @@ public class MainView extends JFrame {
 					if (theme.equals("Claro")) {
 						FlatLightLaf.setup();
 						isDarkTheme = false;
-						replot();
+						plotData();
 					} else {
 						FlatDarkLaf.setup();
 						isDarkTheme = true;
-						replot();
+						plotData();
 					}
 
 					FlatLaf.updateUI();
@@ -342,9 +380,11 @@ public class MainView extends JFrame {
 		plot = new Plot2DPanel();
 		plot.plotCanvas.setAutoBounds(1);
 		plot.plotCanvas.setAxisLabels(new String[] { "X", "Y" });
+		//plot.addLegend("South");
+		//plot.plotCanvas.setAxisLabels(new String[] { "Número de generaciones", "Valor de la función" });
 		plot.plotCanvas.setBackground(UIManager.getColor("Button.light"));
 		eastPanel.add(plot);
-		replot();
+		plotData();
 
 		JPanel solutionPanel = new JPanel();
 		eastPanel.add(solutionPanel);

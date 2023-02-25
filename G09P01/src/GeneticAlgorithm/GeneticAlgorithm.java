@@ -151,14 +151,6 @@ public class GeneticAlgorithm<T, U> {
 		}
 
 		isRunning = false;
-
-		// Print fenotypes of best chromosome
-		System.out.println("Best chromosome fenotypes:");
-		for (U fenotype : best_chromosome.getFenotypes())
-			System.out.println(fenotype);
-
-		System.out.print("Evaluation: ");
-		System.out.println(best_chromosome.evaluate());
 	}
 
 	/**

@@ -89,7 +89,7 @@ public class ViewController implements Runnable {
 	private boolean tryStopThread(Thread thread) {
 		if (thread != null && thread.isAlive()) {
 			thread.interrupt();
-			System.out.println("Stopped");
+			System.out.println("Thread Stopped");
 			return true;
 		}
 
@@ -115,7 +115,7 @@ public class ViewController implements Runnable {
 		
 		this.view.setSolutionText(solutionText);
 	}
-
+	
 	private void wait(int miliseconds) {
 		try {
 			Thread.sleep(miliseconds);
@@ -130,4 +130,55 @@ public class ViewController implements Runnable {
 	public GeneticAlgorithmData getAlgorithmData() {
 		return algorithmData;
 	}
+	
+	// View Interaction
+	public void setPoblationSize(int poblation_size)
+	{
+		this.algorithmData.poblation_size = poblation_size;
+	}
+	
+	public void setGenSize(int generation_size)
+	{
+		this.algorithmData.max_gen_num = generation_size;
+	}
+	
+	public void setFunction(String function)
+	{
+		
+	}
+	
+	public void setSelectionType(String selection)
+	{
+		System.out.println(selection);
+		switch(selection)
+		{
+			case "RULETA":
+				this.algorithmData.selectionAlgorithm = new RouletteSelection();
+				break;
+			case "ESTOCÁSTICO":
+				System.out.println("Funcionan las palabras con tildes (los strings seran UTF-8)");
+				break;
+		}
+	}
+	
+	public void setCrossType(String cross)
+	{
+		
+	}
+	
+	public void setMutationType(String mutationType)
+	{
+		
+	}
+	
+	public void setCrossChance(double cross_chance)
+	{
+		this.algorithmData.cross_chance = cross_chance;
+	}
+	
+	public void setMutationChance(double mutation_chance)
+	{
+		this.algorithmData.mutation_chance = mutation_chance;
+	}
+	
 }
