@@ -10,6 +10,7 @@ public class GeneticAlgorithmData {
 	public double cross_chance;
 	public double mutation_chance;
 	public double tolerance;
+	public double elitism_percentage;
 	public boolean maximize;
 	public int dimensions;
 	public int tournament_size;

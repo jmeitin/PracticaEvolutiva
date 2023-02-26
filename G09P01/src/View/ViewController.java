@@ -49,6 +49,7 @@ public class ViewController implements Runnable {
 		algorithmData.cross_chance = 0.2;
 		algorithmData.mutation_chance = 0.05;
 		algorithmData.tolerance = 0.025;
+		algorithmData.elitism_percentage = 0.0;
 		algorithmData.maximize = true;
 		algorithmData.dimensions = 1;
 		algorithmData.chromosomeFactory = chromosomeFactory;
@@ -65,13 +66,8 @@ public class ViewController implements Runnable {
 		modelThread.start();
 
 		while (modelThread.isAlive()) {
-			try {
-				// UpdateView gatheting model data
-				updateGraphsView();
-				Thread.sleep(1000); // Wait 1 second
-			} catch (InterruptedException e) {
-				geneticAlgorithm.stop();
-			}
+			// Here we can track the percentage of completion of the model
+			// This runs in its own thread to not halt the UI
 		}
 
 		System.out.println("Thread end");
@@ -142,6 +138,16 @@ public class ViewController implements Runnable {
 	public void setGenSize(int generation_size)
 	{
 		this.algorithmData.max_gen_num = generation_size;
+	}
+	
+	public void setElitism(double elitism_percentage)
+	{
+		this.algorithmData.elitism_percentage = elitism_percentage;
+	}
+	
+	public void setTolerance(double tolerance)
+	{
+		this.algorithmData.tolerance = tolerance;
 	}
 	
 	public void setFunction(String function)

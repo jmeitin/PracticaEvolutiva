@@ -10,15 +10,19 @@ public class GeneticAlgorithm<T, U> {
 	private double[] best_absolute_fitnesses;
 	private double[] best_fitnesses;
 
-	// Probabilities-------
+	// Probabilities -------
 	final private double cross_chance;
 	final private double mutation_chance;
 
-	// TAMANYOS------------
+	// Sizes ------------
 	final private int max_gen_num; // max generaciones
 	final private int poblation_size;
 	final private int tournament_size; // NICO NO LO USA?
 
+	// Elitism
+	final private boolean elitism;
+	final private double elitism_percentage;
+	
 	private Chromosome<T, U> best_chromosome;
 	private int best_pos;
 
@@ -100,6 +104,8 @@ public class GeneticAlgorithm<T, U> {
 		this.cross_chance = algorithmData.cross_chance;
 		this.mutation_chance = algorithmData.mutation_chance;
 		this.tolerance = algorithmData.tolerance;
+		this.elitism = algorithmData.elitism_percentage > 0.002;
+		this.elitism_percentage = algorithmData.elitism_percentage;
 		this.maximize = algorithmData.maximize;
 		this.best_absolute_fitness = algorithmData.maximize ? Double.MIN_VALUE : Double.MAX_VALUE;
 		this.dimensions = algorithmData.dimensions;

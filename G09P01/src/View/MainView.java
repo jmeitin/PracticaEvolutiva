@@ -64,6 +64,7 @@ import java.awt.SystemColor;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import java.text.Format;
 
 public class MainView extends JFrame {
 
@@ -89,6 +90,7 @@ public class MainView extends JFrame {
 	private double[] average_fitnesses;
 	private double[] best_absolute_fitnesses;
 	private double[] best_fitnesses;
+	private JFormattedTextField elitismProbabilityTextField;
 
 	/**
 	 * Launch the application.
@@ -222,13 +224,12 @@ public class MainView extends JFrame {
 		JLabel crossProbabilityLabel = new JLabel("% Cruce");
 		crossPanel.add(crossProbabilityLabel);
 
-		crossProbabilityTextField =new JFormattedTextField(numberFormat);
+		crossProbabilityTextField =new JFormattedTextField(decimalFormat);
 		crossProbabilityTextField.addPropertyChangeListener("value", evt -> {
 			String text =  evt.getNewValue().toString();
-			crossProbabilityTextField.setText(text);
 			controller.setMutationChance(Double.parseDouble(text));
 		});
-		crossProbabilityTextField.setText("60.0");
+		crossProbabilityTextField.setText("60,0");
 		crossPanel.add(crossProbabilityTextField);
 		crossProbabilityTextField.setColumns(10);
 
@@ -252,11 +253,10 @@ public class MainView extends JFrame {
 		JLabel mutationProbabilityLabel = new JLabel("% Mutación");
 		mutationPanel.add(mutationProbabilityLabel);
 
-		mutationProbabilityTextField = new JFormattedTextField(numberFormat);
-		mutationProbabilityTextField.setText("60.0");
+		mutationProbabilityTextField = new JFormattedTextField(decimalFormat);
+		mutationProbabilityTextField.setText("60,0");
 		mutationProbabilityTextField.addPropertyChangeListener("value", evt -> {
 			String text =  evt.getNewValue().toString();
-			mutationProbabilityTextField.setText(text);
 			controller.setMutationChance(Double.parseDouble(text));
 		});
 		mutationProbabilityTextField.setColumns(10);
@@ -327,47 +327,88 @@ public class MainView extends JFrame {
 		});
 		;
 		themePanel.add(themeComboBox);
+		
+		JPanel elitismPanel = new JPanel();
+		elitismPanel.setBorder(new TitledBorder(null, "Elitismo", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		elitismPanel.setLayout(new GridLayout(0, 2, 0, 0));
+		
+		JLabel elitismProbabilityLabel = new JLabel("% Elitismo");
+		elitismPanel.add(elitismProbabilityLabel);
+		
+		elitismProbabilityTextField = new JFormattedTextField(decimalFormat);
+		elitismProbabilityTextField.addPropertyChangeListener("value", evt -> {
+			String text =  evt.getNewValue().toString();
+			controller.setElitism(Double.parseDouble(text));
+		});
+		elitismProbabilityTextField.setText("0,0");
+		elitismProbabilityTextField.setColumns(10);
+		elitismPanel.add(elitismProbabilityTextField);
+		
+		JLabel toleranceLabel = new JLabel("Tolerancia");
+		toleranceLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
+		
+		JFormattedTextField toleranceTextField =new JFormattedTextField(decimalFormat);
+		toleranceTextField.addPropertyChangeListener("value", evt -> {
+			String text =  evt.getNewValue().toString();
+			controller.setTolerance(Double.parseDouble(text));
+		});
+		toleranceTextField.setText("0,025");
+		toleranceTextField.setColumns(10);
 		GroupLayout gl_westPanel = new GroupLayout(westPanel);
-		gl_westPanel.setHorizontalGroup(gl_westPanel.createParallelGroup(Alignment.TRAILING).addGroup(Alignment.LEADING,
-				gl_westPanel.createSequentialGroup().addGap(10).addGroup(gl_westPanel
-						.createParallelGroup(Alignment.LEADING)
-						.addComponent(themePanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-						.addComponent(restartButton, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-						.addComponent(mutationPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-						.addComponent(crossPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(selectionPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 234,
-								Short.MAX_VALUE)
-						.addComponent(numGenTextField, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 234,
-								Short.MAX_VALUE)
-						.addComponent(numGenLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-						.addComponent(genSizeTextField, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 234,
-								Short.MAX_VALUE)
-						.addComponent(genSizeLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-						.addComponent(executeButton, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-						.addComponent(problemPanel, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)).addGap(10)));
-		gl_westPanel.setVerticalGroup(gl_westPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_westPanel.createSequentialGroup().addGap(1)
-						.addComponent(genSizeLabel, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(genSizeTextField, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(numGenLabel)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(numGenTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(selectionPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(crossPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(mutationPanel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(problemPanel, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(themePanel, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(executeButton)
-						.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(restartButton).addGap(244)));
+		gl_westPanel.setHorizontalGroup(
+			gl_westPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_westPanel.createSequentialGroup()
+					.addGap(10)
+					.addGroup(gl_westPanel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(restartButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(executeButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(themePanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(toleranceTextField, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(problemPanel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(elitismPanel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(mutationPanel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(crossPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(selectionPanel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(numGenTextField, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(numGenLabel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(genSizeTextField, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(genSizeLabel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(toleranceLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE))
+					.addGap(10))
+		);
+		gl_westPanel.setVerticalGroup(
+			gl_westPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_westPanel.createSequentialGroup()
+					.addGap(1)
+					.addComponent(genSizeLabel, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(genSizeTextField, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(numGenLabel)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(numGenTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(toleranceLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(toleranceTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(selectionPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(crossPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(mutationPanel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+					.addGap(1)
+					.addComponent(elitismPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(problemPanel, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(themePanel, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(executeButton)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(restartButton)
+					.addGap(168))
+		);
 		gl_westPanel.setAutoCreateGaps(true);
 		gl_westPanel.setAutoCreateContainerGaps(true);
 		westPanel.setLayout(gl_westPanel);

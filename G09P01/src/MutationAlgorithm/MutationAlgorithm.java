@@ -6,7 +6,7 @@ import GeneticAlgorithm.Chromosome;
 
 public class MutationAlgorithm {
 	public Chromosome[] mutate(Chromosome[] poblation, int poblation_size, double mutation_chance) {
-		System.out.println("Mutate");
+		// System.out.println("Mutate");
 		Chromosome[] new_population = new Chromosome[poblation_size];
 		Random rand = new Random();
 		
