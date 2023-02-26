@@ -8,6 +8,7 @@ import GeneticAlgorithm.Chromosome;
 import GeneticAlgorithm.ChromosomeFactory;
 import GeneticAlgorithm.GeneticAlgorithm;
 import GeneticAlgorithm.GeneticAlgorithmData;
+import MutationAlgorithm.MutationAlgorithm;
 import SelectionAlgorithms.RouletteSelection;
 
 public class ViewController implements Runnable {
@@ -53,6 +54,7 @@ public class ViewController implements Runnable {
 		algorithmData.chromosomeFactory = chromosomeFactory;
 		algorithmData.selectionAlgorithm = new RouletteSelection();
 		algorithmData.crossAlgorithm = new OnePointCross();
+		algorithmData.mutationAlgorithm = new MutationAlgorithm();
 	}
 
 	private void runAux() {
@@ -168,7 +170,7 @@ public class ViewController implements Runnable {
 	
 	public void setMutationType(String mutationType)
 	{
-		
+		//solo hay 1 tipo de mutacion (creo)
 	}
 	
 	public void setCrossChance(double cross_chance)
