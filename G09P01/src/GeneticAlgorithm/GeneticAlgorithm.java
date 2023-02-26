@@ -183,12 +183,13 @@ public class GeneticAlgorithm<T, U> {
 		}
 
 		this.best_chromosome = poblation[best_pos].getCopy();
-		if (compareFitness(best_fitness, best_absolute_fitness))
-			this.best_absolute_fitness = best_fitness;
+		double best_chromosome_fitness = best_chromosome.fitness;
+		if (compareFitness(best_chromosome_fitness, best_absolute_fitness))
+			this.best_absolute_fitness = best_chromosome_fitness;
 		
 		// Gather stats
 		this.average_fitnesses[generation] = fitness_sum / poblation_size;
-		this.best_fitnesses[generation] = best_chromosome.fitness;
+		this.best_fitnesses[generation] = best_chromosome_fitness;
 		this.best_absolute_fitnesses[generation] = best_absolute_fitness;
 	}
 

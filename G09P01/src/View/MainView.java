@@ -421,8 +421,7 @@ public class MainView extends JFrame {
 		plot = new Plot2DPanel();
 		plot.plotCanvas.setAutoBounds(1);
 		plot.plotCanvas.setAxisLabels(new String[] { "X", "Y" });
-		//plot.addLegend("South");
-		//plot.plotCanvas.setAxisLabels(new String[] { "Número de generaciones", "Valor de la función" });
+		plot.addLegend("South");
 		plot.plotCanvas.setBackground(UIManager.getColor("Button.light"));
 		eastPanel.add(plot);
 		plotData();

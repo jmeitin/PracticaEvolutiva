@@ -110,6 +110,7 @@ public class ViewController implements Runnable {
 		}
 		
 		solutionText += "Valor de la función: " + chromosome.evaluate();
+		solutionText += " Fitness del cromosoma " + chromosome.getFitness();
 		
 		this.view.setSolutionText(solutionText);
 	}
@@ -152,7 +153,8 @@ public class ViewController implements Runnable {
 	
 	public void setFunction(String function)
 	{
-		
+		// This parameter depends on the function so it should be set here.
+		//algorithmData.maximize = true;
 	}
 	
 	public void setSelectionType(String selection)
