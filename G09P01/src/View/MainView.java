@@ -200,8 +200,7 @@ public class MainView extends JFrame {
 				controller.setSelectionType(selectionTypeComboBox.getSelectedItem().toString().toUpperCase());
 			}
 		});
-		selectionTypeComboBox.setModel(new DefaultComboBoxModel(
-				new String[] { "Ruleta", "Estocástico", "T-Determinístico", "T-Probabilístico" }));
+		selectionTypeComboBox.setModel(new DefaultComboBoxModel(new String[] {"Ruleta", "T-Determinístico", "T-Probabilístico", "Estocástico", "Truncamiento", "Restos"}));
 		selectionPanel.add(selectionTypeComboBox);
 
 		JPanel crossPanel = new JPanel();
@@ -218,7 +217,7 @@ public class MainView extends JFrame {
 				controller.setCrossType(crossTypeComboBox.getSelectedItem().toString().toUpperCase());
 			}
 		});
-		crossTypeComboBox.setModel(new DefaultComboBoxModel(new String[] { "Cruce Monopunto" }));
+		crossTypeComboBox.setModel(new DefaultComboBoxModel(new String[] {"Cruce Monopunto", "Cruce Uniforme"}));
 		crossPanel.add(crossTypeComboBox);
 
 		JLabel crossProbabilityLabel = new JLabel("% Cruce");

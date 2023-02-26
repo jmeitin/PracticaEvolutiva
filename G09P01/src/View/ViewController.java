@@ -4,12 +4,19 @@ import java.awt.Color;
 
 import Chromosomes.ChromosomeP1F1;
 import CrossAlgorithms.OnePointCross;
+import CrossAlgorithms.UniformCross;
 import GeneticAlgorithm.Chromosome;
 import GeneticAlgorithm.ChromosomeFactory;
 import GeneticAlgorithm.GeneticAlgorithm;
 import GeneticAlgorithm.GeneticAlgorithmData;
+import MutationAlgorithm.BasicGenMutation;
 import MutationAlgorithm.MutationAlgorithm;
+import SelectionAlgorithms.DeterministicTournamentSelection;
+import SelectionAlgorithms.ProbabilisticTournamentSelection;
+import SelectionAlgorithms.RemainderSelection;
 import SelectionAlgorithms.RouletteSelection;
+import SelectionAlgorithms.StochasticSelection;
+import SelectionAlgorithms.TruncationSelection;
 
 public class ViewController implements Runnable {
 
@@ -53,7 +60,7 @@ public class ViewController implements Runnable {
 		algorithmData.chromosomeFactory = chromosomeFactory;
 		algorithmData.selectionAlgorithm = new RouletteSelection();
 		algorithmData.crossAlgorithm = new OnePointCross();
-		algorithmData.mutationAlgorithm = new MutationAlgorithm();
+		algorithmData.mutationAlgorithm = new BasicGenMutation();
 	}
 
 	private void runAux() {
@@ -99,28 +106,18 @@ public class ViewController implements Runnable {
 			view.updateGraph(this.geneticAlgorithm.getAverageFitnesses(),
 					this.geneticAlgorithm.getBestAbsoluteFitnesses(), this.geneticAlgorithm.getBestFitnesses());
 	}
-	
-	private void updateSolution()
-	{
+
+	private void updateSolution() {
 		String solutionText = "";
 		Chromosome chromosome = this.geneticAlgorithm.getBest_chromosome();
-		for (Object fenotype : chromosome.getFenotypes())
-		{
+		for (Object fenotype : chromosome.getFenotypes()) {
 			solutionText += "Variable X1 = " + fenotype.toString() + ", ";
 		}
-		
+
 		solutionText += "Valor de la función: " + chromosome.evaluate();
 		solutionText += " Fitness del cromosoma " + chromosome.getFitness();
-		
+
 		this.view.setSolutionText(solutionText);
-	}
-	
-	private void wait(int miliseconds) {
-		try {
-			Thread.sleep(miliseconds);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
 	}
 
 	/**
@@ -129,66 +126,78 @@ public class ViewController implements Runnable {
 	public GeneticAlgorithmData getAlgorithmData() {
 		return algorithmData;
 	}
-	
+
 	// View Interaction
-	public void setPoblationSize(int poblation_size)
-	{
+	public void setPoblationSize(int poblation_size) {
 		this.algorithmData.poblation_size = poblation_size;
 	}
-	
-	public void setGenSize(int generation_size)
-	{
+
+	public void setGenSize(int generation_size) {
 		this.algorithmData.max_gen_num = generation_size;
 	}
-	
-	public void setElitism(double elitism_percentage)
-	{
+
+	public void setElitism(double elitism_percentage) {
 		this.algorithmData.elitism_percentage = elitism_percentage;
 	}
-	
-	public void setTolerance(double tolerance)
-	{
+
+	public void setTolerance(double tolerance) {
 		this.algorithmData.tolerance = tolerance;
 	}
-	
-	public void setFunction(String function)
-	{
+
+	public void setFunction(String function) {
 		// This parameter depends on the function so it should be set here.
-		//algorithmData.maximize = true;
+		// algorithmData.maximize = true;
 	}
-	
-	public void setSelectionType(String selection)
-	{
+
+	public void setSelectionType(String selection) {
 		System.out.println(selection);
-		switch(selection)
-		{
-			case "RULETA":
-				this.algorithmData.selectionAlgorithm = new RouletteSelection();
-				break;
-			case "ESTOCÁSTICO":
-				System.out.println("Funcionan las palabras con tildes (los strings seran UTF-8)");
-				break;
+		switch (selection) {
+		case "RULETA":
+			this.algorithmData.selectionAlgorithm = new RouletteSelection();
+			break;
+		case "T-DETERMINÍSTICO":
+			this.algorithmData.selectionAlgorithm = new DeterministicTournamentSelection();
+			break;
+		case "T-PROBABILÍSTICO":
+			this.algorithmData.selectionAlgorithm = new ProbabilisticTournamentSelection();
+			break;
+		case "ESTOCÁSTICO":
+			this.algorithmData.selectionAlgorithm = new StochasticSelection();
+			break;
+		case "TRUNCAMIENTO":
+			this.algorithmData.selectionAlgorithm = new TruncationSelection();
+			break;
+		case "RESTOS":
+			this.algorithmData.selectionAlgorithm = new RemainderSelection();
+			break;
 		}
 	}
-	
-	public void setCrossType(String cross)
-	{
-		
+
+	public void setCrossType(String cross) {
+		switch (cross) {
+		case "CRUCE MONOPUNTO":
+			this.algorithmData.crossAlgorithm = new OnePointCross();
+			break;
+		case "CRUCE UNIFORME":
+			this.algorithmData.crossAlgorithm = new UniformCross();
+			break;
+		}
 	}
-	
-	public void setMutationType(String mutationType)
-	{
-		//solo hay 1 tipo de mutacion (creo)
+
+	public void setMutationType(String mutationType) {
+		switch (mutationType) {
+		case "MUTACIÓN BÁSICA":
+			this.algorithmData.mutationAlgorithm = new BasicGenMutation();
+			break;
+		}
 	}
-	
-	public void setCrossChance(double cross_chance)
-	{
+
+	public void setCrossChance(double cross_chance) {
 		this.algorithmData.cross_chance = cross_chance;
 	}
-	
-	public void setMutationChance(double mutation_chance)
-	{
+
+	public void setMutationChance(double mutation_chance) {
 		this.algorithmData.mutation_chance = mutation_chance;
 	}
-	
+
 }
