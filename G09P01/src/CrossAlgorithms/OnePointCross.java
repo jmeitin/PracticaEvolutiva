@@ -24,12 +24,8 @@ public class OnePointCross extends CrossAlgorithm {
 				Chromosome childA = poblation[i].getCopy();
 				Chromosome childB = poblation[i+1].getCopy();
 				
-				//Point belongs to [1, length - 1]
-				// if length = 10 & point = 0.3 ==> 1 + 0.3 * (10 - 2) = 2.7 ==> 2nd gene
-				// if point 1.0 ==> 1 + 1 * 8 = 9 ==> 9th gene
 				int length = childA.getLenght();
-				double aux = 1 + rand.nextDouble() * (length - 2); 
-				int point = (int)aux;
+				int point = calculateNextPoint(rand, 1, length - 1);
 				
 				for (int g = 0; g < length; g++) {
 					if (g >= point) {
@@ -45,7 +41,7 @@ public class OnePointCross extends CrossAlgorithm {
 			
 			//CROSS DOESN'T HAPPEN
 			else {
-				new_population[i] = poblation[i];
+				new_population[i] = poblation[i].getCopy();
 			}
 			
 		}

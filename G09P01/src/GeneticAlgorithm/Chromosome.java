@@ -2,6 +2,7 @@ package GeneticAlgorithm;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 
@@ -38,6 +39,7 @@ public abstract class Chromosome<T,U> {
 	public abstract double evaluate();
 	protected abstract void initGenes();
 	protected abstract Chromosome getNewInstance();
+	protected abstract void mutateGene(int pos);
 	
 	//UTILITY--------------------------------------------------------
 	// Gets Lenght for a given gen
@@ -100,6 +102,22 @@ public abstract class Chromosome<T,U> {
 		other_chromosome.setGene(pos, g);
 		
 		return true;
+	}
+	
+	// MUTATES GENES IN CHROMOSOME
+	public void mutate(Random rand, double mutation_chance) {
+		boolean cambios = false;
+		
+		for (int i=0; i < num_of_genes; i++) {
+			if (rand.nextDouble() < mutation_chance) {
+				mutateGene(i);
+				cambios = true;
+			}
+		}
+		
+		if (cambios) {
+			calculateFenotypes(); //UPDATE FENOTYPE
+		}
 	}
 	
 	public boolean setGene(int pos, Gene<T> gene)

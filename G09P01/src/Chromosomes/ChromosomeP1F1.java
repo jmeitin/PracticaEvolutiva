@@ -57,6 +57,14 @@ public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 
 		return brute_fitness;
 	}
+	
+	@Override
+	public void mutateGene(int pos) {
+		Random rand = new Random();
+		for (int j = 0; j < this.genes[pos].getLenght(); j++) {
+			this.genes[pos].setAllele(j, rand.nextBoolean());
+		}
+	}
 
 	@Override
 	protected Chromosome getNewInstance() {

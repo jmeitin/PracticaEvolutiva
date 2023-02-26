@@ -39,7 +39,7 @@ public class UniformCross extends CrossAlgorithm {
 			
 			//CROSS DOESN'T HAPPEN
 			else {
-				new_population[i] = poblation[i];
+				new_population[i] = poblation[i].getCopy();
 			}
 			
 		}

@@ -2,6 +2,7 @@ package GeneticAlgorithm;
 
 import SelectionAlgorithms.SelectionAlgorithm;
 import CrossAlgorithms.CrossAlgorithm;
+import MutationAlgorithm.MutationAlgorithm;
 
 public class GeneticAlgorithmData {
 	public int poblation_size;
@@ -15,4 +16,5 @@ public class GeneticAlgorithmData {
 	public ChromosomeFactory chromosomeFactory;
 	public SelectionAlgorithm selectionAlgorithm;
 	public CrossAlgorithm crossAlgorithm;
+	public MutationAlgorithm mutationAlgorithm;
 }

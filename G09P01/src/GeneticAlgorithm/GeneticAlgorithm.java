@@ -2,6 +2,7 @@ package GeneticAlgorithm;
 
 import SelectionAlgorithms.SelectionAlgorithm;
 import CrossAlgorithms.CrossAlgorithm;
+import MutationAlgorithm.MutationAlgorithm;
 
 public class GeneticAlgorithm<T, U> {
 	private Chromosome<T, U>[] poblation; // clase individuo?
@@ -37,6 +38,7 @@ public class GeneticAlgorithm<T, U> {
 	final ChromosomeFactory<T, U> chromosomeFactory;
 	final SelectionAlgorithm selectionAlgorithm;
 	final CrossAlgorithm crossAlgorithm;
+	final MutationAlgorithm mutationAlgorithm;
 
 	// External control
 	private boolean isRunning = false;
@@ -106,6 +108,7 @@ public class GeneticAlgorithm<T, U> {
 		// Algorithms:
 		this.selectionAlgorithm = algorithmData.selectionAlgorithm;
 		this.crossAlgorithm = algorithmData.crossAlgorithm;
+		this.mutationAlgorithm = algorithmData.mutationAlgorithm;
 
 		// Stats
 		average_fitnesses = new double[this.max_gen_num];
@@ -193,6 +196,7 @@ public class GeneticAlgorithm<T, U> {
 	}
 
 	public void mutate() {
+		this.poblation = this.mutationAlgorithm.mutate(poblation,  poblation_size, mutation_chance);
 
 	}
 

@@ -56,21 +56,11 @@ public class MultiPointCross extends CrossAlgorithm {
 			
 			//CROSS DOESN'T HAPPEN
 			else {
-				new_population[i] = poblation[i];
+				new_population[i] = poblation[i].getCopy();
 			}
 			
 		}
 
 		return new_population;	
-	}
-	
-	private int calculateNextPoint(Random rand, int start, int end) {
-		//Point belongs to [1, length - 1]
-		// if length = 10 & point = 0.3 ==> 1 + 0.3 * (10 - 2) = 2.7 ==> 2nd gene
-		// if point 1.0 ==> 1 + 1 * 8 = 9 ==> 9th gene
-		double aux = start + rand.nextDouble() * (end - start); 
-		int point = (int)aux;
-		
-		return point;
 	}
 }
