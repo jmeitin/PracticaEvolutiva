@@ -169,7 +169,7 @@ public class GeneticAlgorithm<T, U> {
 		double fitness_sum = recalculateFitness();
 		double accumulated_score = 0;
 		double best_fitness = maximize ? Double.MIN_VALUE : Double.MAX_VALUE;
-
+		
 		for (int i = 0; i < poblation_size; i++) {
 			double brute_fitness = poblation[i].evaluate();
 			if (compareFitness(brute_fitness, best_fitness)) {
@@ -177,15 +177,18 @@ public class GeneticAlgorithm<T, U> {
 				best_pos = i;
 			}
 
-			poblation[i].setScore(poblation[i].getFitness() / fitness_sum);
-			accumulated_score += poblation[i].getScore();
-			poblation[i].setAccumulatedScore(accumulated_score);
+			// TODO: Preguntar en clase si esto hace falta y si nuestra forma de evaluar fitness es correcta
+			//poblation[i].setScore(poblation[i].getFitness() / fitness_sum);
+			//accumulated_score += poblation[i].getScore();
+			//poblation[i].setAccumulatedScore(accumulated_score);
 		}
 
-		this.best_chromosome = poblation[best_pos].getCopy();
-		double best_chromosome_fitness = best_chromosome.fitness;
+		double best_chromosome_fitness = poblation[best_pos].fitness;
 		if (compareFitness(best_chromosome_fitness, best_absolute_fitness))
+		{
 			this.best_absolute_fitness = best_chromosome_fitness;
+			this.best_chromosome = this.poblation[this.best_pos].getCopy();
+		}
 		
 		// Gather stats
 		this.average_fitnesses[generation] = fitness_sum / poblation_size;
