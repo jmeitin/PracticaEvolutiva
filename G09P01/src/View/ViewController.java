@@ -18,8 +18,6 @@ public class ViewController implements Runnable {
 		public void run() {
 			geneticAlgorithm = new GeneticAlgorithm<Boolean, Double>(getAlgorithmData());
 			geneticAlgorithm.run();
-			updateGraphsView();
-			updateSolution();
 		}
 	}
 
@@ -70,6 +68,8 @@ public class ViewController implements Runnable {
 			// This runs in its own thread to not halt the UI
 		}
 
+		updateGraphsView();
+		updateSolution();
 		System.out.println("Thread end");
 	}
 
