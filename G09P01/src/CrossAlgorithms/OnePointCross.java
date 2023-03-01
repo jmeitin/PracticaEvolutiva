@@ -15,28 +15,36 @@ public class OnePointCross extends CrossAlgorithm {
 		Chromosome[] new_population = new Chromosome[poblation_size];
 		Random rand = new Random();
 		
+		int a = -1; // 1st parent hasn't been selected yet
 		for (int i = 0; i < poblation_size; i++) {
 			double chance = rand.nextDouble(); // [0, 1]
 			
 			//CROSS HAPPENS
-			if(chance <= cross_chance && i < poblation_size - 1) {
-				
-				Chromosome childA = poblation[i].getCopy();
-				Chromosome childB = poblation[i+1].getCopy();
-				
-				int length = childA.getLenght();
-				int point = calculateNextPoint(rand, 1, length - 1);
-				
-				for (int g = 0; g < length; g++) {
-					if (g >= point) {
+			if(chance <= cross_chance) {
+				// THERE IS NO 1st PARENT
+				if (a == - 1) { 
+					a = i;
+					new_population[a] = poblation[a].getCopy(); //default value
+				}
+				//SELECT 2nd PARENT
+				else { 
+					Chromosome childA = poblation[a].getCopy();
+					Chromosome childB = poblation[i].getCopy();
+					
+					int length = childA.getLenght();
+					// Calculate Point in [1, L-1] that delimits 2 portions
+					int point = calculateNextPoint(rand, 1, length - 1);
+					
+					//CROSS GENES ON 2ND PORTION (1st PORTION STAYS THE SAME)
+					for (int g = point; g < length; g++) {
 						childA.swapGene(g, childB);
 					}
-					//else stays the same
+					//UPDATE NEW POPULATION
+					new_population[a] = childA;
+					new_population[i] = childB;	
+					a = -1; // select 1st parent for new couple next
 				}
 				
-				new_population[i] = childA;
-				i++;
-				new_population[i] = childB;	
 			}
 			
 			//CROSS DOESN'T HAPPEN
