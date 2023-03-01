@@ -179,14 +179,12 @@ public class GeneticAlgorithm<T, U> {
 				best_pos = i;
 			}
 
-			// TODO: Preguntar en clase si esto hace falta y si nuestra forma de evaluar fitness es correcta
-			// ¿No nos sirve usar el fitness y ya? No se si score es necesario, no lo entiendo
 			poblation[i].setScore(poblation[i].getFitness() / fitness_sum_adjusted);
 			accumulated_score += poblation[i].getScore();
 			poblation[i].setAccumulatedScore(accumulated_score);
 		}
 
-		if (compareFitness(best_fitness, best_absolute_fitness))
+		if (compareFitness(best_fitness, best_absolute_fitness) || generation == 0)
 		{
 			this.best_absolute_fitness = best_fitness;
 			this.best_chromosome = this.poblation[this.best_pos].getCopy();
