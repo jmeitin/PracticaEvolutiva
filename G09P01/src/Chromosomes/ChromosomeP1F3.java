@@ -55,7 +55,7 @@ public class ChromosomeP1F3 extends Chromosome<Boolean, Double> {
 				sumatorio += Math.pow(x_i, 4) - 16 * Math.pow(x_i, 2) + 5 * x_i;		        
 			}
 			
-			brute_fitness = (sumatorio) / 2;
+			brute_fitness = (sumatorio) * 0.5;
 		} else {
 			brute_fitness = Double.MIN_VALUE; // default value,if fails, wortst value
 			System.out.println("Ejer 1: Wrong number of fitness params.");

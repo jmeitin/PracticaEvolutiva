@@ -39,7 +39,7 @@ public class GeneticAlgorithm<T, U> {
 	final int dimensions;
 
 	// Strategy
-	final ChromosomeFactory<T, U> chromosomeFactory;
+	final ChromosomeFactory<T, U> chromosome_factory;
 	final SelectionAlgorithm selectionAlgorithm;
 	final CrossAlgorithm crossAlgorithm;
 	final MutationAlgorithm mutationAlgorithm;
@@ -109,7 +109,7 @@ public class GeneticAlgorithm<T, U> {
 		this.maximize = algorithmData.maximize;
 		this.best_absolute_fitness = algorithmData.maximize ? Double.MIN_VALUE : Double.MAX_VALUE;
 		this.dimensions = algorithmData.dimensions;
-		this.chromosomeFactory = algorithmData.chromosomeFactory;
+		this.chromosome_factory = algorithmData.chromosome_factory;
 
 		// Algorithms:
 		this.selectionAlgorithm = algorithmData.selectionAlgorithm;
@@ -129,7 +129,7 @@ public class GeneticAlgorithm<T, U> {
 
 	// Shorthand to ChromosomeFactory
 	private Chromosome<T, U> createChromosome() {
-		return chromosomeFactory.createChromosome(tolerance, dimensions);
+		return chromosome_factory.createChromosome(tolerance, dimensions);
 	}
 
 	public void stop() {

@@ -32,7 +32,7 @@ public class ViewController implements Runnable {
 
 	private final MainView view;
 	private GeneticAlgorithm geneticAlgorithm;
-	private ChromosomeFactory chromosomeFactory;
+	private ChromosomeFactory chromosome_factory;
 	private GeneticAlgorithmData algorithmData = new GeneticAlgorithmData();
 	private Thread modelThread;
 	private Thread controllerRunThread;
@@ -47,8 +47,7 @@ public class ViewController implements Runnable {
 
 	public ViewController(final MainView view) {
 		this.view = view;
-		chromosomeFactory = (double tolerance, int dimensions) -> {
-			//return new ChromosomeP1F1(2, tolerance);
+		chromosome_factory = (double tolerance, int dimensions) -> {
 			return new ChromosomeP1F1(2, tolerance);
 		};
 
@@ -60,7 +59,7 @@ public class ViewController implements Runnable {
 		algorithmData.elitism_percentage = 0.0;
 		algorithmData.maximize = true; //--------------------------------------
 		algorithmData.dimensions = 1;
-		algorithmData.chromosomeFactory = chromosomeFactory;
+		algorithmData.chromosome_factory = chromosome_factory;
 		algorithmData.selectionAlgorithm = new RouletteSelection();
 		algorithmData.crossAlgorithm = new OnePointCross();
 		algorithmData.mutationAlgorithm = new BasicGenMutation();
@@ -113,8 +112,9 @@ public class ViewController implements Runnable {
 	private void updateSolution() {
 		String solutionText = "";
 		Chromosome chromosome = this.geneticAlgorithm.getBest_chromosome();
+		int i = 1;
 		for (Object fenotype : chromosome.getFenotypes()) {
-			solutionText += "Variable X1 = " + fenotype.toString() + ", ";
+			solutionText += "Variable X" + i++  + " = " + fenotype.toString() + ", ";
 		}
 
 		solutionText += "Valor de la función: " + chromosome.evaluate();
@@ -147,8 +147,36 @@ public class ViewController implements Runnable {
 	}
 
 	public void setFunction(String function) {
-		// This parameter depends on the function so it should be set here.
-		// algorithmData.maximize = true;
+		switch(function)
+		{
+		case "P1 - FUNCION 1":
+			chromosome_factory = (double tolerance, int dimensions) -> {
+				return new ChromosomeP1F1(2, tolerance);
+			};
+			algorithmData.chromosome_factory = chromosome_factory;
+			algorithmData.maximize = true;
+			break;
+		case "P1 - FUNCION 2":
+			chromosome_factory = (double tolerance, int dimensions) -> {
+				return new ChromosomeP1F2(2, tolerance);
+			};
+			algorithmData.chromosome_factory = chromosome_factory;
+			algorithmData.maximize = false;
+			break;
+		case "P1 - FUNCION 3":
+			chromosome_factory = (double tolerance, int dimensions) -> {
+				return new ChromosomeP1F3(2, tolerance);
+			};
+			algorithmData.chromosome_factory = chromosome_factory;
+			algorithmData.maximize = false;
+			break;
+		case "P1 - FUNCION 4A":
+			break;
+		case "P1 - FUNCION 4B":
+			break;
+		case "P1 - FUNCION 5":
+			break;
+		}
 	}
 
 	public void setSelectionType(String selection) {
