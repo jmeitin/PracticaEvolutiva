@@ -3,6 +3,7 @@ package View;
 import java.awt.Color;
 
 import Chromosomes.ChromosomeP1F1;
+import Chromosomes.ChromosomeP1F2;
 import CrossAlgorithms.OnePointCross;
 import CrossAlgorithms.UniformCross;
 import GeneticAlgorithm.Chromosome;
@@ -46,6 +47,7 @@ public class ViewController implements Runnable {
 	public ViewController(final MainView view) {
 		this.view = view;
 		chromosomeFactory = (double tolerance, int dimensions) -> {
+			//return new ChromosomeP1F1(2, tolerance);
 			return new ChromosomeP1F1(2, tolerance);
 		};
 
@@ -55,7 +57,7 @@ public class ViewController implements Runnable {
 		algorithmData.mutation_chance = 0.05;
 		algorithmData.tolerance = 0.025;
 		algorithmData.elitism_percentage = 0.0;
-		algorithmData.maximize = true;
+		algorithmData.maximize = true; //--------------------------------------
 		algorithmData.dimensions = 1;
 		algorithmData.chromosomeFactory = chromosomeFactory;
 		algorithmData.selectionAlgorithm = new RouletteSelection();
