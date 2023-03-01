@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import Chromosomes.ChromosomeP1F1;
 import Chromosomes.ChromosomeP1F2;
+import Chromosomes.ChromosomeP1F3;
 import CrossAlgorithms.OnePointCross;
 import CrossAlgorithms.UniformCross;
 import GeneticAlgorithm.Chromosome;
