@@ -128,6 +128,8 @@ public class MainView extends JFrame {
 	public void cleanPlot()
 	{
 		plot.removeAllPlots();
+		plot.removeLegend();
+		plot.addLegend("SOUTH");
 	}
 	
 	public void cleanPlotData()
@@ -142,6 +144,7 @@ public class MainView extends JFrame {
 			return;
 
 		cleanPlot();
+		
 		plot.addLinePlot("Mejor Absoluto", isDarkTheme ? lightRed : darkRed, best_absolute_fitnesses);
 		plot.addLinePlot("Mejor Generación", isDarkTheme ? lightBlue : darkBlue, best_fitnesses);
 		plot.addLinePlot("Media Generación", isDarkTheme ? lightGreen : darkGreen, average_fitnesses);
@@ -420,8 +423,9 @@ public class MainView extends JFrame {
 		plot = new Plot2DPanel();
 		plot.plotCanvas.setAutoBounds(1);
 		plot.plotCanvas.setAxisLabels(new String[] { "X", "Y" });
-		plot.addLegend("South");
 		plot.plotCanvas.setBackground(UIManager.getColor("Button.light"));
+		plot.plotLegend.setBackground(UIManager.getColor("Button.light"));
+		plot.plotToolBar.setBackground(UIManager.getColor("Button.light"));
 		eastPanel.add(plot);
 		plotData();
 
