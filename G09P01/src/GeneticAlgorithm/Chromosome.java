@@ -66,7 +66,7 @@ public abstract class Chromosome<T,U> {
 	public Chromosome getCopy()
 	{
 		Chromosome chromosome = getNewInstance();
-		chromosome.setFitness(this.fitness);
+		chromosome.setFitness(this.fitness);	
 		chromosome.setBruteFitness(this.brute_fitness);
 		chromosome.setScore(this.score);
 		chromosome.setAccumulatedScore(this.scoreAccumulated);

@@ -115,7 +115,6 @@ public class ViewController implements Runnable {
 		}
 
 		solutionText += "Valor de la función: " + chromosome.evaluate();
-		solutionText += " Fitness del cromosoma " + chromosome.getFitness();
 
 		this.view.setSolutionText(solutionText);
 	}

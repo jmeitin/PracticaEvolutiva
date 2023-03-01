@@ -166,12 +166,14 @@ public class GeneticAlgorithm<T, U> {
 	 * Evaluates each chromosome, updates its scores and selects the best one.
 	 */
 	public void evaluate(int generation) {
-		double fitness_sum = recalculateFitness();
+		double fitness_sum_adjusted = recalculateFitness();
+		double fitness_sum_brute = 0;
 		double accumulated_score = 0;
 		double best_fitness = maximize ? Double.MIN_VALUE : Double.MAX_VALUE;
 		
 		for (int i = 0; i < poblation_size; i++) {
 			double brute_fitness = poblation[i].evaluate();
+			fitness_sum_brute += brute_fitness;
 			if (compareFitness(brute_fitness, best_fitness)) {
 				best_fitness = brute_fitness;
 				best_pos = i;
@@ -179,21 +181,20 @@ public class GeneticAlgorithm<T, U> {
 
 			// TODO: Preguntar en clase si esto hace falta y si nuestra forma de evaluar fitness es correcta
 			// ¿No nos sirve usar el fitness y ya? No se si score es necesario, no lo entiendo
-			poblation[i].setScore(poblation[i].getFitness() / fitness_sum);
+			poblation[i].setScore(poblation[i].getFitness() / fitness_sum_adjusted);
 			accumulated_score += poblation[i].getScore();
 			poblation[i].setAccumulatedScore(accumulated_score);
 		}
 
-		double best_chromosome_fitness = poblation[best_pos].fitness;
-		if (compareFitness(best_chromosome_fitness, best_absolute_fitness))
+		if (compareFitness(best_fitness, best_absolute_fitness))
 		{
-			this.best_absolute_fitness = best_chromosome_fitness;
+			this.best_absolute_fitness = best_fitness;
 			this.best_chromosome = this.poblation[this.best_pos].getCopy();
 		}
 		
 		// Gather stats
-		this.average_fitnesses[generation] = fitness_sum / poblation_size;
-		this.best_fitnesses[generation] = best_chromosome_fitness;
+		this.average_fitnesses[generation] = fitness_sum_brute / poblation_size;
+		this.best_fitnesses[generation] = best_fitness;
 		this.best_absolute_fitnesses[generation] = best_absolute_fitness;
 	}
 
