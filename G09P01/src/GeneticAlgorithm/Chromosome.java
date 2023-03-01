@@ -39,7 +39,7 @@ public abstract class Chromosome<T,U> {
 	public abstract double evaluate();
 	protected abstract void initGenes();
 	protected abstract Chromosome getNewInstance();
-	protected abstract void mutateGene(int pos);
+	protected abstract boolean mutateGene(int pos, Random rand, double mutation_chance);
 	
 	//UTILITY--------------------------------------------------------
 	// Gets Lenght for a given gen
@@ -109,10 +109,7 @@ public abstract class Chromosome<T,U> {
 		boolean cambios = false;
 		
 		for (int i=0; i < num_of_genes; i++) {
-			if (rand.nextDouble() < mutation_chance) {
-				mutateGene(i);
-				cambios = true;
-			}
+			cambios = mutateGene(i, rand, mutation_chance);
 		}
 		
 		if (cambios) {

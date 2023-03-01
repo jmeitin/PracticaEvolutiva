@@ -65,13 +65,19 @@ public class ChromosomeP1F3 extends Chromosome<Boolean, Double> {
 	}
 	
 	@Override
-	public void mutateGene(int pos) {
+	public boolean mutateGene(int pos, Random rand, double mutation_chance) {
+		boolean cambios = false;
+		
 		if(0 <= pos && pos < num_of_genes){
-			Random rand = new Random();
+			//Random rand = new Random();
 			for (int j = 0; j < this.genes[pos].getLenght(); j++) {
-				this.genes[pos].setAllele(j, rand.nextBoolean());
+				if (rand.nextDouble() < mutation_chance) {
+					this.genes[pos].setAllele(j, rand.nextBoolean());
+					cambios = true;
+				}				
 			}
-		}		
+		}	
+		return cambios;
 	}
 
 	@Override
