@@ -31,9 +31,9 @@ public class ViewController implements Runnable {
 		}
 	}
 
+	private final boolean debugMode = true;
 	private final MainView view;
 	private GeneticAlgorithm geneticAlgorithm;
-	private ChromosomeFactory chromosome_factory;
 	private GeneticAlgorithmData algorithmData = new GeneticAlgorithmData();
 	private Thread modelThread;
 	private Thread controllerRunThread;
@@ -46,24 +46,13 @@ public class ViewController implements Runnable {
 	private final Color darkGreen = new Color(39, 160, 25);
 	private final Color darkRed = new Color(160, 36, 25);
 
+	private void log(String str) {
+		if (debugMode)
+			System.out.println(str);
+	}
+
 	public ViewController(final MainView view) {
 		this.view = view;
-		chromosome_factory = (double tolerance, int dimensions) -> {
-			return new ChromosomeP1F1(2, tolerance);
-		};
-
-		algorithmData.poblation_size = 100;
-		algorithmData.max_gen_num = 100;
-		algorithmData.cross_chance = 0.2;
-		algorithmData.mutation_chance = 0.05;
-		algorithmData.tolerance = 0.025;
-		algorithmData.elitism_percentage = 0.0;
-		algorithmData.maximize = true; //--------------------------------------
-		algorithmData.dimensions = 1;
-		algorithmData.chromosome_factory = chromosome_factory;
-		algorithmData.selectionAlgorithm = new RouletteSelection();
-		algorithmData.crossAlgorithm = new OnePointCross();
-		algorithmData.mutationAlgorithm = new BasicGenMutation();
 	}
 
 	private void runAux() {
@@ -115,7 +104,7 @@ public class ViewController implements Runnable {
 		Chromosome chromosome = this.geneticAlgorithm.getBest_chromosome();
 		int i = 1;
 		for (Object fenotype : chromosome.getFenotypes()) {
-			solutionText += "Variable X" + i++  + " = " + fenotype.toString() + ", ";
+			solutionText += "Variable X" + i++ + " = " + fenotype.toString() + ", ";
 		}
 
 		solutionText += "Valor de la función: " + chromosome.evaluate();
@@ -132,24 +121,29 @@ public class ViewController implements Runnable {
 
 	// View Interaction
 	public void setPoblationSize(int poblation_size) {
+		log("Poblation Size: " + poblation_size);
 		this.algorithmData.poblation_size = poblation_size;
 	}
 
 	public void setGenSize(int generation_size) {
+		log("Generation Number: " + generation_size);
 		this.algorithmData.max_gen_num = generation_size;
 	}
 
 	public void setElitism(double elitism_percentage) {
+		log("Elitism chance: " + elitism_percentage);
 		this.algorithmData.elitism_percentage = elitism_percentage;
 	}
 
 	public void setTolerance(double tolerance) {
+		log("Tolerance: " + tolerance);
 		this.algorithmData.tolerance = tolerance;
 	}
 
 	public void setFunction(String function) {
-		switch(function)
-		{
+		log("Function Type: " + function);
+		ChromosomeFactory chromosome_factory;
+		switch (function) {
 		case "P1 - FUNCION 1":
 			chromosome_factory = (double tolerance, int dimensions) -> {
 				return new ChromosomeP1F1(2, tolerance);
@@ -186,7 +180,7 @@ public class ViewController implements Runnable {
 	}
 
 	public void setSelectionType(String selection) {
-		System.out.println(selection);
+		log("Selection Type: " + selection);
 		switch (selection) {
 		case "RULETA":
 			this.algorithmData.selectionAlgorithm = new RouletteSelection();
@@ -210,29 +204,33 @@ public class ViewController implements Runnable {
 	}
 
 	public void setCrossType(String cross) {
+		log("Cross Type: " + cross);
 		switch (cross) {
-		case "CRUCE MONOPUNTO":
+		case "MONOPUNTO":
 			this.algorithmData.crossAlgorithm = new OnePointCross();
 			break;
-		case "CRUCE UNIFORME":
+		case "UNIFORME":
 			this.algorithmData.crossAlgorithm = new UniformCross();
 			break;
 		}
 	}
 
 	public void setMutationType(String mutationType) {
+		log("Mutation Type: " + mutationType);
 		switch (mutationType) {
-		case "MUTACIÓN BÁSICA":
+		case "BÁSICA":
 			this.algorithmData.mutationAlgorithm = new BasicGenMutation();
 			break;
 		}
 	}
 
 	public void setCrossChance(double cross_chance) {
+		log("Cross chance: " + cross_chance);
 		this.algorithmData.cross_chance = cross_chance;
 	}
 
 	public void setMutationChance(double mutation_chance) {
+		log("Mutation chance: " + mutation_chance);
 		this.algorithmData.mutation_chance = mutation_chance;
 	}
 

@@ -36,6 +36,7 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
+import javax.swing.text.JTextComponent;
 
 import org.math.plot.Plot2DPanel;
 import org.math.plot.plotObjects.Axis;
@@ -132,6 +133,11 @@ public class MainView extends JFrame {
 	private double[] best_absolute_fitnesses;
 	private double[] best_fitnesses;
 	private JFormattedTextField elitismProbabilityTextField;
+	private JTextComponent genSizeTextField;
+	private JFormattedTextField toleranceTextField;
+	private JComboBox selectionTypeComboBox;
+	private JComboBox mutationTypeComboBox;
+	private JComboBox problemSelectionComboBox;
 
 	/**
 	 * Launch the application.
@@ -217,6 +223,20 @@ public class MainView extends JFrame {
 		controller.setCrossType(((SelectableType) crossTypeComboBox.getSelectedItem()).toString().toUpperCase());
 		crossTypeComboBox.repaint();
 	}
+	
+	private void initController()
+	{
+		controller.setPoblationSize(Integer.parseInt(genSizeTextField.getText()));
+		controller.setGenSize(Integer.parseInt(numGenTextField.getText()));
+		controller.setTolerance(Double.parseDouble(toleranceTextField.getText().replace(',', '.')));
+		controller.setSelectionType((selectionTypeComboBox.getSelectedItem()).toString().toUpperCase());
+		controller.setCrossType((crossTypeComboBox.getSelectedItem()).toString().toUpperCase());
+		controller.setCrossChance(Double.parseDouble(crossProbabilityTextField.getText().replace(',', '.')));
+		controller.setMutationType((mutationTypeComboBox.getSelectedItem()).toString().toUpperCase());
+		controller.setMutationChance(Double.parseDouble(mutationProbabilityTextField.getText().replace(',', '.')));
+		controller.setElitism(Double.parseDouble(elitismProbabilityTextField.getText().replace(',', '.')));
+		controller.setFunction((problemSelectionComboBox.getSelectedItem()).toString().toUpperCase());
+	}
 
 	/**
 	 * Create the frame.
@@ -237,7 +257,7 @@ public class MainView extends JFrame {
 		JLabel genSizeLabel = new JLabel("Tamaño de la población");
 		genSizeLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		;
-		JTextField genSizeTextField = new JFormattedTextField(numberFormat);
+		genSizeTextField = new JFormattedTextField(numberFormat);
 		genSizeTextField.setText("100");
 		genSizeTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
@@ -265,7 +285,7 @@ public class MainView extends JFrame {
 		selectionTypeLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		selectionPanel.add(selectionTypeLabel);
 
-		JComboBox selectionTypeComboBox = new JComboBox();
+		selectionTypeComboBox = new JComboBox();
 		selectionTypeComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.setSelectionType(selectionTypeComboBox.getSelectedItem().toString().toUpperCase());
@@ -347,14 +367,14 @@ public class MainView extends JFrame {
 		mutationTypeLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		mutationPanel.add(mutationTypeLabel);
 
-		JComboBox mutationTypeTextField = new JComboBox();
-		mutationTypeTextField.addActionListener(new ActionListener() {
+		mutationTypeComboBox = new JComboBox();
+		mutationTypeComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.setMutationType(mutationTypeTextField.getSelectedItem().toString().toUpperCase());
+				controller.setMutationType(mutationTypeComboBox.getSelectedItem().toString().toUpperCase());
 			}
 		});
-		mutationTypeTextField.setModel(new DefaultComboBoxModel(new String[] { "Básica" }));
-		mutationPanel.add(mutationTypeTextField);
+		mutationTypeComboBox.setModel(new DefaultComboBoxModel(new String[] { "Básica" }));
+		mutationPanel.add(mutationTypeComboBox);
 
 		JLabel mutationProbabilityLabel = new JLabel("% Mutación");
 		mutationPanel.add(mutationProbabilityLabel);
@@ -391,7 +411,7 @@ public class MainView extends JFrame {
 		lblSeleccionaProblema.setHorizontalAlignment(SwingConstants.LEFT);
 		problemPanel.add(lblSeleccionaProblema);
 
-		JComboBox problemSelectionComboBox = new JComboBox();
+		problemSelectionComboBox = new JComboBox();
 		problemSelectionComboBox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -464,7 +484,7 @@ public class MainView extends JFrame {
 		JLabel toleranceLabel = new JLabel("Tolerancia");
 		toleranceLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 
-		JFormattedTextField toleranceTextField = new JFormattedTextField(decimalFormat);
+		toleranceTextField = new JFormattedTextField(decimalFormat);
 		toleranceTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
 			controller.setTolerance(Double.parseDouble(text));
@@ -569,5 +589,6 @@ public class MainView extends JFrame {
 		window = new JPanel();
 		window.setLayout(new BorderLayout());
 		this.setVisible(true);
+		initController();
 	}
 }
