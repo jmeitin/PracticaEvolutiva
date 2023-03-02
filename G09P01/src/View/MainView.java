@@ -138,6 +138,8 @@ public class MainView extends JFrame {
 	private JComboBox selectionTypeComboBox;
 	private JComboBox mutationTypeComboBox;
 	private JComboBox problemSelectionComboBox;
+	private JFormattedTextField dimensionsTextField;
+	private JLabel lblDimensions;
 
 	/**
 	 * Launch the application.
@@ -218,14 +220,13 @@ public class MainView extends JFrame {
 				}
 			}
 		}
-		
+
 		// Just in case the selection changed, update the controller
 		controller.setCrossType(((SelectableType) crossTypeComboBox.getSelectedItem()).toString().toUpperCase());
 		crossTypeComboBox.repaint();
 	}
-	
-	private void initController()
-	{
+
+	private void initController() {
 		controller.setPoblationSize(Integer.parseInt(genSizeTextField.getText()));
 		controller.setGenSize(Integer.parseInt(numGenTextField.getText()));
 		controller.setTolerance(Double.parseDouble(toleranceTextField.getText().replace(',', '.')));
@@ -236,6 +237,7 @@ public class MainView extends JFrame {
 		controller.setMutationChance(Double.parseDouble(mutationProbabilityTextField.getText().replace(',', '.')));
 		controller.setElitism(Double.parseDouble(elitismProbabilityTextField.getText().replace(',', '.')));
 		controller.setFunction((problemSelectionComboBox.getSelectedItem()).toString().toUpperCase());
+		controller.setDimensions(Integer.parseInt(dimensionsTextField.getText()));
 	}
 
 	/**
@@ -305,25 +307,25 @@ public class MainView extends JFrame {
 
 		crossTypeComboBox = new JComboBox();
 		crossTypeComboBox.addItemListener(new ItemListener() {
-		    public void itemStateChanged(ItemEvent event) {
-		        if (event.getStateChange() == ItemEvent.SELECTED) {
-		            SelectableType selectedType = (SelectableType) crossTypeComboBox.getSelectedItem();
-		            if (!selectedType.isEnabled()) {
-		            	// If the option is disabled, select the first enabled option
-		            	// Sadly we couldn't find other way to make the item not selectable
-		                ComboBoxModel<SelectableType> model = crossTypeComboBox.getModel();
-		                for (int i = 0; i < model.getSize(); i++) {
-		                    SelectableType type = model.getElementAt(i);
-		                    if (type.isEnabled()) {
-		                        crossTypeComboBox.setSelectedItem(type);
-		                        break;
-		                    }
-		                }
-		            } else {
-		                controller.setCrossType(selectedType.toString().toUpperCase());
-		            }
-		        }
-		    }
+			public void itemStateChanged(ItemEvent event) {
+				if (event.getStateChange() == ItemEvent.SELECTED) {
+					SelectableType selectedType = (SelectableType) crossTypeComboBox.getSelectedItem();
+					if (!selectedType.isEnabled()) {
+						// If the option is disabled, select the first enabled option
+						// Sadly we couldn't find other way to make the item not selectable
+						ComboBoxModel<SelectableType> model = crossTypeComboBox.getModel();
+						for (int i = 0; i < model.getSize(); i++) {
+							SelectableType type = model.getElementAt(i);
+							if (type.isEnabled()) {
+								crossTypeComboBox.setSelectedItem(type);
+								break;
+							}
+						}
+					} else {
+						controller.setCrossType(selectedType.toString().toUpperCase());
+					}
+				}
+			}
 		});
 		crossTypeComboBox.setModel(new DefaultComboBoxModel<>(
 				new SelectableType[] { new SelectableType("Monopunto", true), new SelectableType("Uniforme", true),
@@ -405,11 +407,9 @@ public class MainView extends JFrame {
 
 		JPanel problemPanel = new JPanel();
 		problemPanel.setBorder(new TitledBorder("Problema"));
-		problemPanel.setLayout(new GridLayout(0, 2, 0, 0));
 
 		JLabel lblSeleccionaProblema = new JLabel("Selecciona problema");
 		lblSeleccionaProblema.setHorizontalAlignment(SwingConstants.LEFT);
-		problemPanel.add(lblSeleccionaProblema);
 
 		problemSelectionComboBox = new JComboBox();
 		problemSelectionComboBox.addItemListener(new ItemListener() {
@@ -418,19 +418,17 @@ public class MainView extends JFrame {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					String selectedFunction = e.getItem().toString();
 					// enabled or disable options "Aritmético" y "BLX-α"
-					if (selectedFunction.equals("P1 - Funcion 4B")) {
-						enableCrossTypeOptions(true);
-					} else {
-						enableCrossTypeOptions(false);
-					}
+					enableCrossTypeOptions(selectedFunction.equals("P1 - Funcion 4B"));
+					boolean dimensionsVisible = selectedFunction.equals("P1 - Funcion 4B") || selectedFunction.equals("P1 - Funcion 4A");
+					lblDimensions.setVisible(dimensionsVisible);
+					dimensionsTextField.setVisible(dimensionsVisible);
 				}
 
 				controller.setFunction(e.getItem().toString().toUpperCase());
 			}
 		});
 		problemSelectionComboBox.setModel(new DefaultComboBoxModel(new String[] { "P1 - Funcion 1", "P1 - Funcion 2",
-				"P1 - Funcion 3", "P1 - Funcion 4A", "P1 - Funcion 4B", "P1 - Funcion 5" }));
-		problemPanel.add(problemSelectionComboBox);
+				"P1 - Funcion 3", "P1 - Funcion 4A", "P1 - Funcion 4B" }));
 
 		JPanel themePanel = new JPanel();
 		themePanel.setBorder(new TitledBorder("Tema"));
@@ -492,25 +490,26 @@ public class MainView extends JFrame {
 		toleranceTextField.setText("0,025");
 		toleranceTextField.setColumns(10);
 		GroupLayout gl_westPanel = new GroupLayout(westPanel);
-		gl_westPanel.setHorizontalGroup(gl_westPanel.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING,
+		gl_westPanel.setHorizontalGroup(gl_westPanel.createParallelGroup(Alignment.TRAILING).addGroup(Alignment.LEADING,
 				gl_westPanel.createSequentialGroup().addGap(10).addGroup(gl_westPanel
-						.createParallelGroup(Alignment.TRAILING)
-						.addComponent(restartButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-						.addComponent(executeButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-						.addComponent(themePanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-						.addComponent(toleranceTextField, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 282,
+						.createParallelGroup(Alignment.LEADING)
+						.addComponent(problemPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(restartButton, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(executeButton, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(themePanel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(toleranceTextField, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(elitismPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(mutationPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(crossPanel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(selectionPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
 								Short.MAX_VALUE)
-						.addComponent(problemPanel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-						.addComponent(elitismPanel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-						.addComponent(mutationPanel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-						.addComponent(crossPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-						.addComponent(selectionPanel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-						.addComponent(numGenTextField, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-						.addComponent(numGenLabel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-						.addComponent(genSizeTextField, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-						.addComponent(genSizeLabel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE).addComponent(
-								toleranceLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE))
-						.addGap(10)));
+						.addComponent(numGenTextField, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
+								Short.MAX_VALUE)
+						.addComponent(numGenLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(genSizeTextField, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
+								Short.MAX_VALUE)
+						.addComponent(genSizeLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+						.addComponent(toleranceLabel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)).addGap(10)));
 		gl_westPanel.setVerticalGroup(gl_westPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_westPanel.createSequentialGroup().addGap(1)
 						.addComponent(genSizeLabel, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
@@ -537,11 +536,47 @@ public class MainView extends JFrame {
 						.addComponent(elitismPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(problemPanel, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+						.addComponent(problemPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addComponent(themePanel, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.RELATED).addComponent(executeButton)
 						.addPreferredGap(ComponentPlacement.RELATED).addComponent(restartButton).addGap(168)));
+
+		lblDimensions = new JLabel("Dimensiones");
+		lblDimensions.setHorizontalAlignment(SwingConstants.LEFT);
+		lblDimensions.setVisible(false);
+
+		dimensionsTextField = new JFormattedTextField(numberFormat);
+		dimensionsTextField.setText("2");
+		dimensionsTextField.setVisible(false);
+		dimensionsTextField.addPropertyChangeListener("value", evt -> {
+			String text = evt.getNewValue().toString();
+			int dimensions = Math.max(Integer.parseInt(text), 1);
+			dimensionsTextField.setText(Integer.toString(dimensions));
+			controller.setDimensions(dimensions);
+		});
+		GroupLayout gl_problemPanel = new GroupLayout(problemPanel);
+		gl_problemPanel.setHorizontalGroup(
+			gl_problemPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_problemPanel.createSequentialGroup()
+					.addComponent(lblSeleccionaProblema, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+					.addComponent(problemSelectionComboBox, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_problemPanel.createSequentialGroup()
+					.addComponent(lblDimensions, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+					.addComponent(dimensionsTextField, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE))
+		);
+		gl_problemPanel.setVerticalGroup(
+			gl_problemPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_problemPanel.createSequentialGroup()
+					.addGroup(gl_problemPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblSeleccionaProblema, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+						.addComponent(problemSelectionComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_problemPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblDimensions, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dimensionsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+		);
+		problemPanel.setLayout(gl_problemPanel);
 		gl_westPanel.setAutoCreateGaps(true);
 		gl_westPanel.setAutoCreateContainerGaps(true);
 		westPanel.setLayout(gl_westPanel);
