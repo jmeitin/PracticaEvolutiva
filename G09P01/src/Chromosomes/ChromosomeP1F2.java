@@ -64,8 +64,8 @@ public class ChromosomeP1F2 extends Chromosome<Boolean, Double> {
 			
 			brute_fitness = sumatorio - productorio + 1;
 		} else {
-			brute_fitness = Double.MIN_VALUE; // default value,if fails, wortst value
-			System.out.println("Ejer 1: Wrong number of fitness params.");
+			brute_fitness = Double.MAX_VALUE; // default value,if fails, wortst value
+			System.out.println("Ejer 2: Wrong number of fitness params.");
 		}
 
 		return brute_fitness;

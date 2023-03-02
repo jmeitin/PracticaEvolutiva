@@ -49,27 +49,18 @@ public class ChromosomeP1F4a extends Chromosome<Boolean, Double> {
 		for (int i = 0; i < num_of_genes; i++) {
 			fenotypes[i] = min_x + (max_x - min_x) * (binaryToDecimal(genes[i]) / (Math.pow(2, genes[i].getLenght()) - 1));
 		}
-		//fenotypes[0] = min_x1 + (max_x1 - min_x1) * (binaryToDecimal(genes[0]) / (Math.pow(2, genes[0].getLenght()) - 1));
-		
 	}
 
 	@Override
 	public double evaluate() {
-		if (fenotypes.length == num_of_genes) { // X1 && X2
-//			final double x1 = fenotypes[0];
-//			final double x2 = fenotypes[1];
-			
-			double sumatorio = 0;
+		if (fenotypes.length == num_of_genes) { 
+			brute_fitness = 0;
 			for (int i = 0; i < num_of_genes; i++) {
-				double x_i = fenotypes[i];
-				double angle = (i * Math.pow(x_i, 2)) / Math.PI;
-				sumatorio += Math.sin(x_i) * Math.pow(angle, 2*m);	        
+				brute_fitness += Math.sin(fenotypes[i] * Math.sin(Math.pow(((i + 1) * Math.pow(fenotypes[i], 2))/Math.PI, 2 * m)));
 			}
-			
-			brute_fitness = - sumatorio;
 		} else {
-			brute_fitness = Double.MIN_VALUE; // default value,if fails, wortst value
-			System.out.println("Ejer 1: Wrong number of fitness params.");
+			brute_fitness = Double.MAX_VALUE; // default value,if fails, wortst value
+			System.out.println("Ejer 4: Wrong number of fitness params.");
 		}
 
 		return brute_fitness;

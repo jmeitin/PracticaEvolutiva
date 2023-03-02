@@ -115,10 +115,10 @@ public class ViewController implements Runnable {
 		Chromosome chromosome = this.geneticAlgorithm.getBest_chromosome();
 		int i = 1;
 		for (Object fenotype : chromosome.getFenotypes()) {
-			solutionText += "Variable X" + i++ + " = " + formatNumber((double)fenotype, 3) + " | ";
+			solutionText += "Variable X" + i++ + " = " + formatNumber((double)fenotype, 4) + " | ";
 		}
 
-		solutionText += "Valor de la función: " + formatNumber(chromosome.evaluate(), 3);
+		solutionText += "Valor de la función: " + formatNumber(chromosome.evaluate(), 4);
 
 		this.view.setSolutionText(solutionText);
 	}
