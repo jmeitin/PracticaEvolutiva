@@ -50,7 +50,9 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 	
 	@Override
 	public int compareTo(Chromosome other)
-	{
+	{ // if other < this ==> -1
+	  // if == ==> 0
+	// if other > this ==> 1
 		return Double.compare(other.fitness,  this.fitness);
 	}
 	

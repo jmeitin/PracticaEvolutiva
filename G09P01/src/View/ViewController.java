@@ -201,6 +201,7 @@ public class ViewController implements Runnable {
 			break;
 		case "T-PROBABILÍSTICO":
 			this.algorithmData.selectionAlgorithm = new ProbabilisticTournamentSelection();
+			//this.algorithmData.selectionAlgorithm.setP(0.5);
 			break;
 		case "ESTOCÁSTICO":
 			this.algorithmData.selectionAlgorithm = new StochasticSelection();
