@@ -33,19 +33,19 @@ public class ProbabilisticTournamentSelection extends SelectionAlgorithm {
 					
 					int selected = a;
 					if(rand.nextDouble() > p) {
-						int best = selected;
-						if(poblation[b].getScore() >= poblation[a].getScore() && poblation[b].getScore() >= poblation[c].getScore())
+						int best = selected; // a
+						if(poblation[b].compareTo(poblation[a]) >= 0 && poblation[b].compareTo(poblation[c]) >= 0)
 							best = b;
-						else if (poblation[c].getScore() >= poblation[a].getScore() && poblation[c].getScore() >= poblation[b].getScore())
+						else if (poblation[c].compareTo(poblation[a]) >= 0 && poblation[c].compareTo(poblation[b]) >= 0)
 							best = c;
 						
 						selected = best;
 					}
 					else {
-						int worst = selected;
-						if(poblation[b].getScore() <= poblation[a].getScore() && poblation[b].getScore() <= poblation[c].getScore())
+						int worst = selected; // a
+						if(poblation[b].compareTo(poblation[a]) <= 0 && poblation[b].compareTo(poblation[c]) <= 0)
 							worst = b;
-						else if (poblation[c].getScore() <= poblation[a].getScore() && poblation[c].getScore() <= poblation[b].getScore())
+						else if (poblation[c].compareTo(poblation[a]) <= 0 && poblation[c].compareTo(poblation[b]) <= 0)
 							worst = c;
 						
 						selected = worst; 

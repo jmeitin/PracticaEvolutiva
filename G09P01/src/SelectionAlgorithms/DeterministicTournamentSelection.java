@@ -28,9 +28,9 @@ public class DeterministicTournamentSelection extends SelectionAlgorithm {
 			int c = (int)(rand.nextDouble() * num_people);
 			
 			int best = a;
-			if(poblation[b].getScore() >= poblation[a].getScore() && poblation[b].getScore() >= poblation[c].getScore())
+			if(poblation[b].compareTo(poblation[a]) >= 0 && poblation[b].compareTo(poblation[c]) >= 0)
 				best = b;
-			else if (poblation[c].getScore() >= poblation[a].getScore() && poblation[c].getScore() >= poblation[b].getScore())
+			else if (poblation[c].compareTo(poblation[a]) >= 0 && poblation[c].compareTo(poblation[b]) >= 0)
 				best = c;
 			
 			new_population[i] = poblation[best].getCopy();
