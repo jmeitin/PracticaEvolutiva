@@ -7,6 +7,7 @@ import GeneticAlgorithm.Chromosome;
 public abstract class CrossAlgorithm {
 	public abstract Chromosome[] cross(Chromosome[] poblation, int poblation_size, double cross_chance, int num_points);
 	
+	//DIVIDES GENES
 	protected int calculateNextPoint(Random rand, int start, int end) {
 		//Point belongs to [1, length - 1]
 		// if length = 10 & point = 0.3 ==> 1 + 0.3 * (10 - 2) = 2.7 ==> 2nd gene

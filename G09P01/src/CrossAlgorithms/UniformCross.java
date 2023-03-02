@@ -30,14 +30,9 @@ public class UniformCross extends CrossAlgorithm {
 					Chromosome childA = poblation[a].getCopy();
 					Chromosome childB = poblation[i].getCopy();
 					
-					//CROSS EVERY PAIR OF GENES IF P < 0.5 
+					//CROSS EVERY PAIR OF GENES
 					for (int g = 0; g < childA.getLenght(); g++) {
-						double exchange = rand.nextDouble(); // [0, 1]
-						
-						if (exchange < 0.5) {
-							childA.swapGene(g, childB);
-						}
-						//else stays the same
+						childA.swapAllelesInGene(childB, g, 0, rand, 0.5); // Cross chance is (50%)
 					}
 					//UPDATE NEW POPULATION
 					new_population[a] = childA;
