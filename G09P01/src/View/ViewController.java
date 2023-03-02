@@ -115,10 +115,10 @@ public class ViewController implements Runnable {
 		Chromosome chromosome = this.geneticAlgorithm.getBest_chromosome();
 		int i = 1;
 		for (Object fenotype : chromosome.getFenotypes()) {
-			solutionText += "Variable X" + i++ + " = " + formatNumber((double)fenotype, 3) + " | ";
+			solutionText += "Variable X" + i++ + " = " + formatNumber((double)fenotype, 4) + " | ";
 		}
 
-		solutionText += "Valor de la función: " + formatNumber(chromosome.evaluate(), 3);
+		solutionText += "Valor de la función: " + formatNumber(chromosome.evaluate(), 4);
 
 		this.view.setSolutionText(solutionText);
 	}
@@ -178,14 +178,12 @@ public class ViewController implements Runnable {
 			break;
 		case "P1 - FUNCION 4A":
 			chromosome_factory = (double tolerance, int dimensions) -> {
-				return new ChromosomeP1F4a(5, tolerance);
+				return new ChromosomeP1F4a(algorithmData.dimensions, tolerance);
 			};
 			algorithmData.chromosome_factory = chromosome_factory;
 			algorithmData.maximize = false;
 			break;
 		case "P1 - FUNCION 4B":
-			break;
-		case "P1 - FUNCION 5":
 			break;
 		}
 	}
@@ -201,7 +199,6 @@ public class ViewController implements Runnable {
 			break;
 		case "T-PROBABILÍSTICO":
 			this.algorithmData.selectionAlgorithm = new ProbabilisticTournamentSelection();
-			//this.algorithmData.selectionAlgorithm.setP(0.5);
 			break;
 		case "ESTOCÁSTICO":
 			this.algorithmData.selectionAlgorithm = new StochasticSelection();
@@ -236,6 +233,12 @@ public class ViewController implements Runnable {
 		}
 	}
 
+	public void setDimensions(int dimensions)
+	{
+		log("Dimensions: " + dimensions);
+		algorithmData.dimensions = dimensions;
+	}
+	
 	public void setCrossChance(double cross_chance) {
 		log("Cross chance: " + cross_chance);
 		this.algorithmData.cross_chance = cross_chance;
