@@ -5,7 +5,7 @@ import java.util.Random;
 
 import GeneticAlgorithm.Chromosome;
 
-//ASUME QUE LAS PARTICIONES SON DEL MISMO TAMANYO
+// LO HACE A NIVEL DE GEN, NO ALELOS
 
 public class MultiPointCross extends CrossAlgorithm {
 

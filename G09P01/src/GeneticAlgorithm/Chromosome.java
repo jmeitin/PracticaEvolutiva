@@ -87,6 +87,13 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 	
 	//GET & SET--------------------------------------------------
 	public int getLenght() 	{ return this.num_of_genes;	}
+	
+	
+	public int getAlleleLength(){
+		if (this.num_of_genes == 0)
+			return 0;
+		return genes[0].getLenght();
+	}
 
 	// Returns gene at pos if it exists and null otherwise.
 	public Gene<T> getGene(int pos)
@@ -95,6 +102,26 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 			return null;
 		
 		return genes[pos];
+	}
+	
+	//SWAPS ALLELES OF 2 GENES IF RANDOM < cross_chance. STARTS SWAPPING IN allele_pos
+	public boolean swapAllelesInGene(Chromosome<T,U> other_chromosome, int pos, int allele_pos, Random rand, double cross_chance)
+	{
+		int num_alleles = genes[0].getLenght();
+		if(pos * num_alleles + allele_pos >= genes.length * num_alleles && allele_pos < num_alleles)
+			return false;
+		
+		// SWAP ALLELES IN GENE [pos]
+		for (int a = allele_pos; a < num_alleles; a++) {
+			if (rand.nextDouble() < cross_chance) { // [0.0, 1.0]
+				T allele = genes[pos].getAllele(a);
+				genes[pos].setAllele (a, other_chromosome.getGene(pos).getAllele(a));
+				other_chromosome.getGene(pos).setAllele(a, allele);
+			}
+			// else chromosome[pos, a] stays the same 
+		}
+		
+		return true;
 	}
 
 	// EXCHANGE GENES WITH OTHER CHROMOSOME. CALLED FROM CROSS FUNCTION
