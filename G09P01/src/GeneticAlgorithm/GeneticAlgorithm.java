@@ -1,11 +1,14 @@
 package GeneticAlgorithm;
 
 import SelectionAlgorithms.SelectionAlgorithm;
+
+import java.util.Arrays;
+
 import CrossAlgorithms.CrossAlgorithm;
 import MutationAlgorithm.MutationAlgorithm;
 
 public class GeneticAlgorithm<T, U> {
-	private Chromosome<T, U>[] poblation; // clase individuo?
+	private Chromosome<T, U>[] poblation;
 	private double[] average_fitnesses;
 	private double[] best_absolute_fitnesses;
 	private double[] best_fitnesses;
@@ -17,11 +20,10 @@ public class GeneticAlgorithm<T, U> {
 	// Sizes ------------
 	final private int max_gen_num; // max generaciones
 	final private int poblation_size;
-	final private int tournament_size; // NICO NO LO USA?
 
 	// Elitism
 	final private boolean elitism;
-	final private double elitism_percentage;
+	private Chromosome<T, U>[] elite_poblation;
 	
 	private Chromosome<T, U> best_chromosome;
 	private int best_pos;
@@ -98,14 +100,14 @@ public class GeneticAlgorithm<T, U> {
 		// Sizes
 		this.poblation_size = algorithmData.poblation_size;
 		this.max_gen_num = algorithmData.max_gen_num;
-		this.tournament_size = algorithmData.tournament_size;
 
 		// Chances
 		this.cross_chance = algorithmData.cross_chance;
 		this.mutation_chance = algorithmData.mutation_chance;
 		this.tolerance = algorithmData.tolerance;
-		this.elitism = algorithmData.elitism_percentage > 0.002;
-		this.elitism_percentage = algorithmData.elitism_percentage;
+		this.elitism = algorithmData.elitism_percentage > 0.0001;
+		if(this.elitism)
+			this.elite_poblation = new Chromosome[Math.max((int) (poblation_size * algorithmData.elitism_percentage), 1)];
 		this.maximize = algorithmData.maximize;
 		this.best_absolute_fitness = algorithmData.maximize ? Double.MIN_VALUE : Double.MAX_VALUE;
 		this.dimensions = algorithmData.dimensions;
@@ -147,14 +149,15 @@ public class GeneticAlgorithm<T, U> {
 		evaluate(0);
 
 		for (int i = 0; i < this.max_gen_num; i++) { // generations
-			if (true) // elitism select
-			{
-
-			}
+			if (elitism)
+				selectElite();
 
 			select();
 			cross();
 			mutate();
+			
+			if(elitism)
+				insertElite();
 
 			evaluate(i);
 		}
@@ -162,6 +165,20 @@ public class GeneticAlgorithm<T, U> {
 		isRunning = false;
 	}
 
+	public void selectElite()
+	{
+		Arrays.sort(poblation);
+		
+		for(int i = 0; i < elite_poblation.length; i++)
+			elite_poblation[i] = poblation[i].getCopy();
+	}
+	
+	public void insertElite()
+	{
+		for(int i = 0; i < elite_poblation.length; i++)
+			poblation[i] = elite_poblation[i].getCopy();
+	}
+	
 	/**
 	 * Evaluates each chromosome, updates its scores and selects the best one.
 	 */

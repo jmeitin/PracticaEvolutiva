@@ -13,7 +13,6 @@ public class GeneticAlgorithmData {
 	public double elitism_percentage;
 	public boolean maximize;
 	public int dimensions;
-	public int tournament_size;
 	public ChromosomeFactory chromosome_factory;
 	public SelectionAlgorithm selectionAlgorithm;
 	public CrossAlgorithm crossAlgorithm;

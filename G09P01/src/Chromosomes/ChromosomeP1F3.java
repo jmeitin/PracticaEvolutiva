@@ -16,6 +16,12 @@ public class ChromosomeP1F3 extends Chromosome<Boolean, Double> {
 	}
 	
 	@Override
+	public int compareTo(Chromosome other)
+	{
+		return Double.compare(this.fitness, other.getFitness());
+	}
+	
+	@Override
 	protected void initGenes() {
 		final int tam_genes_x = this.calculateGenSize(this.tolerance, min_x, max_x);
 		

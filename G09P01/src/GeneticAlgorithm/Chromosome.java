@@ -11,7 +11,7 @@ import java.util.Random;
  * @param <T> Gene type
  * @param <U> Fenotype type
  */
-public abstract class Chromosome<T,U> {
+public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 	protected Gene<T>[] genes;
 	protected U[] fenotypes;
 	
@@ -46,6 +46,12 @@ public abstract class Chromosome<T,U> {
 	public int calculateGenSize(double tolerance, double min, double max)
 	{
 		return (int) (Math.log10(((max - min) / tolerance) + 1) / Math.log10(2));
+	}
+	
+	@Override
+	public int compareTo(Chromosome other)
+	{
+		return Double.compare(other.fitness,  this.fitness);
 	}
 	
 	//Converts the chromosome to its decimal representation.
