@@ -1,6 +1,7 @@
 package View;
 
 import java.awt.Color;
+import java.text.DecimalFormat;
 
 import Chromosomes.ChromosomeP1F1;
 import Chromosomes.ChromosomeP1F2;
@@ -99,15 +100,25 @@ public class ViewController implements Runnable {
 					this.geneticAlgorithm.getBestAbsoluteFitnesses(), this.geneticAlgorithm.getBestFitnesses());
 	}
 
+	private String formatNumber(double number, int num_decimals)
+	{
+		String format = "0.";
+        for (int i = 0; i < num_decimals; i++) {
+            format += "0";
+        }
+        DecimalFormat df = new DecimalFormat(format);
+        return df.format(number);
+	}
+	
 	private void updateSolution() {
 		String solutionText = "";
 		Chromosome chromosome = this.geneticAlgorithm.getBest_chromosome();
 		int i = 1;
 		for (Object fenotype : chromosome.getFenotypes()) {
-			solutionText += "Variable X" + i++ + " = " + fenotype.toString() + ", ";
+			solutionText += "Variable X" + i++ + " = " + formatNumber((double)fenotype, 3) + " | ";
 		}
 
-		solutionText += "Valor de la función: " + chromosome.evaluate();
+		solutionText += "Valor de la función: " + formatNumber(chromosome.evaluate(), 3);
 
 		this.view.setSolutionText(solutionText);
 	}
