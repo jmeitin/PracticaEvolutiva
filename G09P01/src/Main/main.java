@@ -1,4 +1,4 @@
-package Evolutiva;
+package Main;
 import View.MainView;
 
 public class main {
