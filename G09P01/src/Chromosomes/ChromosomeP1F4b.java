@@ -49,7 +49,8 @@ public class ChromosomeP1F4b extends Chromosome<Double, Double> {
 		fenotypes = new Double[num_of_genes];
 		
 		for (int i = 0; i < num_of_genes; i++) {
-			fenotypes[i] = min_x + (max_x - min_x) * (binaryToDecimal(genes[i]) / (Math.pow(2, genes[i].getLenght()) - 1));
+			// EACH GENE CONTAINS ONLY 1 ALLELE. FENOTYPE = VALUE IN ALLELE
+			fenotypes[i] = genes[i].getAllele(0);//min_x + (max_x - min_x) * (binaryToDecimal(genes[i]) / (Math.pow(2, genes[i].getLenght()) - 1));
 		}
 	}
 
@@ -70,7 +71,7 @@ public class ChromosomeP1F4b extends Chromosome<Double, Double> {
 	
 	@Override
 	public boolean mutateGene(int pos, Random rand, double mutation_chance) {
-		System.out.print("HOLLAAAAAA");
+		//System.out.print("HOLLAAAAAA");
 		boolean cambios = false;
 		
 		if(0 <= pos && pos < num_of_genes){
