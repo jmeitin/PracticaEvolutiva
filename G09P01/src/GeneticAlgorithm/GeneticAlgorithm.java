@@ -94,7 +94,8 @@ public class GeneticAlgorithm<T, U> {
 		this.best_chromosome = best_chromosome;
 	}
 
-	public GeneticAlgorithm(GeneticAlgorithmData algorithmData) {
+	// AlgorithmData is readonly, used to init the class
+	public GeneticAlgorithm(final GeneticAlgorithmData algorithmData) {
 		// Poblation
 		this.poblation = new Chromosome[algorithmData.poblation_size];
 
