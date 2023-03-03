@@ -10,6 +10,7 @@ import Chromosomes.ChromosomeP1F4a;
 import Chromosomes.ChromosomeP1F4b;
 import CrossAlgorithms.OnePointCross;
 import CrossAlgorithms.UniformCross;
+import CrossAlgorithms.ArithmeticCross;
 import GeneticAlgorithm.Chromosome;
 import GeneticAlgorithm.ChromosomeFactory;
 import GeneticAlgorithm.GeneticAlgorithm;
@@ -226,6 +227,10 @@ public class ViewController implements Runnable {
 			break;
 		case "UNIFORME":
 			this.algorithmData.crossAlgorithm = new UniformCross();
+			break;
+		//ONLY CALLABLE DURING FUNCTION 4B--------------------------------------------------------------------
+		case "ARITMÉTICO":
+			this.algorithmData.crossAlgorithm = new ArithmeticCross();
 			break;
 		}
 	}

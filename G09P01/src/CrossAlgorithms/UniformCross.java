@@ -14,20 +14,20 @@ public class UniformCross extends CrossAlgorithm {
 		Chromosome[] new_population = new Chromosome[poblation_size];
 		Random rand = new Random();
 		
-		int a = -1; // 1st parent hasn't been selected yet
+		int parent_selected = -1; // 1st parent hasn't been selected yet
 		for (int i = 0; i < poblation_size; i++) {
 			double chance = rand.nextDouble(); // [0, 1]
 			
 			//CROSS HAPPENS
 			if(chance <= cross_chance) {
 				// THERE IS NO 1st PARENT
-				if (a == - 1) { 
-					a = i;
-					new_population[a] = poblation[a].getCopy(); //default value
+				if (parent_selected == - 1) { 
+					parent_selected = i;
+					new_population[parent_selected] = poblation[parent_selected].getCopy(); //default value
 				}
 				//SELECT 2nd PARENT
 				else { 
-					Chromosome childA = poblation[a].getCopy();
+					Chromosome childA = poblation[parent_selected].getCopy();
 					Chromosome childB = poblation[i].getCopy();
 					
 					//CROSS EVERY PAIR OF GENES
@@ -35,9 +35,9 @@ public class UniformCross extends CrossAlgorithm {
 						childA.swapAllelesInGene(childB, g, 0, rand, 0.5); // Cross chance is (50%)
 					}
 					//UPDATE NEW POPULATION
-					new_population[a] = childA;
+					new_population[parent_selected] = childA;
 					new_population[i] = childB;	
-					a = -1;
+					parent_selected = -1;
 				}
 			}
 			
