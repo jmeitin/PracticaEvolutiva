@@ -1,7 +1,5 @@
 package GeneticAlgorithm;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -139,17 +137,19 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 		return true;
 	}
 	
-	// MUTATES GENES IN CHROMOSOME
+	/***
+	 * Mutates gene bitwise (if boolean chromsoome) and random (if real)
+	 * @param rand Random object
+	 * @param mutation_chance Probability of the bit to mutate (0-100%)
+	 */
 	public void mutate(Random rand, double mutation_chance) {
-		boolean cambios = false;
+		boolean changes = false;
 		
-		for (int i=0; i < num_of_genes; i++) {
-			cambios = mutateGene(i, rand, mutation_chance);
-		}
+		for (int i=0; i < num_of_genes; i++)
+			changes = mutateGene(i, rand, mutation_chance);
 		
-		if (cambios) {
-			calculateFenotypes(); //UPDATE FENOTYPE
-		}
+		if (changes)
+			calculateFenotypes(); // Update fenotype
 	}
 	
 	public boolean setGene(int pos, Gene<T> gene)

@@ -1,11 +1,10 @@
 package GeneticAlgorithm;
 
-import SelectionAlgorithms.SelectionAlgorithm;
-
 import java.util.Arrays;
 
 import CrossAlgorithms.CrossAlgorithm;
 import MutationAlgorithm.MutationAlgorithm;
+import SelectionAlgorithms.SelectionAlgorithm;
 
 public class GeneticAlgorithm<T, U> {
 	private Chromosome<T, U>[] poblation;

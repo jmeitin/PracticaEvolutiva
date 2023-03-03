@@ -1,8 +1,5 @@
 package CrossAlgorithms;
 
-import java.util.List;
-import java.util.Random;
-
 import GeneticAlgorithm.Chromosome;
 
 // LO HACE A NIVEL DE GEN, NO ALELOS

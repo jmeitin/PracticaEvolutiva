@@ -1,8 +1,5 @@
 package SelectionAlgorithms;
 
-import java.util.List;
-import java.util.Random;
-
 import GeneticAlgorithm.Chromosome;
 
 public class RouletteSelection extends SelectionAlgorithm {

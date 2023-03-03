@@ -1,6 +1,5 @@
 package View;
 
-import java.awt.Color;
 import java.text.DecimalFormat;
 
 import Chromosomes.ChromosomeP1F1;
@@ -8,16 +7,15 @@ import Chromosomes.ChromosomeP1F2;
 import Chromosomes.ChromosomeP1F3;
 import Chromosomes.ChromosomeP1F4a;
 import Chromosomes.ChromosomeP1F4b;
+import CrossAlgorithms.ArithmeticCross;
 import CrossAlgorithms.BLXAlphaCross;
 import CrossAlgorithms.OnePointCross;
 import CrossAlgorithms.UniformCross;
-import CrossAlgorithms.ArithmeticCross;
 import GeneticAlgorithm.Chromosome;
 import GeneticAlgorithm.ChromosomeFactory;
 import GeneticAlgorithm.GeneticAlgorithm;
 import GeneticAlgorithm.GeneticAlgorithmData;
 import MutationAlgorithm.BasicGenMutation;
-import MutationAlgorithm.MutationAlgorithm;
 import SelectionAlgorithms.DeterministicTournamentSelection;
 import SelectionAlgorithms.ProbabilisticTournamentSelection;
 import SelectionAlgorithms.RemainderSelection;

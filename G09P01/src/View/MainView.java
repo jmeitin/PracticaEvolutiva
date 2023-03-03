@@ -1,77 +1,52 @@
 package View;
 
-import java.awt.EventQueue;
-
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.GridLayout;
-
-import javax.swing.JToolBar;
-import java.awt.TextField;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
-import java.awt.Label;
-import java.awt.Button;
-import java.awt.Dimension;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListCellRenderer;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
 import javax.swing.text.JTextComponent;
 
 import org.math.plot.Plot2DPanel;
-import org.math.plot.plotObjects.Axis;
-import org.math.plot.plots.LinePlot;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import com.formdev.flatlaf.util.LoggingFacade;
-
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.border.EtchedBorder;
-import java.awt.Color;
-import javax.swing.BoxLayout;
-import javax.swing.ComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.ListCellRenderer;
-import javax.swing.JButton;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.Frame;
-
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import java.awt.SystemColor;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
-import java.text.Format;
 
 public class MainView extends JFrame {
+	private static final long serialVersionUID = 1L;
 
 	class SelectableType {
 		private String name;
@@ -126,7 +101,6 @@ public class MainView extends JFrame {
 	private final Color DARK_RED = new Color(160, 36, 25);
 	private boolean isDarkTheme = false;
 	private final ViewController controller = new ViewController(this);
-	private Thread controllerThread = new Thread(controller);
 
 	// Plot
 	private double[] average_fitnesses;
@@ -162,6 +136,7 @@ public class MainView extends JFrame {
 	 * @param message
 	 * @param ex
 	 */
+	@SuppressWarnings("unused")
 	private void showInformationDialog(String message, Exception ex) {
 		JOptionPane.showMessageDialog(SwingUtilities.windowForComponent(this), message + "\n\n" + ex.getMessage(),
 				"FlatLaf", JOptionPane.INFORMATION_MESSAGE);
@@ -231,7 +206,7 @@ public class MainView extends JFrame {
 
 		for (int i = 0; i < model.getSize(); i++) {
 			SelectableType crossType = model.getElementAt(i);
-			if (crossType.equals("Aritmético") || crossType.equals("BLX-α")) {
+			if (crossType.name.equals("Aritmético") || crossType.name.equals("BLX-α")) {
 				crossType.setEnabled(enabled);
 
 				// Check if the selected element is now disabled. If so, search the next enabled

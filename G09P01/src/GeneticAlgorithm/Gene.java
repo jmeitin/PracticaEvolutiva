@@ -1,8 +1,5 @@
 package GeneticAlgorithm;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class Gene<T> {
 	protected T[] alleles;
 	protected int geneLenght;

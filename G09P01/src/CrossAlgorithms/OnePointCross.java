@@ -1,10 +1,6 @@
 package CrossAlgorithms;
 
-import java.util.List;
-import java.util.Random;
-
 import GeneticAlgorithm.Chromosome;
-import GeneticAlgorithm.Gene;
 
 public class OnePointCross extends CrossAlgorithm {
 	@Override

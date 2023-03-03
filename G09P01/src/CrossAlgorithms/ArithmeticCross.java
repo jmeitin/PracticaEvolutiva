@@ -1,11 +1,7 @@
 package CrossAlgorithms;
 
-import java.util.List;
-import java.util.Random;
-
 import Chromosomes.ChromosomeP1F4b;
 import GeneticAlgorithm.Chromosome;
-import GeneticAlgorithm.Gene;
 
 public class ArithmeticCross extends CrossAlgorithm {
 //THIS ONLY WORKS IN 4B

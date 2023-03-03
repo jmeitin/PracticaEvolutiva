@@ -1,7 +1,5 @@
 package SelectionAlgorithms;
 
-import java.util.List;
-
 import GeneticAlgorithm.Chromosome;
 
 public abstract class SelectionAlgorithm {

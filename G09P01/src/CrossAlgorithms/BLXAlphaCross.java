@@ -1,7 +1,5 @@
 package CrossAlgorithms;
 
-import java.util.Random;
-
 import Chromosomes.ChromosomeP1F4b;
 import GeneticAlgorithm.Chromosome;
 

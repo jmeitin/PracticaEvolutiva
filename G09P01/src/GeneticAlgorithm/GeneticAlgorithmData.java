@@ -1,8 +1,8 @@
 package GeneticAlgorithm;
 
-import SelectionAlgorithms.SelectionAlgorithm;
 import CrossAlgorithms.CrossAlgorithm;
 import MutationAlgorithm.MutationAlgorithm;
+import SelectionAlgorithms.SelectionAlgorithm;
 
 public class GeneticAlgorithmData {
 	public int poblation_size;
