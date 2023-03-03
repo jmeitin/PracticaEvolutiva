@@ -336,7 +336,7 @@ public class MainView extends JFrame {
 			}
 		});
 		crossTypeComboBox.setModel(new DefaultComboBoxModel<>(
-				new SelectableType[] { new SelectableType("Monopunto", true), new SelectableType("Uniforme", true),
+				new SelectableType[] { new SelectableType("Monopunto", true), new SelectableType("Multipunto", true), new SelectableType("Uniforme", true),
 						new SelectableType("Aritmético", false), new SelectableType("BLX-α", false) }));
 		crossTypeComboBox.setRenderer(new ListCellRenderer<SelectableType>() {
 			private final DefaultListCellRenderer DEFAULT_RENDERER = new DefaultListCellRenderer();

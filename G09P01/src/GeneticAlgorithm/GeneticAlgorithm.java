@@ -113,9 +113,9 @@ public class GeneticAlgorithm<T, U> {
 		this.chromosome_factory = algorithmData.chromosome_factory;
 
 		// Algorithms:
-		this.selectionAlgorithm = algorithmData.selectionAlgorithm;
-		this.crossAlgorithm = algorithmData.crossAlgorithm;
-		this.mutationAlgorithm = algorithmData.mutationAlgorithm;
+		this.selectionAlgorithm = algorithmData.selection_algorithm;
+		this.crossAlgorithm = algorithmData.cross_algorithm;
+		this.mutationAlgorithm = algorithmData.mutation_algorithm;
 
 		// Stats
 		average_fitnesses = new double[this.max_gen_num];

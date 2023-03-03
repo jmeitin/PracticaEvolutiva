@@ -9,6 +9,7 @@ import Chromosomes.ChromosomeP1F4a;
 import Chromosomes.ChromosomeP1F4b;
 import CrossAlgorithms.ArithmeticCross;
 import CrossAlgorithms.BLXAlphaCross;
+import CrossAlgorithms.MultiPointCross;
 import CrossAlgorithms.OnePointCross;
 import CrossAlgorithms.UniformCross;
 import GeneticAlgorithm.Chromosome;
@@ -247,22 +248,22 @@ public class ViewController implements Runnable {
 		log("Selection Type: " + selection);
 		switch (selection) {
 		case "RULETA":
-			this.algorithmData.selectionAlgorithm = new RouletteSelection();
+			this.algorithmData.selection_algorithm = new RouletteSelection();
 			break;
 		case "T-DETERMINÍSTICO":
-			this.algorithmData.selectionAlgorithm = new DeterministicTournamentSelection();
+			this.algorithmData.selection_algorithm = new DeterministicTournamentSelection();
 			break;
 		case "T-PROBABILÍSTICO":
-			this.algorithmData.selectionAlgorithm = new ProbabilisticTournamentSelection();
+			this.algorithmData.selection_algorithm = new ProbabilisticTournamentSelection();
 			break;
 		case "ESTOCÁSTICO":
-			this.algorithmData.selectionAlgorithm = new StochasticSelection();
+			this.algorithmData.selection_algorithm = new StochasticSelection();
 			break;
 		case "TRUNCAMIENTO":
-			this.algorithmData.selectionAlgorithm = new TruncationSelection();
+			this.algorithmData.selection_algorithm = new TruncationSelection();
 			break;
 		case "RESTOS":
-			this.algorithmData.selectionAlgorithm = new RemainderSelection();
+			this.algorithmData.selection_algorithm = new RemainderSelection();
 			break;
 		}
 	}
@@ -275,17 +276,20 @@ public class ViewController implements Runnable {
 		log("Cross Type: " + cross);
 		switch (cross) {
 		case "MONOPUNTO":
-			this.algorithmData.crossAlgorithm = new OnePointCross();
+			this.algorithmData.cross_algorithm = new OnePointCross();
+			break;
+		case "MULTIPUNTO":
+			this.algorithmData.cross_algorithm = new MultiPointCross();
 			break;
 		case "UNIFORME":
-			this.algorithmData.crossAlgorithm = new UniformCross();
+			this.algorithmData.cross_algorithm = new UniformCross();
 			break;
 		// Only for P1-F4a and P1-F4b
 		case "ARITMÉTICO":
-			this.algorithmData.crossAlgorithm = new ArithmeticCross();
+			this.algorithmData.cross_algorithm = new ArithmeticCross();
 			break;
 		case "BLX-Α":
-			this.algorithmData.crossAlgorithm = new BLXAlphaCross();
+			this.algorithmData.cross_algorithm = new BLXAlphaCross();
 			break;
 		}
 	}
@@ -298,7 +302,7 @@ public class ViewController implements Runnable {
 		log("Mutation Type: " + mutationType);
 		switch (mutationType) {
 		case "BÁSICA":
-			this.algorithmData.mutationAlgorithm = new BasicGenMutation();
+			this.algorithmData.mutation_algorithm = new BasicGenMutation();
 			break;
 		}
 	}

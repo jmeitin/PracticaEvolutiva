@@ -14,7 +14,7 @@ public class GeneticAlgorithmData {
 	public boolean maximize;
 	public int dimensions;
 	public ChromosomeFactory chromosome_factory;
-	public SelectionAlgorithm selectionAlgorithm;
-	public CrossAlgorithm crossAlgorithm;
-	public MutationAlgorithm mutationAlgorithm;
+	public SelectionAlgorithm selection_algorithm;
+	public CrossAlgorithm cross_algorithm;
+	public MutationAlgorithm mutation_algorithm;
 }
