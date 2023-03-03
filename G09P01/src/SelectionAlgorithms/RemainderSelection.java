@@ -25,7 +25,7 @@ public class RemainderSelection extends SelectionAlgorithm {
 		
 		int index = 0;
 		for (int i = 0; i < k && index < poblation_size; i ++) {
-			int pos = (int)(rand.nextDouble() * poblation.length);			
+			int pos = (int)(rand.nextDouble() * (poblation.length - 1));			
 			int pi_k = (int)(poblation[pos].getScore() * k);
 			
 			for (int j = 0; j < pi_k && index < poblation_size; j++) {
@@ -38,7 +38,7 @@ public class RemainderSelection extends SelectionAlgorithm {
 		
 		//Fill Array however you like		
 		for (int i = index; i < poblation_size; i++) {
-			int pos = (int)(rand.nextDouble() * poblation.length);
+			int pos = (int)(rand.nextDouble() * (poblation.length - 1));
 			new_population[i] = poblation[pos];
 		}
 		
