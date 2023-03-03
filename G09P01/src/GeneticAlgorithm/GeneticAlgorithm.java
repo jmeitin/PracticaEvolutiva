@@ -106,7 +106,7 @@ public class GeneticAlgorithm<T, U> {
 		this.tolerance = algorithmData.tolerance;
 		this.elitism = algorithmData.elitism_percentage > 0.0001;
 		if(this.elitism)
-			this.elite_poblation = new Chromosome[Math.max((int) (poblation_size * algorithmData.elitism_percentage), 1)];
+			this.elite_poblation = new Chromosome[Math.max((int) (poblation_size * algorithmData.elitism_percentage / 100.0), 1)];
 		this.maximize = algorithmData.maximize;
 		this.best_absolute_fitness = algorithmData.maximize ? Double.MIN_VALUE : Double.MAX_VALUE;
 		this.dimensions = algorithmData.dimensions;

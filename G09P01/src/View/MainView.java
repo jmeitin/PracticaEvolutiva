@@ -246,6 +246,16 @@ public class MainView extends JFrame {
 		controller.setDimensions(Integer.parseInt(dimensionsTextField.getText()));
 	}
 
+	private int clamp(int value, int min, int max)
+	{
+		return Math.max(min, Math.min(max, value));
+	}
+	
+	private double clamp(double value, double min, double max)
+	{
+		return Math.max(min, Math.min(max, value));
+	}
+	
 	/**
 	 * Create the frame.
 	 * Most of the code was generated with windowbuildertool. 
@@ -271,8 +281,9 @@ public class MainView extends JFrame {
 		genSizeTextField.setText("100");
 		genSizeTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
-			genSizeTextField.setText(text);
-			controller.getAlgorithmData().poblation_size = Integer.parseInt(text);
+			final int result = clamp(Integer.parseInt(text), 10 , 100000);
+			genSizeTextField.setText(Integer.toString(result));
+			controller.getAlgorithmData().poblation_size = result;
 		});
 
 		JLabel numGenLabel = new JLabel("Número de generaciones");
@@ -282,8 +293,9 @@ public class MainView extends JFrame {
 		numGenTextField.setColumns(10);
 		numGenTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
-			numGenTextField.setText(text);
-			controller.setGenSize(Integer.parseInt(text));
+			final int result = clamp(Integer.parseInt(text), 10 , 100000);
+			numGenTextField.setText(Integer.toString(result));
+			controller.setGenSize(result);
 		});
 
 		JPanel selectionPanel = new JPanel();
@@ -363,7 +375,9 @@ public class MainView extends JFrame {
 		crossProbabilityTextField = new JFormattedTextField(decimalFormat);
 		crossProbabilityTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
-			controller.setMutationChance(Double.parseDouble(text));
+			final double result = clamp(Double.parseDouble(text), 0.0 , 100.0);
+			crossProbabilityTextField.setText(Double.toString(result).replace('.', ','));
+			controller.setMutationChance(result);
 		});
 		crossProbabilityTextField.setText("60,0");
 		crossPanel.add(crossProbabilityTextField);
@@ -393,7 +407,9 @@ public class MainView extends JFrame {
 		mutationProbabilityTextField.setText("5,0");
 		mutationProbabilityTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
-			controller.setMutationChance(Double.parseDouble(text));
+			final double result = clamp(Double.parseDouble(text), 0.0 , 100.0);
+			mutationProbabilityTextField.setText(Double.toString(result).replace('.', ','));
+			controller.setMutationChance(result);
 		});
 		mutationProbabilityTextField.setColumns(10);
 		mutationPanel.add(mutationProbabilityTextField);
@@ -481,7 +497,9 @@ public class MainView extends JFrame {
 		elitismProbabilityTextField = new JFormattedTextField(decimalFormat);
 		elitismProbabilityTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
-			controller.setElitism(Double.parseDouble(text));
+			final double result = clamp(Double.parseDouble(text), 0.0 , 100.0);
+			elitismProbabilityTextField.setText(Double.toString(result).replace('.', ','));
+			controller.setElitism(result);
 		});
 		elitismProbabilityTextField.setText("0,0");
 		elitismProbabilityTextField.setColumns(10);
@@ -493,7 +511,9 @@ public class MainView extends JFrame {
 		toleranceTextField = new JFormattedTextField(decimalFormat);
 		toleranceTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
-			controller.setTolerance(Double.parseDouble(text));
+			final double result = clamp(Double.parseDouble(text), 0.001 , 1.0);
+			toleranceTextField.setText(Double.toString(result).replace('.', ','));
+			controller.setTolerance(result);
 		});
 		toleranceTextField.setText("0,025");
 		toleranceTextField.setColumns(10);
