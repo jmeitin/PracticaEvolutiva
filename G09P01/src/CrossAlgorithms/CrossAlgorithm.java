@@ -2,7 +2,7 @@ package CrossAlgorithms;
 
 import java.util.Random;
 
-import GeneticAlgorithm.Chromosome;
+import Chromosomes.Chromosome;
 
 public abstract class CrossAlgorithm {
 	

@@ -1,4 +1,4 @@
-package GeneticAlgorithm;
+package Chromosomes;
 
 import java.util.Random;
 

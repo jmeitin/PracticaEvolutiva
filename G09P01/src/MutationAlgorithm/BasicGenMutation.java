@@ -3,7 +3,7 @@
  */
 package MutationAlgorithm;
 
-import GeneticAlgorithm.Chromosome;
+import Chromosomes.Chromosome;
 
 /**
  * @author Rioni

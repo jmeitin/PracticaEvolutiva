@@ -1,6 +1,6 @@
 package SelectionAlgorithms;
 
-import GeneticAlgorithm.Chromosome;
+import Chromosomes.Chromosome;
 
 public class RouletteSelection extends SelectionAlgorithm {
 

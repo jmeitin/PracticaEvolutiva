@@ -1,5 +1,6 @@
 package GeneticAlgorithm;
 
+import Chromosomes.ChromosomeFactory;
 import CrossAlgorithms.CrossAlgorithm;
 import MutationAlgorithm.MutationAlgorithm;
 import SelectionAlgorithms.SelectionAlgorithm;

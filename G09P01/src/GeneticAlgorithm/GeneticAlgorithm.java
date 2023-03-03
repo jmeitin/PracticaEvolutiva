@@ -2,6 +2,8 @@ package GeneticAlgorithm;
 
 import java.util.Arrays;
 
+import Chromosomes.Chromosome;
+import Chromosomes.ChromosomeFactory;
 import CrossAlgorithms.CrossAlgorithm;
 import MutationAlgorithm.MutationAlgorithm;
 import SelectionAlgorithms.SelectionAlgorithm;

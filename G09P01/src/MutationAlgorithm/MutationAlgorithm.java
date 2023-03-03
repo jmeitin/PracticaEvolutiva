@@ -2,7 +2,7 @@ package MutationAlgorithm;
 
 import java.util.Random;
 
-import GeneticAlgorithm.Chromosome;
+import Chromosomes.Chromosome;
 
 public abstract class MutationAlgorithm {
 	protected Random rand = new Random();

@@ -1,7 +1,7 @@
 package CrossAlgorithms;
 
+import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP1F4b;
-import GeneticAlgorithm.Chromosome;
 
 public class BLXAlphaCross extends CrossAlgorithm {
 	@Override

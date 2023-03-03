@@ -1,4 +1,4 @@
-package GeneticAlgorithm;
+package Chromosomes;
 
 public class Gene<T> {
 	protected T[] alleles;

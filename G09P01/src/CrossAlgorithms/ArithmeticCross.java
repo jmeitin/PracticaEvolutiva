@@ -1,7 +1,7 @@
 package CrossAlgorithms;
 
+import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP1F4b;
-import GeneticAlgorithm.Chromosome;
 
 public class ArithmeticCross extends CrossAlgorithm {
 //THIS ONLY WORKS IN 4B

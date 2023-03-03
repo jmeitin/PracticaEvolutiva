@@ -1,6 +1,6 @@
 package CrossAlgorithms;
 
-import GeneticAlgorithm.Chromosome;
+import Chromosomes.Chromosome;
 
 public class OnePointCross extends CrossAlgorithm {
 	@Override

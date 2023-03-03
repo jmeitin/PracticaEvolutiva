@@ -2,9 +2,6 @@ package Chromosomes;
 
 import java.util.Random;
 
-import GeneticAlgorithm.Chromosome;
-import GeneticAlgorithm.Gene;
-
 public class ChromosomeP1F3 extends Chromosome<Boolean, Double> {
 	//n mínimo global de de -39.16599d en x1 = -2.903534 y x2 = -2.9035340.
 	final double min_x = -5;

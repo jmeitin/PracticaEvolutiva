@@ -1,6 +1,6 @@
 package CrossAlgorithms;
 
-import GeneticAlgorithm.Chromosome;
+import Chromosomes.Chromosome;
 
 // LO HACE A NIVEL DE GEN, NO ALELOS
 

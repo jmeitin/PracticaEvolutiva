@@ -3,7 +3,7 @@
  */
 package SelectionAlgorithms;
 
-import GeneticAlgorithm.Chromosome;
+import Chromosomes.Chromosome;
 
 /**
  * @author Rioni

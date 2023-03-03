@@ -2,6 +2,8 @@ package View;
 
 import java.text.DecimalFormat;
 
+import Chromosomes.Chromosome;
+import Chromosomes.ChromosomeFactory;
 import Chromosomes.ChromosomeP1F1;
 import Chromosomes.ChromosomeP1F2;
 import Chromosomes.ChromosomeP1F3;
@@ -12,8 +14,6 @@ import CrossAlgorithms.BLXAlphaCross;
 import CrossAlgorithms.MultiPointCross;
 import CrossAlgorithms.OnePointCross;
 import CrossAlgorithms.UniformCross;
-import GeneticAlgorithm.Chromosome;
-import GeneticAlgorithm.ChromosomeFactory;
 import GeneticAlgorithm.GeneticAlgorithm;
 import GeneticAlgorithm.GeneticAlgorithmData;
 import MutationAlgorithm.BasicGenMutation;

@@ -2,9 +2,6 @@ package Chromosomes;
 
 import java.util.Random;
 
-import GeneticAlgorithm.Chromosome;
-import GeneticAlgorithm.Gene;
-
 public class ChromosomeP1F4b extends Chromosome<Double, Double> {
 	//que presenta los siguientes mínimos en función de d:
 //	        d= 2 f(x*) = - 1.8013 en x* = (2.20, 1.57)

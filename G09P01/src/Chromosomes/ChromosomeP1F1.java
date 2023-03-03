@@ -2,9 +2,6 @@ package Chromosomes;
 
 import java.util.Random;
 
-import GeneticAlgorithm.Chromosome;
-import GeneticAlgorithm.Gene;
-
 public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 
 	final double min_x1 = -3.000;

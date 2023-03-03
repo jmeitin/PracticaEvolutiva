@@ -5,7 +5,7 @@ package SelectionAlgorithms;
 
 import java.util.Arrays;
 
-import GeneticAlgorithm.Chromosome;
+import Chromosomes.Chromosome;
 
 /**
  * @author Rioni
