@@ -8,6 +8,7 @@ import Chromosomes.ChromosomeP1F2;
 import Chromosomes.ChromosomeP1F3;
 import Chromosomes.ChromosomeP1F4a;
 import Chromosomes.ChromosomeP1F4b;
+import CrossAlgorithms.BLXAlphaCross;
 import CrossAlgorithms.OnePointCross;
 import CrossAlgorithms.UniformCross;
 import CrossAlgorithms.ArithmeticCross;
@@ -231,6 +232,8 @@ public class ViewController implements Runnable {
 		//ONLY CALLABLE DURING FUNCTION 4B--------------------------------------------------------------------
 		case "ARITMÉTICO":
 			this.algorithmData.crossAlgorithm = new ArithmeticCross();
+		case "BLX-Α":
+			this.algorithmData.crossAlgorithm = new BLXAlphaCross();
 			break;
 		}
 	}
