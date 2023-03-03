@@ -265,8 +265,9 @@ public class MainView extends JFrame {
 		FlatLightLaf.setup();
 
 		this.setTitle("Practica 1 - PEV");
-		this.setResizable(false);
-		this.setMinimumSize(new Dimension(1280, 720));
+		this.setResizable(true);
+		this.setMinimumSize(new Dimension(512, 256));
+		this.setSize(new Dimension(1280,720));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 
