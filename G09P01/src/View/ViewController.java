@@ -232,6 +232,7 @@ public class ViewController implements Runnable {
 		//ONLY CALLABLE DURING FUNCTION 4B--------------------------------------------------------------------
 		case "ARITMÉTICO":
 			this.algorithmData.crossAlgorithm = new ArithmeticCross();
+			break;
 		case "BLX-Α":
 			this.algorithmData.crossAlgorithm = new BLXAlphaCross();
 			break;
