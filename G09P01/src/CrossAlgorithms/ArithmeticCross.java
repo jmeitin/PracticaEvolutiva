@@ -14,7 +14,7 @@ public class ArithmeticCross extends CrossAlgorithm {
 	
 	@Override
 	public Chromosome[] cross(Chromosome[] poblation, int poblation_size, double cross_chance, int num_points) {
-		//System.out.print("ARITMETICO");
+		System.out.print("ARITMETICO");
 		
 		Chromosome[] new_population = new Chromosome[poblation_size];
 		Random rand = new Random();
