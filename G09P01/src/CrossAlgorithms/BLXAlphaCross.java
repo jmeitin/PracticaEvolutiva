@@ -8,6 +8,7 @@ import GeneticAlgorithm.Chromosome;
 public class BLXAlphaCross extends CrossAlgorithm {
 	@Override
 	protected void cross(Chromosome childA, Chromosome childB) {
+		//CASTING FOR 4B------------------------------------------------------------------------------------------
 		ChromosomeP1F4b child_a_b = (ChromosomeP1F4b)childA;
 		ChromosomeP1F4b child_b_b = (ChromosomeP1F4b)childB;
 		

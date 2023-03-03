@@ -9,6 +9,10 @@ public abstract class CrossAlgorithm {
 	
 	protected Random rand = new Random();
 	
+	//ABSTRACT METHODS---------------
+	protected abstract void cross(Chromosome childA, Chromosome childB);
+	
+	//METHODS---------------------
 	public Chromosome[] cross(Chromosome[] poblation, int poblation_size, double cross_chance, int num_points)
 	{
 		Chromosome[] new_population = new Chromosome[poblation_size];
@@ -22,32 +26,32 @@ public abstract class CrossAlgorithm {
 				// THERE IS NO 1st PARENT
 				if (parent_selected == - 1) { 
 					parent_selected = i;
+					// IN CASE NO 2nd PARENT IS SELECTED 
 					new_population[parent_selected] = poblation[parent_selected].getCopy(); //default value
 				}
 				//SELECT 2nd PARENT
 				else { 
-					//CASTING FOR 4B------------------------------------------------------------------------------------------
+					//DEFAULT VALUE
 					Chromosome parent_a = poblation[parent_selected].getCopy();
 					Chromosome parent_b = poblation[i].getCopy();
+					//CROSS
 					cross(parent_a, parent_b);
+					
 					new_population[parent_selected] = parent_a;
 					new_population[i] = parent_b;	
 					parent_selected = -1;
-				}
-				
+				}				
 			}
 			
 			//CROSS DOESN'T HAPPEN
 			else {
 				new_population[i] = poblation[i].getCopy();
 			}
-			
 		}
 
 		return new_population;		
 	}
 	
-	protected abstract void cross(Chromosome childA, Chromosome childB);
 	//DIVIDES GENES
 	protected int calculateNextPoint(Random rand, int start, int end) {
 		//Point belongs to [1, length - 1]

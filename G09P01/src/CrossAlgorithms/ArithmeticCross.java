@@ -20,8 +20,9 @@ public class ArithmeticCross extends CrossAlgorithm {
 		
 		int num_genes = childA_4b.getLenght();
 		int num_alleles = childA_4b.getAlleleLength();
-		
+		//GENES IN CHROMOSOME
 		for (int g = 0; g < num_genes; g++) {
+			//ALLELES IN CHROMOSOME
 			for (int a = 0; a < num_alleles; a++) {
 				double a1 = childA_4b.getGene(g).getAllele(a);
 				double a2 = childB_4b.getGene(g).getAllele(a);

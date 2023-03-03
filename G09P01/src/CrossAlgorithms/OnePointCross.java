@@ -22,6 +22,7 @@ public class OnePointCross extends CrossAlgorithm {
 		
 		//CROSS GENES ON 2ND PORTION (1st PORTION STAYS THE SAME)					
 		for (int g = gene; g < length; g++) {
+			//CROSS ALL ALLELES STARTING AT POINT allele
 			childA.swapAllelesInGene(childB, g, allele, rand, 2); // Cross chance is (200%)
 			if (g == gene + 1)
 				allele = 0; //will exchange all alleles in gene
