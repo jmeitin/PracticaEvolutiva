@@ -17,8 +17,8 @@ public class MultiPointCross extends CrossAlgorithm {
 	}
 	
 	@Override
-	protected void cross(Chromosome childA, Chromosome childB) {
-		int length = childA.getLenght();
+	protected void cross(Chromosome first_child, Chromosome second_child) {
+		int length = first_child.getLenght();
 		// Calculate 1st Point that delimits 2 portions
 		int point = calculateNextPoint(rand, 1, (length - 1) / numPoints);
 		
@@ -31,7 +31,7 @@ public class MultiPointCross extends CrossAlgorithm {
 		for (int g = point; g < length; g++) {
 			
 			if (swap) { //swap genes by default
-				childA.swapGene(g, childB);
+				first_child.swapGene(g, second_child);
 			}
 			//else stays the same
 			

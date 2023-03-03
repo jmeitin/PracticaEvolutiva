@@ -9,16 +9,16 @@ public class ArithmeticCross extends CrossAlgorithm {
 	final static double alpha = 0.5;
 	
 	@Override
-	protected void cross(Chromosome parent_a, Chromosome parent_b) {
-		//CASTING FOR 4B------------------------------------------------------------------------------------------
-		ChromosomeP1F4b childA_4b = (ChromosomeP1F4b)parent_a;
-		ChromosomeP1F4b childB_4b = (ChromosomeP1F4b)parent_b;
+	protected void cross(Chromosome first_child, Chromosome second_child) {
+		// CASTING FOR 4B------------------------------------------------------------------------------------------
+		ChromosomeP1F4b childA_4b = (ChromosomeP1F4b)first_child;
+		ChromosomeP1F4b childB_4b = (ChromosomeP1F4b)second_child;
 		
 		int num_genes = childA_4b.getLenght();
 		int num_alleles = childA_4b.getAlleleLength();
-		//GENES IN CHROMOSOME
+		// Genes in chromosome
 		for (int g = 0; g < num_genes; g++) {
-			//ALLELES IN CHROMOSOME
+			// Alleles in chromosome
 			for (int a = 0; a < num_alleles; a++) {
 				double a1 = childA_4b.getGene(g).getAllele(a);
 				double a2 = childB_4b.getGene(g).getAllele(a);

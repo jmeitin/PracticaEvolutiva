@@ -32,14 +32,14 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 		calculateFenotypes();
 	}
 	
-	//OVERRIDE METHODS------------------------------------------------
+	// OVERRIDE METHODS------------------------------------------------
 	public abstract void calculateFenotypes();
 	public abstract double evaluate();
 	protected abstract void initGenes();
 	protected abstract Chromosome getNewInstance();
 	protected abstract boolean mutateGene(int pos, Random rand, double mutation_chance);
 	
-	//UTILITY--------------------------------------------------------
+	// UTILITY--------------------------------------------------------
 	// Gets Lenght for a given gen
 	public int calculateGenSize(double tolerance, double min, double max)
 	{
@@ -48,9 +48,10 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 	
 	@Override
 	public int compareTo(Chromosome other)
-	{ // if other < this ==> -1
-	  // if == ==> 0
-	// if other > this ==> 1
+	{ 
+		// if other < this ==> -1
+		// if == ==> 0
+		// if other > this ==> 1
 		return Double.compare(other.fitness,  this.fitness);
 	}
 	
@@ -85,7 +86,7 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 		return chromosome;
 	};
 	
-	//GET & SET--------------------------------------------------
+	// Returns num_of_genes
 	public int getLenght() 	{ return this.num_of_genes;	}
 	
 	
@@ -104,27 +105,31 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 		return genes[pos];
 	}
 	
-	//SWAPS ALLELES OF 2 GENES IF RANDOM < cross_chance. STARTS SWAPPING IN allele_pos
+	// Swaps alleles of 2 genes if random < cross_chance. Starts swapping in allele_pos
 	public boolean swapAllelesInGene(Chromosome<T,U> other_chromosome, int pos, int allele_pos, Random rand, double cross_chance)
 	{
 		int num_alleles = genes[0].getLenght();
 		if(pos * num_alleles + allele_pos >= genes.length * num_alleles && allele_pos < num_alleles)
 			return false;
 		
-		// SWAP ALLELES IN GENE [pos]
+		// Swap alleles in gene [pos]
 		for (int a = allele_pos; a < num_alleles; a++) {
 			if (rand.nextDouble() < cross_chance) { // [0.0, 1.0]
 				T allele = genes[pos].getAllele(a);
 				genes[pos].setAllele (a, other_chromosome.getGene(pos).getAllele(a));
 				other_chromosome.getGene(pos).setAllele(a, allele);
 			}
-			// else chromosome[pos, a] stays the same 
 		}
 		
 		return true;
 	}
 
-	// EXCHANGE GENES WITH OTHER CHROMOSOME. CALLED FROM CROSS FUNCTION
+	/**
+	 * Exchange genes with other chromosome
+	 * @param pos Position of the gen to chance
+	 * @param other_chromosome The other chromosome to swap genes with
+	 * @return Wheter the swap succeeded
+	 */
 	public boolean swapGene(int pos, Chromosome<T,U> other_chromosome)
 	{
 		if(pos >= genes.length)
@@ -152,6 +157,12 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 			calculateFenotypes(); // Update fenotype
 	}
 	
+	/**
+	 * Sets a gene in pos
+	 * @param pos
+	 * @param gene
+	 * @return
+	 */
 	public boolean setGene(int pos, Gene<T> gene)
 	{
 		if(pos >= genes.length)
@@ -161,7 +172,7 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 		return true;
 	}
 	
-	
+	// Getters and settters, we aren't adding doc for that
 
 	public double getFitness() { return fitness;	}
 

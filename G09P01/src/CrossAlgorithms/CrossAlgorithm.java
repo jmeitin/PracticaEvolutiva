@@ -9,7 +9,7 @@ public abstract class CrossAlgorithm {
 	protected Random rand = new Random();
 	
 	//ABSTRACT METHODS---------------
-	protected abstract void cross(Chromosome childA, Chromosome childB);
+	protected abstract void cross(Chromosome first_child, Chromosome second_child);
 	
 	//METHODS---------------------
 	public Chromosome[] cross(Chromosome[] poblation, int poblation_size, double cross_chance, int num_points)
@@ -20,29 +20,30 @@ public abstract class CrossAlgorithm {
 		for (int i = 0; i < poblation_size; i++) {
 			double chance = rand.nextDouble(); // [0, 1]
 			
-			//CROSS HAPPENS
+			// Cross happens
 			if(chance <= cross_chance) {
-				// THERE IS NO 1st PARENT
+				// There is no first parent
 				if (parent_selected == - 1) { 
 					parent_selected = i;
-					// IN CASE NO 2nd PARENT IS SELECTED 
-					new_population[parent_selected] = poblation[parent_selected].getCopy(); //default value
+					// In case no 2nd parent gets selected
+					new_population[parent_selected] = poblation[parent_selected]; //default value
 				}
-				//SELECT 2nd PARENT
+				// Select 2nd parent
 				else { 
-					//DEFAULT VALUE
 					Chromosome parent_a = poblation[parent_selected].getCopy();
 					Chromosome parent_b = poblation[i].getCopy();
-					//CROSS
+					
+					// Cross strategy
 					cross(parent_a, parent_b);
 					
+					// Update population with the results
 					new_population[parent_selected] = parent_a;
 					new_population[i] = parent_b;	
 					parent_selected = -1;
 				}				
 			}
 			
-			//CROSS DOESN'T HAPPEN
+			// Cross doesn't happen
 			else {
 				new_population[i] = poblation[i].getCopy();
 			}
@@ -51,9 +52,9 @@ public abstract class CrossAlgorithm {
 		return new_population;		
 	}
 	
-	//DIVIDES GENES
+	// Divides genes
 	protected int calculateNextPoint(Random rand, int start, int end) {
-		//Point belongs to [1, length - 1]
+		// Point belongs to [1, length - 1]
 		// if length = 10 & point = 0.3 ==> 1 + 0.3 * (10 - 2) = 2.7 ==> 2nd gene
 		// if point 1.0 ==> 1 + 1 * 8 = 9 ==> 9th gene
 		double aux = start + rand.nextDouble() * (end - start); 
