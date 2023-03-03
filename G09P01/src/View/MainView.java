@@ -157,15 +157,31 @@ public class MainView extends JFrame {
 		});
 	}
 
+	/***
+	 * Shows a dialog bog with an "ok" button
+	 * @param message
+	 * @param ex
+	 */
 	private void showInformationDialog(String message, Exception ex) {
 		JOptionPane.showMessageDialog(SwingUtilities.windowForComponent(this), message + "\n\n" + ex.getMessage(),
 				"FlatLaf", JOptionPane.INFORMATION_MESSAGE);
 	}
 
+	
+	/***
+	 * Sets the solution text of the view
+	 * @param solutionText The text you want to appear in the view
+	 */
 	public void setSolutionText(String solutionText) {
 		this.solutionTextField.setText(solutionText);
 	}
 
+	/***
+	 * Updates the view of the graph with new data
+	 * @param average_fitnesses Average fitness of the poblation
+	 * @param best_absolute_fitnesses Best absolute fitness of the poblation
+	 * @param best_fitnesses Best fitness of the poblation in each iteration
+	 */
 	public void updateGraph(double[] average_fitnesses, double[] best_absolute_fitnesses, double[] best_fitnesses) {
 		this.average_fitnesses = average_fitnesses;
 		this.best_absolute_fitnesses = best_absolute_fitnesses;
@@ -173,18 +189,27 @@ public class MainView extends JFrame {
 		plotData();
 	}
 
+	/***
+	 * Cleans the graph view
+	 */
 	public void cleanPlot() {
 		plot.removeAllPlots();
 		plot.removeLegend();
 		plot.addLegend("SOUTH");
 	}
 
+	/***
+	 * Cleans the plot data
+	 */
 	public void cleanPlotData() {
 		average_fitnesses = null;
 		best_fitnesses = null;
 		best_absolute_fitnesses = null;
 	}
 
+	/***
+	 * Uses the current data to redraw the graph
+	 */
 	private void plotData() {
 		if (average_fitnesses == null || best_fitnesses == null || best_absolute_fitnesses == null)
 			return;
@@ -196,7 +221,10 @@ public class MainView extends JFrame {
 		plot.addLinePlot("Media Generación", isDarkTheme ? LIGHT_GREEN : DARK_GREEN, average_fitnesses);
 	}
 
-	// Method to enable/disable options "Aritmético" y "BLX-α"
+	/***
+	 * Method to enable/disable options "Aritmético" y "BLX-α"
+	 * @param enabled Determines wheter enable or disable options "Aritmético" y "BLX-α" 
+	 */
 	private void enableCrossTypeOptions(boolean enabled) {
 		ComboBoxModel<SelectableType> model = (ComboBoxModel<SelectableType>) crossTypeComboBox.getModel();
 		SelectableType selectedItem = (SelectableType) crossTypeComboBox.getSelectedItem();
@@ -226,6 +254,9 @@ public class MainView extends JFrame {
 		crossTypeComboBox.repaint();
 	}
 
+	/**
+	 * Sets the controller data to match the view data.
+	 */
 	private void initController() {
 		controller.setPoblationSize(Integer.parseInt(genSizeTextField.getText()));
 		controller.setGenSize(Integer.parseInt(numGenTextField.getText()));
@@ -242,6 +273,8 @@ public class MainView extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * Most of the code was generated with windowbuildertool. 
+	 * Some snippets (cell renderer, jformattedclass) where added manually to fit our needs.
 	 */
 	public MainView() {
 		FlatLightLaf.setup();
