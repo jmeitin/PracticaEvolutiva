@@ -7,6 +7,7 @@ import Chromosomes.ChromosomeP1F1;
 import Chromosomes.ChromosomeP1F2;
 import Chromosomes.ChromosomeP1F3;
 import Chromosomes.ChromosomeP1F4a;
+import Chromosomes.ChromosomeP1F4b;
 import CrossAlgorithms.OnePointCross;
 import CrossAlgorithms.UniformCross;
 import GeneticAlgorithm.Chromosome;
@@ -184,6 +185,11 @@ public class ViewController implements Runnable {
 			algorithmData.maximize = false;
 			break;
 		case "P1 - FUNCION 4B":
+			chromosome_factory = (double tolerance, int dimensions) -> {
+				return new ChromosomeP1F4b(algorithmData.dimensions, tolerance);
+			};
+			algorithmData.chromosome_factory = chromosome_factory;
+			algorithmData.maximize = false;
 			break;
 		}
 	}
