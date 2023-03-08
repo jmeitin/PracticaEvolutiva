@@ -31,7 +31,7 @@ public class ViewController implements Runnable {
 		public void run() {
 			geneticAlgorithm = new GeneticAlgorithm<Boolean, Double>(getAlgorithmData());
 
-			System.out.println("Running: " + Thread.currentThread().getName());
+			log("Running: " + Thread.currentThread().getName());
 			while (!Thread.interrupted() && geneticAlgorithm.runSequentially()) {
 			}
 		}
@@ -70,7 +70,7 @@ public class ViewController implements Runnable {
 	 * view accordingly (not implemented)
 	 */
 	private void runAux() {
-		System.out.println("Running: " + Thread.currentThread().getName());
+		log("Running: " + Thread.currentThread().getName());
 
 		modelThread = new Thread(new ModelRunner(), "Model Thread");
 		modelThread.start();
@@ -84,11 +84,9 @@ public class ViewController implements Runnable {
 
 		if (interrupted) {
 			tryStopThread(modelThread);
-			System.out.println("Controller thread ended by interruption");
 		} else {
 			updateGraphsView();
 			updateSolution();
-			System.out.println("Thread ended normally");
 		}
 
 	}
@@ -116,12 +114,12 @@ public class ViewController implements Runnable {
 	 */
 	private boolean tryStopThread(Thread thread) {
 		if (thread != null && thread.isAlive()) {
-			System.out.println(thread.getName() + " have signaled to be interrupted");
+			log(thread.getName() + " have signaled to be interrupted");
 			thread.interrupt();
 
 			try {
 				thread.join();
-				System.out.println(thread.getName() + " interruption succeded");
+				log(thread.getName() + " interruption succeded");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
