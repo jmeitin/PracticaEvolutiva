@@ -279,7 +279,7 @@ public class MainView extends JFrame {
 		genSizeLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		;
 		genSizeTextField = new JFormattedTextField(numberFormat);
-		genSizeTextField.setText("100");
+		genSizeTextField.setText("1000");
 		genSizeTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
 			final int result = clamp(Integer.parseInt(text), 10 , 100000);
@@ -290,7 +290,7 @@ public class MainView extends JFrame {
 		JLabel numGenLabel = new JLabel("Número de generaciones");
 		numGenLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		numGenTextField = new JFormattedTextField(numberFormat);
-		numGenTextField.setText("100");
+		numGenTextField.setText("1000");
 		numGenTextField.setColumns(10);
 		numGenTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();

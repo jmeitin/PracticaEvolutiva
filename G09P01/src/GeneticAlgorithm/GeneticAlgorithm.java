@@ -21,11 +21,12 @@ public class GeneticAlgorithm<T, U> {
 	// Sizes ------------
 	final private int max_gen_num; // max generaciones
 	final private int poblation_size;
+	private int current_generation; // used in sequential run
 
 	// Elitism
 	final private boolean elitism;
 	private Chromosome<T, U>[] elite_poblation;
-	
+
 	private Chromosome<T, U> best_chromosome;
 	private int best_pos;
 
@@ -108,8 +109,9 @@ public class GeneticAlgorithm<T, U> {
 		this.mutation_chance = algorithmData.mutation_chance;
 		this.tolerance = algorithmData.tolerance;
 		this.elitism = algorithmData.elitism_percentage > 0.0001;
-		if(this.elitism)
-			this.elite_poblation = new Chromosome[Math.max((int) (poblation_size * algorithmData.elitism_percentage / 100.0), 1)];
+		if (this.elitism)
+			this.elite_poblation = new Chromosome[Math
+					.max((int) (poblation_size * algorithmData.elitism_percentage / 100.0), 1)];
 		this.maximize = algorithmData.maximize;
 		this.best_absolute_fitness = algorithmData.maximize ? Double.MIN_VALUE : Double.MAX_VALUE;
 		this.dimensions = algorithmData.dimensions;
@@ -124,6 +126,8 @@ public class GeneticAlgorithm<T, U> {
 		average_fitnesses = new double[this.max_gen_num];
 		best_absolute_fitnesses = new double[this.max_gen_num];
 		best_fitnesses = new double[this.max_gen_num];
+
+		current_generation = 0;
 	}
 
 	public void initializePoblation() {
@@ -157,8 +161,8 @@ public class GeneticAlgorithm<T, U> {
 			select();
 			cross();
 			mutate();
-			
-			if(elitism)
+
+			if (elitism)
 				insertElite();
 
 			evaluate(i);
@@ -167,20 +171,44 @@ public class GeneticAlgorithm<T, U> {
 		isRunning = false;
 	}
 
-	public void selectElite()
-	{
+	public boolean runSequentially() {
+		if (!isRunning) {
+			isRunning = true;
+			initializePoblation();
+			evaluate(0);
+		} else {
+			if (elitism)
+				selectElite();
+
+			select();
+			cross();
+			mutate();
+
+			if (elitism)
+				insertElite();
+
+			evaluate(current_generation);
+			current_generation++;
+
+			if (current_generation == max_gen_num)
+				isRunning = false;
+		}
+
+		return current_generation != max_gen_num;
+	}
+
+	public void selectElite() {
 		Arrays.sort(poblation);
-		
-		for(int i = 0; i < elite_poblation.length; i++)
+
+		for (int i = 0; i < elite_poblation.length; i++)
 			elite_poblation[i] = poblation[i].getCopy();
 	}
-	
-	public void insertElite()
-	{
-		for(int i = 0; i < elite_poblation.length; i++)
+
+	public void insertElite() {
+		for (int i = 0; i < elite_poblation.length; i++)
 			poblation[i] = elite_poblation[i].getCopy();
 	}
-	
+
 	/**
 	 * Evaluates each chromosome, updates its scores and selects the best one.
 	 */
@@ -189,7 +217,7 @@ public class GeneticAlgorithm<T, U> {
 		double fitness_sum_brute = 0;
 		double accumulated_score = 0;
 		double best_fitness = maximize ? Double.MIN_VALUE : Double.MAX_VALUE;
-		
+
 		for (int i = 0; i < poblation_size; i++) {
 			double brute_fitness = poblation[i].evaluate();
 			fitness_sum_brute += brute_fitness;
@@ -203,12 +231,11 @@ public class GeneticAlgorithm<T, U> {
 			poblation[i].setAccumulatedScore(accumulated_score);
 		}
 
-		if (compareFitness(best_fitness, best_absolute_fitness) || generation == 0)
-		{
+		if (compareFitness(best_fitness, best_absolute_fitness) || generation == 0) {
 			this.best_absolute_fitness = best_fitness;
 			this.best_chromosome = this.poblation[this.best_pos].getCopy();
 		}
-		
+
 		// Gather stats
 		this.average_fitnesses[generation] = fitness_sum_brute / poblation_size;
 		this.best_fitnesses[generation] = best_fitness;
@@ -225,7 +252,7 @@ public class GeneticAlgorithm<T, U> {
 	}
 
 	public void mutate() {
-		this.poblation = this.mutationAlgorithm.mutate(poblation,  poblation_size, mutation_chance);
+		this.poblation = this.mutationAlgorithm.mutate(poblation, poblation_size, mutation_chance);
 
 	}
 

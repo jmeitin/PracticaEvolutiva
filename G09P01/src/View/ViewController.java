@@ -30,11 +30,14 @@ public class ViewController implements Runnable {
 		@Override
 		public void run() {
 			geneticAlgorithm = new GeneticAlgorithm<Boolean, Double>(getAlgorithmData());
-			geneticAlgorithm.run();
+
+			System.out.println("Running: " + Thread.currentThread().getName());
+			while (!Thread.interrupted() && geneticAlgorithm.runSequentially()) {
+			}
 		}
 	}
 
-	private final boolean debugMode = true; // Enables debug mode
+	private final boolean debugMode = false; // Enables debug mode
 	private final MainView view; // View to be controlled
 	private GeneticAlgorithm geneticAlgorithm; // Genetic algorithm to be run
 	private GeneticAlgorithmData algorithmData; // Genetic algorithm data
@@ -43,6 +46,7 @@ public class ViewController implements Runnable {
 
 	/**
 	 * Shortcut to log a string if debug mode is enabled
+	 * 
 	 * @param str String to be logged
 	 */
 	private void log(String str) {
@@ -52,6 +56,7 @@ public class ViewController implements Runnable {
 
 	/**
 	 * Constructor
+	 * 
 	 * @param view View to be controlled
 	 */
 	public ViewController(final MainView view) {
@@ -61,28 +66,36 @@ public class ViewController implements Runnable {
 
 	/**
 	 * This thread will run the genetic algorithm and update the view once it's done
-	 * It could also serve to track the progress of the algorithm and update the view accordingly (not implemented)
-	 */ 
+	 * It could also serve to track the progress of the algorithm and update the
+	 * view accordingly (not implemented)
+	 */
 	private void runAux() {
-		if (tryStopThread(modelThread)) // Cancel thread if already running
-			geneticAlgorithm.stop();
+		System.out.println("Running: " + Thread.currentThread().getName());
 
-		modelThread = new Thread(new ModelRunner());
+		modelThread = new Thread(new ModelRunner(), "Model Thread");
 		modelThread.start();
 
-		while (modelThread.isAlive()) {
+		boolean interrupted = false;
+		while (modelThread.isAlive() && !interrupted) {
 			// Here we can track the percentage of completion of the model
 			// This runs in its own thread to not halt the UI
+			interrupted = Thread.interrupted();
 		}
 
-		updateGraphsView();
-		updateSolution();
-		System.out.println("Thread end");
+		if (interrupted) {
+			tryStopThread(modelThread);
+			System.out.println("Controller thread ended by interruption");
+		} else {
+			updateGraphsView();
+			updateSolution();
+			System.out.println("Thread ended normally");
+		}
+
 	}
 
 	/**
-	 * Runs the genetic algorithm in a separate thread to not halt the view.
-	 * If the thread is already running, it will be stopped and a new one will be created
+	 * Runs the genetic algorithm in a separate thread to not halt the view. If the
+	 * thread is already running, it will be stopped and a new one will be created
 	 */
 	public void run() {
 		tryStopThread(controllerRunThread);
@@ -91,19 +104,29 @@ public class ViewController implements Runnable {
 			public void run() {
 				runAux();
 			}
-		});
+		}, "Controller Thread");
 		controllerRunThread.start();
 	}
 
 	/**
 	 * Tries to stop a thread
+	 * 
 	 * @param thread Thread to be stopped
 	 * @return Wheter it could be stopped or not
 	 */
 	private boolean tryStopThread(Thread thread) {
 		if (thread != null && thread.isAlive()) {
+			System.out.println(thread.getName() + " have signaled to be interrupted");
 			thread.interrupt();
-			System.out.println("Thread Stopped");
+
+			try {
+				thread.join();
+				System.out.println(thread.getName() + " interruption succeded");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			return true;
 		}
 
@@ -121,20 +144,20 @@ public class ViewController implements Runnable {
 
 	/**
 	 * Returns a string given a double rounded to the given number of decimals
-	 * @param number Number to be formatted
+	 * 
+	 * @param number       Number to be formatted
 	 * @param num_decimals Number of decimals to be rounded
 	 * @return
 	 */
-	private String formatNumber(double number, int num_decimals)
-	{
+	private String formatNumber(double number, int num_decimals) {
 		String format = "0.";
-        for (int i = 0; i < num_decimals; i++) {
-            format += "0";
-        }
-        DecimalFormat df = new DecimalFormat(format);
-        return df.format(number);
+		for (int i = 0; i < num_decimals; i++) {
+			format += "0";
+		}
+		DecimalFormat df = new DecimalFormat(format);
+		return df.format(number);
 	}
-	
+
 	/**
 	 * Updates the solution text in the view
 	 */
@@ -143,7 +166,7 @@ public class ViewController implements Runnable {
 		Chromosome chromosome = this.geneticAlgorithm.getBest_chromosome();
 		int i = 1;
 		for (Object fenotype : chromosome.getFenotypes()) {
-			solutionText += "Variable X" + i++ + " = " + formatNumber((double)fenotype, 4) + " | ";
+			solutionText += "Variable X" + i++ + " = " + formatNumber((double) fenotype, 4) + " | ";
 		}
 
 		solutionText += "Valor de la función: " + formatNumber(chromosome.evaluate(), 4);
@@ -187,6 +210,7 @@ public class ViewController implements Runnable {
 
 	/**
 	 * Sets the tolerance of the algorithm (error value)
+	 * 
 	 * @param tolerance Value between 0 and 1
 	 */
 	public void setTolerance(double tolerance) {
@@ -196,7 +220,9 @@ public class ViewController implements Runnable {
 
 	/**
 	 * Sets the selection algorithm
-	 * @param function the function to set (P1 - FUNCION 1, P1 - FUNCION 2, P1 - FUNCION 3, P1 - FUNCION 4A, P1 - FUNCION 4B)
+	 * 
+	 * @param function the function to set (P1 - FUNCION 1, P1 - FUNCION 2, P1 -
+	 *                 FUNCION 3, P1 - FUNCION 4A, P1 - FUNCION 4B)
 	 */
 	public void setFunction(String function) {
 		log("Function Type: " + function);
@@ -242,7 +268,9 @@ public class ViewController implements Runnable {
 
 	/**
 	 * Sets the selection algorithm to use
-	 * @param selection It can be: RULETA, T-DETERMINÍSTICO, T-PROBABILÍSTICO, ESTOCÁSTICO, TRUNCAMIENTO, RESTOS
+	 * 
+	 * @param selection It can be: RULETA, T-DETERMINÍSTICO, T-PROBABILÍSTICO,
+	 *                  ESTOCÁSTICO, TRUNCAMIENTO, RESTOS
 	 */
 	public void setSelectionType(String selection) {
 		log("Selection Type: " + selection);
@@ -270,6 +298,7 @@ public class ViewController implements Runnable {
 
 	/**
 	 * Sets the cross type
+	 * 
 	 * @param cross Cross type (MONOPUNTO, UNIFORME, ARITMÉTICO, BLX-Α)
 	 */
 	public void setCrossType(String cross) {
@@ -296,6 +325,7 @@ public class ViewController implements Runnable {
 
 	/**
 	 * Sets the mutation type
+	 * 
 	 * @param mutationType Mutation type (BÁSICA)
 	 */
 	public void setMutationType(String mutationType) {
@@ -309,16 +339,17 @@ public class ViewController implements Runnable {
 
 	/**
 	 * Sets the number of dimensions for the function 4a and 4b
+	 * 
 	 * @param dimensions Number of dimensions
 	 */
-	public void setDimensions(int dimensions)
-	{
+	public void setDimensions(int dimensions) {
 		log("Dimensions: " + dimensions);
 		algorithmData.dimensions = dimensions;
 	}
-	
+
 	/**
 	 * Sets cross chance
+	 * 
 	 * @param cross_chance Cross chance in percentage (0 - 100%)
 	 */
 	public void setCrossChance(double cross_chance) {
@@ -328,6 +359,7 @@ public class ViewController implements Runnable {
 
 	/**
 	 * Sets mutation chance
+	 * 
 	 * @param mutation_chance Mutation chance in percentage (0 - 100%)
 	 */
 	public void setMutationChance(double mutation_chance) {
