@@ -268,6 +268,10 @@ public class GeneticAlgorithm<T, U> {
 	 */
 	private double recalculateFitness() {
 		double extreme_value = maximize ? Double.MIN_VALUE : Double.MAX_VALUE;
+		//lo aplicaré en problemas de minimización
+//		for(int i = 0; i < poblation_size; i++)
+//			this.fitness[i] = (1.05 * extreme_value) - this.fitness[i];
+//		}
 		for (int i = 0; i < poblation_size; i++) {
 			double brute_fitness = poblation[i].evaluate();
 			if (compareFitness(brute_fitness, extreme_value))

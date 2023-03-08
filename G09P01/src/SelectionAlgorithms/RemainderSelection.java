@@ -12,21 +12,18 @@ import Chromosomes.Chromosome;
  *
  */
 public class RemainderSelection extends SelectionAlgorithm {
-
-	static int k = 8;
+	// k = poblation_size
 	
 	@Override
 	public Chromosome[] select(Chromosome[] poblation, int poblation_size) {
-		if (k > poblation.length)
-			return poblation;
 		
 		Chromosome[] new_population = new Chromosome[poblation_size];
 		Random rand = new Random();
 		
 		int index = 0;
-		for (int i = 0; i < k && index < poblation_size; i ++) {
+		for (int i = 0; i < poblation_size && index < poblation_size; i ++) {
 			int pos = (int)(rand.nextDouble() * (poblation.length - 1));			
-			int pi_k = (int)(poblation[pos].getScore() * k);
+			int pi_k = (int)(poblation[pos].getScore() * poblation_size);
 			
 			for (int j = 0; j < pi_k && index < poblation_size; j++) {
 				if(index < poblation_size) {
