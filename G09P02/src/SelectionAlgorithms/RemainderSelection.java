@@ -25,6 +25,7 @@ public class RemainderSelection extends SelectionAlgorithm {
 			int pos = (int)(rand.nextDouble() * (poblation.length - 1));			
 			int pi_k = (int)(poblation[pos].getScore() * poblation_size);
 			
+			//SI ES MAYOR QUE UNO SE METE
 			for (int j = 0; j < pi_k && index < poblation_size; j++) {
 				if(index < poblation_size) {
 					new_population[index] = poblation[pos].getCopy();

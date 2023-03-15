@@ -10,8 +10,8 @@ public class BLXAlphaCross extends CrossAlgorithm {
 		ChromosomeP1F4b child_a_b = (ChromosomeP1F4b)first_child;
 		ChromosomeP1F4b child_b_b = (ChromosomeP1F4b)second_child;
 		
-		int num_genes = first_child.getLenght();
-		int num_alleles = first_child.getAlleleLength();
+		int num_genes = first_child.getNumOfGenes();
+		int num_alleles = first_child.getNumAllelesInGene();
 		
 		// Genes in chromosome
 		for (int g = 0; g < num_genes; g++) {

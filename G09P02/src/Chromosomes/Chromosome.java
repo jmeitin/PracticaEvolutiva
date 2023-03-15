@@ -87,10 +87,9 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 	};
 	
 	// Returns num_of_genes
-	public int getLenght() 	{ return this.num_of_genes;	}
+	public int getNumOfGenes() 	{ return this.num_of_genes;	}
 	
-	
-	public int getAlleleLength(){
+	public int getNumAllelesInGene(){
 		if (this.num_of_genes == 0)
 			return 0;
 		return genes[0].getLenght();
@@ -132,7 +131,7 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 	 */
 	public boolean swapGene(int pos, Chromosome<T,U> other_chromosome)
 	{
-		if(pos >= genes.length)
+		if(pos >= genes.length || pos <= 0)
 			return false;
 		
 		Gene<T> g = genes[pos];
@@ -140,6 +139,22 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 		other_chromosome.setGene(pos, g);
 		
 		return true;
+	}
+	
+	//Displace genes to the right in segment[init, fin]
+	public boolean displaceGenes(int init, int fin) {
+		if(0 <= init && init < fin && fin < num_of_genes) {
+			int i = fin;
+			Gene<T> last = genes[fin];
+			while (i > init) {				
+				genes[i] = genes[i-1];
+				i--;				
+			}
+			genes[init] = last;
+			return true;
+		}
+		return false;
+		
 	}
 	
 	/***

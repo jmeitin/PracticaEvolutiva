@@ -22,7 +22,7 @@ public class MultiPointCross extends CrossAlgorithm {
 	
 	@Override
 	protected void cross(Chromosome first_child, Chromosome second_child) {
-		int length = first_child.getLenght();
+		int length = first_child.getNumOfGenes();
 		// Calculate 1st Point that delimits 2 portions
 		int point = calculateNextPoint(rand, 1, (length - 1) / numPoints);
 		

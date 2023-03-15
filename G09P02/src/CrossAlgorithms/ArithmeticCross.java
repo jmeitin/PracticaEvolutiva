@@ -19,8 +19,8 @@ public class ArithmeticCross extends CrossAlgorithm {
 		ChromosomeP1F4b childA_4b = (ChromosomeP1F4b)first_child;
 		ChromosomeP1F4b childB_4b = (ChromosomeP1F4b)second_child;
 		
-		int num_genes = childA_4b.getLenght();
-		int num_alleles = childA_4b.getAlleleLength();
+		int num_genes = childA_4b.getNumOfGenes();
+		int num_alleles = childA_4b.getNumAllelesInGene();
 		// Genes in chromosome
 		for (int g = 0; g < num_genes; g++) {
 			// Alleles in chromosome

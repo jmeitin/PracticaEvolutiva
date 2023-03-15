@@ -9,8 +9,8 @@ import Chromosomes.Chromosome;
 public class OnePointCross extends CrossAlgorithm {
 	@Override
 	protected void cross(Chromosome first_child, Chromosome second_child) {
-		int length = first_child.getLenght();
-		int alleleLength = first_child.getAlleleLength();
+		int length = first_child.getNumOfGenes();
+		int alleleLength = first_child.getNumAllelesInGene();
 		// Calculate Point in [1, L-1] that delimits 2 portions
 		int allelePoint = calculateNextPoint(rand, 1 * alleleLength, (length - 1) * alleleLength);
 		// 4 genes, 2 bits each ==> 01 23 45 67
