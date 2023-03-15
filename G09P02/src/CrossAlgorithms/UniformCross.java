@@ -1,7 +1,9 @@
 package CrossAlgorithms;
 
 import Chromosomes.Chromosome;
-
+/*
+ * Intercambiamos cada par de alelos con una probabilidad dada (0.5).
+*/
 public class UniformCross extends CrossAlgorithm {
 	@Override
 	protected void cross(Chromosome first_child, Chromosome second_child) {

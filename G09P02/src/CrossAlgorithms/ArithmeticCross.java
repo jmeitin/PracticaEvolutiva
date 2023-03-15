@@ -3,6 +3,11 @@ package CrossAlgorithms;
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP1F4b;
 
+/*
+ * Realiza una combinación lineal entre los cromosomas de los padres. 
+ * El caso más simple es el cruce de media aritmética:
+ * hi = αp1i + (1-α)p2i
+ * */
 public class ArithmeticCross extends CrossAlgorithm {
 //THIS ONLY WORKS IN 4B
 	

@@ -9,7 +9,8 @@ import Chromosomes.Chromosome;
 
 /**
  * @author Rioni
- *
+ * Selecciona 2-3 individuos aleatoriamente y se guarda el mejor. 
+ * Este proceso se repite n veces donde n es el tamaño de la población resultante.
  */
 public class DeterministicTournamentSelection extends SelectionAlgorithm {
 

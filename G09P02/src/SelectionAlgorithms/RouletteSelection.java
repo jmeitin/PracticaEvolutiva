@@ -1,6 +1,10 @@
 package SelectionAlgorithms;
 
 import Chromosomes.Chromosome;
+/*
+ *  Escoge un punto aleatorio en la población, esto avanza mientras el punto aleatorio sea superior a la puntuación acumulada del cromosoma. 
+ *  Una vez se encuentra un cromosoma válido se clona. Este proceso se repite hasta completar la población.
+*/
 
 public class RouletteSelection extends SelectionAlgorithm {
 

@@ -9,7 +9,7 @@ import Chromosomes.Chromosome;
 
 /**
  * @author Rioni
- *
+ * Se seleccionan individuos al azar y se reproducen score * poblation_size veces. Los que faltan se seleccionan por cualquier otro método de selección.
  */
 public class RemainderSelection extends SelectionAlgorithm {
 	// k = poblation_size
@@ -27,7 +27,7 @@ public class RemainderSelection extends SelectionAlgorithm {
 			
 			for (int j = 0; j < pi_k && index < poblation_size; j++) {
 				if(index < poblation_size) {
-					new_population[index] = poblation[pos];
+					new_population[index] = poblation[pos].getCopy();
 					index += 1;
 				}
 			}
@@ -36,7 +36,7 @@ public class RemainderSelection extends SelectionAlgorithm {
 		//Fill Array however you like		
 		for (int i = index; i < poblation_size; i++) {
 			int pos = (int)(rand.nextDouble() * (poblation.length - 1));
-			new_population[i] = poblation[pos];
+			new_population[i] = poblation[pos].getCopy();
 		}
 		
 		

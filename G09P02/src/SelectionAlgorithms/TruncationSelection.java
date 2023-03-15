@@ -9,7 +9,7 @@ import Chromosomes.Chromosome;
 
 /**
  * @author Rioni
- *
+ *  Selecciona el x% de la población y lo duplica 1/x veces, eliminando la población con mala puntuación.
  */
 public class TruncationSelection extends SelectionAlgorithm {
 	static double trunc = 0.5; // [0.1, 0.5]
@@ -27,15 +27,16 @@ public class TruncationSelection extends SelectionAlgorithm {
 		for (int i = 0; i < num_padres; i ++) { 
 			for (int j = 0; j < 1 / trunc; j++) {
 				if(index < poblation_size) {
-					new_population[index] = poblation[i];
+					new_population[index] = poblation[i].getCopy();
 					index += 1;
 				}
 			}
 		}
 		
+		// En caso de que no se haya llenado entero la poblacion rellenamos con los mejores.
 		int padre = 0;
 		while (index < poblation_size) {
-			new_population[index] = poblation[padre];
+			new_population[index] = poblation[padre].getCopy();
 			index++;
 			if (padre < (int)num_padres) padre++;
 			else padre = 0;

@@ -9,7 +9,8 @@ import Chromosomes.Chromosome;
 
 /**
  * @author Rioni
- *
+ * Igual que el T-Probalilístico solo que en vez de quedarse siempre con el mejor, genera un número aleatorio. 
+ * Dependiendo de su valor, se queda con el mejor o el peor. *
  */
 public class ProbabilisticTournamentSelection extends SelectionAlgorithm {
 

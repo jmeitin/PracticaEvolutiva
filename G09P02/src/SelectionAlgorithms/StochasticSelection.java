@@ -7,7 +7,10 @@ import Chromosomes.Chromosome;
 
 /**
  * @author Rioni
- *
+ * Se selecciona un punto aleatorio, como en la ruleta y se avanza hasta encontrar un individuo 
+ * cuya puntuación acumulada sea superior a este punto aleatorio. 
+ * Sin embargo, ahora la población está “dividida” en intervalos equidistantes, 
+ * esta distancia se usa para calcular el siguiente punto en lugar de que sea aleatorio.
  */
 public class StochasticSelection extends SelectionAlgorithm {
 

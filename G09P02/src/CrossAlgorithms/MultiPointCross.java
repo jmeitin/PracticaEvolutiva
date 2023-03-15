@@ -4,6 +4,10 @@ import Chromosomes.Chromosome;
 
 // LO HACE A NIVEL DE GEN, NO ALELOS
 
+/*
+ * Se seleccionan varios puntos de corte en el cromosoma y se intercambian los trozos de manera intercalada.
+ */
+
 public class MultiPointCross extends CrossAlgorithm {
 	private int numPoints;
 	int part = 1;

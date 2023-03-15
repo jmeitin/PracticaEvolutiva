@@ -2,6 +2,10 @@ package CrossAlgorithms;
 
 import Chromosomes.Chromosome;
 
+/*
+ * Corta los 2 progenitores en una posición aleatoria e intercambia los respectivos segmentos. 
+ */
+
 public class OnePointCross extends CrossAlgorithm {
 	@Override
 	protected void cross(Chromosome first_child, Chromosome second_child) {
