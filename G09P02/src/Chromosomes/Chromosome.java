@@ -32,6 +32,11 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 		calculateFenotypes();
 	}
 	
+	public Chromosome(int geneLenght) {
+		this.num_of_genes = geneLenght;
+		this.tolerance = 0.001;
+	}
+	
 	// OVERRIDE METHODS------------------------------------------------
 	public abstract void calculateFenotypes();
 	public abstract double evaluate();

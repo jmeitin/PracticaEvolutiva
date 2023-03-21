@@ -9,6 +9,7 @@ import Chromosomes.ChromosomeP1F2;
 import Chromosomes.ChromosomeP1F3;
 import Chromosomes.ChromosomeP1F4a;
 import Chromosomes.ChromosomeP1F4b;
+import Chromosomes.ChromosomeP2;
 import CrossAlgorithms.ArithmeticCross;
 import CrossAlgorithms.BLXAlphaCross;
 import CrossAlgorithms.MultiPointCross;
@@ -160,14 +161,44 @@ public class ViewController implements Runnable {
 	 * Updates the solution text in the view
 	 */
 	private void updateSolution() {
-		String solutionText = "";
+		
 		Chromosome chromosome = this.geneticAlgorithm.getBest_chromosome();
+		// P1 function solution uses fenotypes. In P2 genotype and fenotype coincide, but
+		// we don`t want to write it like "Variable X+1", we want to write it like a list
+		// so we decided to do two similar methods. We know we could have done one parametriced but this approach gives are
+		// more flexibility in the future.	
+		if(chromosome instanceof ChromosomeP2)
+		{
+			updateSolutionP2(chromosome);
+		}
+		else
+			updateSolutionP1(chromosome);
+		
+	}
+	
+	private void updateSolutionP1(Chromosome chromosome)
+	{
+		String solutionText = "";
 		int i = 1;
 		for (Object fenotype : chromosome.getFenotypes()) {
 			solutionText += "Variable X" + i++ + " = " + formatNumber((double) fenotype, 4) + " | ";
 		}
 
 		solutionText += "Valor de la función: " + formatNumber(chromosome.evaluate(), 4);
+
+		this.view.setSolutionText(solutionText);
+	}
+	
+	private void updateSolutionP2(Chromosome chromosome)
+	{
+		String solutionText = "Recorrido: [";
+		int i = 1;
+		for (Object fenotype : chromosome.getFenotypes()) {
+			solutionText += fenotype + ", ";
+		}
+
+		solutionText = solutionText.substring(0, solutionText.length() - 2);
+		solutionText += "] | Distancia: " + chromosome.evaluate();
 
 		this.view.setSolutionText(solutionText);
 	}
@@ -257,6 +288,12 @@ public class ViewController implements Runnable {
 		case "P1 - FUNCION 4B":
 			chromosome_factory = (double tolerance, int dimensions) -> {
 				return new ChromosomeP1F4b(algorithmData.dimensions, tolerance);
+			};
+			algorithmData.chromosome_factory = chromosome_factory;
+			algorithmData.maximize = false;
+		case "P2":
+			chromosome_factory = (double tolerance, int dimensions) -> {
+				return new ChromosomeP2(tolerance);
 			};
 			algorithmData.chromosome_factory = chromosome_factory;
 			algorithmData.maximize = false;

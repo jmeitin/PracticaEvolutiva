@@ -453,7 +453,7 @@ public class MainView extends JFrame {
 			}
 		});
 		problemSelectionComboBox.setModel(new DefaultComboBoxModel(new String[] { "P1 - Funcion 1", "P1 - Funcion 2",
-				"P1 - Funcion 3", "P1 - Funcion 4A", "P1 - Funcion 4B" }));
+				"P1 - Funcion 3", "P1 - Funcion 4A", "P1 - Funcion 4B", "P2" }));
 
 		JPanel themePanel = new JPanel();
 		themePanel.setBorder(new TitledBorder("Tema"));
