@@ -25,6 +25,10 @@ import CrossAlgorithms.P2.PMXCross;
 import GeneticAlgorithm.GeneticAlgorithm;
 import GeneticAlgorithm.GeneticAlgorithmData;
 import MutationAlgorithm.BasicGenMutation;
+import MutationAlgorithm.P2.ExchangeMutation;
+import MutationAlgorithm.P2.HeuristicMutation;
+import MutationAlgorithm.P2.InsertionMutation;
+import MutationAlgorithm.P2.InversionMutation;
 import SelectionAlgorithms.DeterministicTournamentSelection;
 import SelectionAlgorithms.ProbabilisticTournamentSelection;
 import SelectionAlgorithms.RemainderSelection;
@@ -400,9 +404,23 @@ public class ViewController implements Runnable {
 	 */
 	public void setMutationType(String mutationType) {
 		log("Mutation Type: " + mutationType);
+		
+		//"Intercambio", "Inversion", "Insercion", "Heuristica"
 		switch (mutationType) {
 		case "BÁSICA":
 			this.algorithmData.mutation_algorithm = new BasicGenMutation();
+			break;
+		case "INTERCAMBIO":
+			this.algorithmData.mutation_algorithm = new ExchangeMutation();
+			break;
+		case "INVERSION":
+			this.algorithmData.mutation_algorithm = new InversionMutation();
+			break;
+		case "INSERCION":
+			this.algorithmData.mutation_algorithm = new InsertionMutation();
+			break;
+		case "HEURISTICA":
+			this.algorithmData.mutation_algorithm = new HeuristicMutation();
 			break;
 		}
 	}

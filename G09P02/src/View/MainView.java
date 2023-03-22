@@ -120,6 +120,8 @@ public class MainView extends JFrame {
 
 	private DefaultComboBoxModel p1Model;
 	private DefaultComboBoxModel p2Model;
+	private DefaultComboBoxModel p1Mutations;
+	private DefaultComboBoxModel p2Mutations;
 	private JProgressBar progressBar;
 
 	/**
@@ -426,7 +428,10 @@ public class MainView extends JFrame {
 				controller.setMutationType(mutationTypeComboBox.getSelectedItem().toString().toUpperCase());
 			}
 		});
-		mutationTypeComboBox.setModel(new DefaultComboBoxModel(new String[] { "Básica" }));
+		
+		this.p1Mutations = new DefaultComboBoxModel(new String[] { "Básica" });
+		this.p2Mutations = new DefaultComboBoxModel(new String[] { "Intercambio", "Inversion", "Insercion", "Heuristica" });
+		mutationTypeComboBox.setModel(p2Mutations);
 		mutationPanel.add(mutationTypeComboBox);
 
 		JLabel mutationProbabilityLabel = new JLabel("% Mutación");
