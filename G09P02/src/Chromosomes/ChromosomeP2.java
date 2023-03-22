@@ -33,7 +33,7 @@ public class ChromosomeP2 extends Chromosome<Integer, Integer> {
 	
 	public int[] getGenesCopy()
 	{
-		int[] genes_copy = new int[this.num_of_genes];
+		int[] genes_copy = new int[genes.length];
 		for(int i = 0; i < genes.length; i++)
 		{
 			genes_copy[i] = genes[i];
@@ -43,6 +43,7 @@ public class ChromosomeP2 extends Chromosome<Integer, Integer> {
 	}
 	
 	public boolean setGenes(int[] g) {
+		genes = g.clone();
 		if (g.length == genes.length) {
 			genes = g.clone();
 			return true;

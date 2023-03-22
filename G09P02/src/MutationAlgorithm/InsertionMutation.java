@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
-import Chromosomes.Gene;
 
 //A NIVEL DE GEN
 

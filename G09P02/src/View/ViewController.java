@@ -31,7 +31,6 @@ import SelectionAlgorithms.RemainderSelection;
 import SelectionAlgorithms.RouletteSelection;
 import SelectionAlgorithms.StochasticSelection;
 import SelectionAlgorithms.TruncationSelection;
-import View.MainView.SelectableType;
 
 public class ViewController implements Runnable {
 
@@ -200,7 +199,6 @@ public class ViewController implements Runnable {
 	private void updateSolutionP2(Chromosome chromosome)
 	{
 		String solutionText = "Recorrido: [";
-		int i = 1;
 		for (Object fenotype : chromosome.getFenotypes()) {
 			solutionText += fenotype + ", ";
 		}

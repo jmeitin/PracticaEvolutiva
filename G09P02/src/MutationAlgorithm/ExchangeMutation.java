@@ -1,11 +1,9 @@
 package MutationAlgorithm;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
-import Chromosomes.Gene;
 
 //A NIVEL DE GEN
 

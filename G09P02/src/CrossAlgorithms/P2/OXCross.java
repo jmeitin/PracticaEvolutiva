@@ -1,8 +1,6 @@
 package CrossAlgorithms.P2;
 
-import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
-import CrossAlgorithms.CrossAlgorithm;
 
 public class OXCross extends CrossAlgorithmsP2 {
 
