@@ -1,6 +1,5 @@
 package CrossAlgorithms.P2;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +11,10 @@ public class PMXCross extends CrossAlgorithmsP2 {
 
 	@Override
 	protected void cross(ChromosomeP2 first_child, ChromosomeP2 second_child) {
+//		first_child.setGenes(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+//		second_child.setGenes(new int[] { 4, 5, 2, 1, 8, 7, 6, 9, 3 });
+//		final int gene_size = first_child.getGenesRef().length;
+
 		final int gene_size = first_child.getNumOfGenes();
 
 		final int[] first_child_gene = first_child.getGenesRef();
@@ -40,6 +43,9 @@ public class PMXCross extends CrossAlgorithmsP2 {
 			}
 		} while (second_cross - first_cross == gene_size || first_cross == second_cross);
 
+//		first_cross = 3;
+//		second_cross = 7;
+		
 		// Swap between cross points, set the other to unknown (-1)
 		for (int i = 0; i < gene_size; i++) {
 			if (i >= first_cross && i < second_cross) {
@@ -55,9 +61,31 @@ public class PMXCross extends CrossAlgorithmsP2 {
 		}
 
 		// Iterate fron 0 to end of gene except for genes in cross interval. If gene is
-		// repeated, exchange with the homologus in the other gene.
-		// If the homologous if repeated, search next homologous
+		// repeated, ignore
 		// If gene isn't already in child, we just add it.
+		for (int i = 0; i < gene_size; i++) {
+			// These are already exchanged
+			if (i >= first_cross && i < second_cross)
+				continue;
+
+			// First child
+			int current_gen = first_child_gene[i];
+			if (!first_child_new_gen.contains(current_gen)) {
+				first_child_gen_copy[i] = current_gen;
+				first_child_new_gen.add(current_gen);
+			}
+
+			// Second child
+			// If element is already in the genes, search homologous
+			current_gen = second_child_gene[i];
+			if (!second_child_new_gen.contains(current_gen)) {
+				second_child_gen_copy[i] = current_gen;
+				second_child_new_gen.add(current_gen);
+			}
+		}
+
+		// Iterate fron 0 to end of gene except for genes in cross interval. If gene is
+		// repeated, exchange with the homologus in the other gene.
 		for (int i = 0; i < gene_size; i++) {
 			// These are already exchanged
 			if (i >= first_cross && i < second_cross)
@@ -66,7 +94,7 @@ public class PMXCross extends CrossAlgorithmsP2 {
 			// First child
 			// If element is already in the genes, search homologous
 			int current_gen = first_child_gene[i];
-			if (first_child_new_gen.contains(first_child_gene[i])) {
+			if (first_child_new_gen.contains(current_gen) && first_child_gen_copy[i] != current_gen) {
 				while (first_child_new_gen.contains(current_gen)) {
 					final int gene = first_child_gene[i];
 
@@ -75,16 +103,15 @@ public class PMXCross extends CrossAlgorithmsP2 {
 					current_gen = second_child_gen_copy[gene_index];
 				}
 
+				// Now we have the correct gene we can assign it
+				first_child_gen_copy[i] = current_gen;
+				first_child_new_gen.add(current_gen);
 			}
 
-			// Now we have the correct gene we can assign it
-			first_child_gen_copy[i] = current_gen;
-			first_child_new_gen.add(current_gen);
-			
 			// Second child
 			// If element is already in the genes, search homologous
 			current_gen = second_child_gene[i];
-			if (second_child_new_gen.contains(second_child_gene[i])) {
+			if (second_child_new_gen.contains(current_gen) && second_child_gen_copy[i] != current_gen) {
 				current_gen = second_child_gene[i];
 				while (second_child_new_gen.contains(current_gen)) {
 					final int gene = second_child_gene[i];
@@ -94,11 +121,10 @@ public class PMXCross extends CrossAlgorithmsP2 {
 					current_gen = first_child_gen_copy[gene_index];
 				}
 
+				// Now we have the correct gene we can assign it
+				second_child_gen_copy[i] = current_gen;
+				second_child_new_gen.add(current_gen);
 			}
-			
-			// Now we have the correct gene we can assign it
-			second_child_gen_copy[i] = current_gen;
-			second_child_new_gen.add(current_gen);
 		}
 
 		first_child.setGenes(first_child_gen_copy);
