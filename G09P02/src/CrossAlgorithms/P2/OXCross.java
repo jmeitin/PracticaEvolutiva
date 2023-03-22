@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import Chromosomes.ChromosomeP2;
-import Utils.ArrayUtils;
 import Utils.RandomUtils;
 
 public class OXCross extends CrossAlgorithmsP2 {
