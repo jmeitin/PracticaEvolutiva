@@ -44,6 +44,20 @@ public class ChromosomeP2 extends Chromosome<Integer, Integer> {
 		}
 		return false;
 	}
+	
+	public boolean setGene(int pos, int value) {
+		if (0 <= pos && pos < genes.length) {
+			genes[pos] = value;
+			return true;
+		}
+		else return false;
+	}
+	
+	public int getGeneInt(int pos) {
+		if (0 <= pos && pos < genes.length)
+			return genes[pos];
+		else return -1;
+	}
 
 	@Override
 	public double evaluate() {
