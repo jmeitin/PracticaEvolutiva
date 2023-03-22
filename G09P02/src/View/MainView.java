@@ -116,6 +116,9 @@ public class MainView extends JFrame {
 	private JComboBox problemSelectionComboBox;
 	private JFormattedTextField dimensionsTextField;
 	private JLabel lblDimensions;
+	
+	private DefaultComboBoxModel p1Model;
+	private DefaultComboBoxModel p2Model;
 
 	/**
 	 * Launch the application.
@@ -258,6 +261,16 @@ public class MainView extends JFrame {
 		return Math.max(min, Math.min(max, value));
 	}
 	
+	private void setCrossModelP1()
+	{
+		crossTypeComboBox.setModel(p1Model);
+	}
+	
+	private void setCrossModelP2()
+	{
+		crossTypeComboBox.setModel(p2Model);		
+	}
+	
 	/**
 	 * Create the frame.
 	 * Most of the code was generated with windowbuildertool. 
@@ -350,9 +363,13 @@ public class MainView extends JFrame {
 				}
 			}
 		});
-		crossTypeComboBox.setModel(new DefaultComboBoxModel<>(
+		p1Model = new DefaultComboBoxModel<>(
 				new SelectableType[] { new SelectableType("Monopunto", true), new SelectableType("Multipunto", true), new SelectableType("Uniforme", true),
-						new SelectableType("Aritmético", false), new SelectableType("BLX-α", false) }));
+						new SelectableType("Aritmético", false), new SelectableType("BLX-α", false) });
+		p2Model = new DefaultComboBoxModel<>(
+				new SelectableType[] { new SelectableType("PMX", true), new SelectableType("OX", true), new SelectableType("OX-PP", true),
+						new SelectableType("OX-PO", true), new SelectableType("CX", true),new SelectableType("ERX", true),new SelectableType("CO", true) });
+		setCrossModelP1();
 		crossTypeComboBox.setRenderer(new ListCellRenderer<SelectableType>() {
 			private final DefaultListCellRenderer DEFAULT_RENDERER = new DefaultListCellRenderer();
 			private final Color DISABLED_COLOR = Color.LIGHT_GRAY;
@@ -444,6 +461,10 @@ public class MainView extends JFrame {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					String selectedFunction = e.getItem().toString();
+					if(e.getItem().equals("P2"))
+						setCrossModelP2();
+					else
+						setCrossModelP1();
 					// enabled or disable options "Aritmético" y "BLX-α"
 					enableCrossTypeOptions(selectedFunction.equals("P1 - Funcion 4B"));
 					boolean dimensionsVisible = selectedFunction.equals("P1 - Funcion 4B") || selectedFunction.equals("P1 - Funcion 4A");

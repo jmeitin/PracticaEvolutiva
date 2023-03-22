@@ -1,4 +1,4 @@
-package CrossAlgorithms;
+package CrossAlgorithms.P1;
 
 import Chromosomes.Chromosome;
 /*

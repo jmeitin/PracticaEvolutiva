@@ -10,11 +10,18 @@ import Chromosomes.ChromosomeP1F3;
 import Chromosomes.ChromosomeP1F4a;
 import Chromosomes.ChromosomeP1F4b;
 import Chromosomes.ChromosomeP2;
-import CrossAlgorithms.ArithmeticCross;
-import CrossAlgorithms.BLXAlphaCross;
-import CrossAlgorithms.MultiPointCross;
-import CrossAlgorithms.OnePointCross;
-import CrossAlgorithms.UniformCross;
+import CrossAlgorithms.P1.ArithmeticCross;
+import CrossAlgorithms.P1.BLXAlphaCross;
+import CrossAlgorithms.P1.MultiPointCross;
+import CrossAlgorithms.P1.OnePointCross;
+import CrossAlgorithms.P1.UniformCross;
+import CrossAlgorithms.P2.COCross;
+import CrossAlgorithms.P2.CXCross;
+import CrossAlgorithms.P2.ERXCross;
+import CrossAlgorithms.P2.OXCross;
+import CrossAlgorithms.P2.OXPOCross;
+import CrossAlgorithms.P2.OXPPCross;
+import CrossAlgorithms.P2.PMXCross;
 import GeneticAlgorithm.GeneticAlgorithm;
 import GeneticAlgorithm.GeneticAlgorithmData;
 import MutationAlgorithm.BasicGenMutation;
@@ -24,6 +31,7 @@ import SelectionAlgorithms.RemainderSelection;
 import SelectionAlgorithms.RouletteSelection;
 import SelectionAlgorithms.StochasticSelection;
 import SelectionAlgorithms.TruncationSelection;
+import View.MainView.SelectableType;
 
 public class ViewController implements Runnable {
 
@@ -355,6 +363,27 @@ public class ViewController implements Runnable {
 			break;
 		case "BLX-Α":
 			this.algorithmData.cross_algorithm = new BLXAlphaCross();
+			break;
+		case "PMX":
+			this.algorithmData.cross_algorithm = new PMXCross();
+			break;
+		case "OX":
+			this.algorithmData.cross_algorithm = new OXCross();
+			break;
+		case "OX-PP":
+			this.algorithmData.cross_algorithm = new OXPPCross();
+			break;
+		case "OX-PO":
+			this.algorithmData.cross_algorithm = new OXPOCross();
+			break;
+		case "CX":
+			this.algorithmData.cross_algorithm = new CXCross();
+			break;
+		case "ERX":
+			this.algorithmData.cross_algorithm = new ERXCross();
+			break;
+		case "CO":
+			this.algorithmData.cross_algorithm = new COCross();
 			break;
 		}
 	}
