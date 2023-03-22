@@ -12,9 +12,6 @@ public class OXCross extends CrossAlgorithmsP2 {
 	@Override
 	protected void cross(ChromosomeP2 first_child, ChromosomeP2 second_child) {
 		final int gene_size = first_child.getNumOfGenes();
-
-		first_child.setGenes(new int[]{1,2,3,5,6,4});
-		second_child.setGenes(new int[]{4,3,2,1,5,6});
 		
 		final int[] first_child_gene = first_child.getGenesRef();
 		final int[] second_child_gene = second_child.getGenesRef();
@@ -41,9 +38,6 @@ public class OXCross extends CrossAlgorithmsP2 {
 				second_cross = tmp;
 			}
 		} while (second_cross - first_cross == gene_size || first_cross == second_cross);
-
-		first_cross = 2;
-		second_cross = 4;
 		
 		// Swap between cross points, set the other to unknown (-1)
 		for (int i = 0; i < gene_size; i++) {
@@ -63,22 +57,24 @@ public class OXCross extends CrossAlgorithmsP2 {
 
 		// Iterate from second_cross items_to_fill times. We have indexes for each child original array
 		// And we use module operation to find out the current index in our child copy we are assigning
-		for (int i = second_cross, ch1 = second_cross, ch2 = second_cross; // Init 
+		for (int i = second_cross, ch1 = second_cross % gene_size, ch2 = second_cross % gene_size; // Init 
 				 i < items_to_fill + second_cross; 						   // Condition
 				 i++,ch1 = (ch1 + 1) % gene_size, ch2 = (ch2 + 1) % gene_size) // Increment 
 		{
 			// If the gene is already in the child, ignore it
 			while (first_child_new_gen.contains(first_child_gene[ch1])) {
-				ch1 = (ch1 + 1) % gene_size;
-				continue;
+				ch1++;
+				if(ch1 >= gene_size)
+					ch1 = 0;
 			}
 
 			first_child_gen_copy[i % gene_size] = first_child_gene[ch1];
 			//first_child_new_gen.add(first_child_gene[ch1]); Not necessary, we only care about the numbers inserted in the swap
 
 			while (second_child_new_gen.contains(second_child_gene[ch2])) {
-				ch2 = (ch2 + 1) % gene_size;
-				continue;
+				ch2++;
+				if(ch2 >= gene_size)
+					ch2 = 0;
 			}
 
 			second_child_gen_copy[i % gene_size] = second_child_gene[ch2];
