@@ -46,7 +46,7 @@ public class ViewController implements Runnable {
 		}
 	}
 
-	private final boolean debugMode = false; // Enables debug mode
+	private final boolean debugMode = true; // Enables debug mode
 	private final MainView view; // View to be controlled
 	private GeneticAlgorithm geneticAlgorithm; // Genetic algorithm to be run
 	private GeneticAlgorithmData algorithmData; // Genetic algorithm data

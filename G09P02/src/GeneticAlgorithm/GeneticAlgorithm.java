@@ -181,7 +181,7 @@ public class GeneticAlgorithm<T, U> {
 				selectElite();
 
 //			select();
-//			cross();
+			cross();
 //			mutate();
 
 			if (elitism)

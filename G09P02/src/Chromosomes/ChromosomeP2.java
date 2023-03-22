@@ -26,6 +26,11 @@ public class ChromosomeP2 extends Chromosome<Integer, Integer> {
 		}
 	}
 	
+	public final int[] getGenesRef()
+	{
+		return this.genes;
+	}
+	
 	public int[] getGenesCopy()
 	{
 		int[] genes_copy = new int[this.num_of_genes];
