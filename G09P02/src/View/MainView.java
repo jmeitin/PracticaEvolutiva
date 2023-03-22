@@ -455,6 +455,7 @@ public class MainView extends JFrame {
 		restartButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cleanPlot();
+				controller.stop();
 			}
 		});
 

@@ -45,7 +45,7 @@ public class ViewController implements Runnable {
 		}
 	}
 
-	private final boolean debugMode = true; // Enables debug mode
+	private final boolean debugMode = false; // Enables debug mode
 	private final MainView view; // View to be controlled
 	private GeneticAlgorithm geneticAlgorithm; // Genetic algorithm to be run
 	private GeneticAlgorithmData algorithmData; // Genetic algorithm data
@@ -96,8 +96,10 @@ public class ViewController implements Runnable {
 		}
 
 		if (interrupted) {
+			view.setProgressBarPercentage(0);
 			tryStopThread(modelThread);
 		} else {
+			view.setProgressBarPercentage(100);
 			updateGraphsView();
 			updateSolution();
 		}
@@ -433,6 +435,10 @@ public class ViewController implements Runnable {
 	public void setMutationChance(double mutation_chance) {
 		log("Mutation chance: " + mutation_chance);
 		this.algorithmData.mutation_chance = mutation_chance;
+	}
+
+	public void stop() {
+		tryStopThread(controllerRunThread);
 	}
 
 }
