@@ -46,6 +46,7 @@ import org.math.plot.Plot2DPanel;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import javax.swing.JProgressBar;
 
 public class MainView extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -119,6 +120,7 @@ public class MainView extends JFrame {
 
 	private DefaultComboBoxModel p1Model;
 	private DefaultComboBoxModel p2Model;
+	private JProgressBar progressBar;
 
 	/**
 	 * Launch the application.
@@ -239,6 +241,12 @@ public class MainView extends JFrame {
 		crossTypeComboBox.repaint();
 	}
 
+	
+	public void setProgressBarPercentage(int percentage)
+	{
+		this.progressBar.setValue(percentage);
+	}
+	
 	/**
 	 * Sets the controller data to match the view data.
 	 */
@@ -646,6 +654,10 @@ public class MainView extends JFrame {
 		eastPanel.setBorder(new TitledBorder(null, "Plot", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		getContentPane().add(eastPanel, BorderLayout.CENTER);
 		eastPanel.setLayout(new BoxLayout(eastPanel, BoxLayout.Y_AXIS));
+		
+		progressBar = new JProgressBar();
+		progressBar.setStringPainted(true);
+		eastPanel.add(progressBar);
 
 		plot = new Plot2DPanel();
 		plot.plotCanvas.setAutoBounds(1);

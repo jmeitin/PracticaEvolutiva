@@ -94,6 +94,20 @@ public class GeneticAlgorithm<T, U> {
 	public void setBest_chromosome(Chromosome<T, U> best_chromosome) {
 		this.best_chromosome = best_chromosome;
 	}
+	
+	/**
+	 * @return the current_generation
+	 */
+	public int getCurrent_generation() {
+		return current_generation;
+	}
+
+	/**
+	 * @return the max_gen_num
+	 */
+	public int getMax_gen_num() {
+		return max_gen_num;
+	}
 
 	// AlgorithmData is readonly, used to init the class
 	public GeneticAlgorithm(final GeneticAlgorithmData algorithmData) {

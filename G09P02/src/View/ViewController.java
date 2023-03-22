@@ -87,6 +87,11 @@ public class ViewController implements Runnable {
 		while (modelThread.isAlive() && !interrupted) {
 			// Here we can track the percentage of completion of the model
 			// This runs in its own thread to not halt the UI
+			// Calculate percentage of completion using getCurrent_generation and getMax_gen_num
+			int percentage = 0;
+			if (geneticAlgorithm != null)
+				percentage = (int) (geneticAlgorithm.getCurrent_generation() * 100 / geneticAlgorithm.getMax_gen_num());
+			view.setProgressBarPercentage(percentage);
 			interrupted = Thread.interrupted();
 		}
 
