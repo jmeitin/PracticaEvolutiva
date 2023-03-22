@@ -6,15 +6,41 @@ public class ChromosomeP2 extends Chromosome<Integer, Integer> {
 	protected int[] genes;
 	
 	private final int MADRID_INDEX = 25;
+	private static final int CITIES_COUNT = CitiesData.getNumCiudades();
+	private static final int GEN_SIZE = CITIES_COUNT - 1;
 	
 	public ChromosomeP2(double tolerance) {
-		super(27); // 27 cities to travel, Madrid is always start and end so it's excluded
+		super(GEN_SIZE); // 27 cities to travel, Madrid is always start and end so it's excluded
 		genes = new int[this.num_of_genes];
 		
 		initGenes();
 		calculateFenotypes();
 	}
 
+	@Override
+	protected void initGenes() {
+		
+		// Init array from 0 to 26 without 25 (Madrid)
+		int j = 0;
+		for(int i = 0; i < CITIES_COUNT; i++)
+		{
+			if(i == MADRID_INDEX)
+				continue;
+			
+			genes[j] = i;
+			j++;
+		}
+
+		// Shuffle the array (Fisher-Yates method)
+		Random random = new Random();
+		for (int i = genes.length - 1; i > 0; i--) { 
+		    j = random.nextInt(i + 1); // random number between 0 and i (inclusive)
+		    int temp = genes[i];
+		    genes[i] = genes[j];
+		    genes[j] = temp;
+		}
+	}
+	
 	@Override
 	public void calculateFenotypes() {
 		fenotypes = new Integer[num_of_genes];
@@ -81,30 +107,6 @@ public class ChromosomeP2 extends Chromosome<Integer, Integer> {
 		brute_fitness += CitiesData.getDistance(genes[num_Cities -1], MADRID_INDEX);
 		
 		return brute_fitness;
-	}
-
-	@Override
-	protected void initGenes() {
-		
-		// Init array from 0 to 26 without 25 (Madrid)
-		int j = 0;
-		for(int i = 0; i < CitiesData.getNumCiudades(); i++)
-		{
-			if(i == MADRID_INDEX)
-				continue;
-			
-			genes[j] = i;
-			j++;
-		}
-
-		// Shuffle the array (Fisher-Yates method)
-		Random random = new Random();
-		for (int i = genes.length - 1; i > 0; i--) { 
-		    j = random.nextInt(i + 1); // random number between 0 and i (inclusive)
-		    int temp = genes[i];
-		    genes[i] = genes[j];
-		    genes[j] = temp;
-		}
 	}
 
 	@Override
