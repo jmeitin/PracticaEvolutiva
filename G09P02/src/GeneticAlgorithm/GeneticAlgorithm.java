@@ -180,9 +180,9 @@ public class GeneticAlgorithm<T, U> {
 			if (elitism)
 				selectElite();
 
-//			select();
+			select();
 			cross();
-//			mutate();
+			mutate();
 
 			if (elitism)
 				insertElite();

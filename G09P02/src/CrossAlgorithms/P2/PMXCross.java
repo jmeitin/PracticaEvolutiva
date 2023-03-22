@@ -1,5 +1,6 @@
 package CrossAlgorithms.P2;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +12,6 @@ public class PMXCross extends CrossAlgorithmsP2 {
 	@Override
 	protected void cross(ChromosomeP2 first_child, ChromosomeP2 second_child) {
 		final int gene_size = first_child.getNumOfGenes();
-		final int last_index = gene_size - 1;
 		
 		final int[] first_child_gene = first_child.getGenesRef();
 		final int[] second_child_gene = second_child.getGenesRef();
@@ -51,21 +51,57 @@ public class PMXCross extends CrossAlgorithmsP2 {
 			second_child_new_gen.add(first_child_gene[i]);
 		}
 		
-		int gene_to_fill = second_cross - first_cross;
-		
-		// Iterate the next genes without getting out of the array
-		for(int next_index = second_cross % last_index; gene_to_fill > 0; gene_to_fill--, ++next_index, next_index %= last_index)
+		// Iterate fron 0 to end of gene except for genes in cross interval. If gene is repeated, exchange with the homologus in the other gene. 
+		// If the homologous if repeated, search next homologous
+		// If gene isn't already in child, we just add it.
+		for(int i = 0; i < gene_size;i++)
 		{
-			if(first_child_new_gen.contains(first_child_gene[next_index]))
-			{
-				
-			}
+			// These are already exchanged
+			if(i >= first_cross || i < second_cross)
+				continue;
 			
-			if(second_child_new_gen.contains(second_child_gene[next_index]))
+			// First child
+			// If element is already in the genes, search homologous
+			if(first_child_new_gen.contains(first_child_gene[i]))
 			{
+				int current_gen = first_child_gene[i];
+				while(first_child_new_gen.contains(current_gen))
+				{
+					final int gene = first_child_gene[i];
+					
+					// First, search index of gene in current child
+					final int gene_index = Arrays.asList(gene).indexOf(gene);
+					current_gen = second_child_gene[gene_index];
+				}
 				
+				// Now we have the correct homologous gene so we can assign it
+				first_child_gen_copy[i] = current_gen;
 			}
+			else
+				first_child_gen_copy[i] = first_child_gene[i];
+			
+			// Second child
+			// If element is already in the genes, search homologous
+			if(second_child_new_gen.contains(second_child_gene[i]))
+			{
+				int current_gen = second_child_gene[i];
+				while(second_child_new_gen.contains(current_gen))
+				{
+					final int gene = second_child_gene[i];
+					
+					// First, search index of gene in current child
+					final int gene_index = Arrays.asList(gene).indexOf(gene);
+					current_gen = first_child_gene[gene_index];
+				}
+				
+				// Now we have the correct homologous gene so we can assign it
+				second_child_gen_copy[i] = current_gen;
+			}
+			else
+				second_child_gen_copy[i] = second_child_gene[i];
 		}
 		
+		first_child.setGenes(first_child_gen_copy);
+		second_child.setGenes(second_child_gen_copy);
 	}
 }
