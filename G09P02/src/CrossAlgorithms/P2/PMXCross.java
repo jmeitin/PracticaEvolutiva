@@ -11,10 +11,6 @@ public class PMXCross extends CrossAlgorithmsP2 {
 
 	@Override
 	protected void cross(ChromosomeP2 first_child, ChromosomeP2 second_child) {
-//		first_child.setGenes(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
-//		second_child.setGenes(new int[] { 4, 5, 2, 1, 8, 7, 6, 9, 3 });
-//		final int gene_size = first_child.getGenesRef().length;
-
 		final int gene_size = first_child.getNumOfGenes();
 
 		final int[] first_child_gene = first_child.getGenesRef();
@@ -42,9 +38,6 @@ public class PMXCross extends CrossAlgorithmsP2 {
 				second_cross = tmp;
 			}
 		} while (second_cross - first_cross == gene_size || first_cross == second_cross);
-
-//		first_cross = 3;
-//		second_cross = 7;
 		
 		// Swap between cross points, set the other to unknown (-1)
 		for (int i = 0; i < gene_size; i++) {
@@ -94,12 +87,10 @@ public class PMXCross extends CrossAlgorithmsP2 {
 			// First child
 			// If element is already in the genes, search homologous
 			int current_gen = first_child_gene[i];
-			if (first_child_new_gen.contains(current_gen) && first_child_gen_copy[i] != current_gen) {
+			if (first_child_gen_copy[i] == -1) {
 				while (first_child_new_gen.contains(current_gen)) {
-					final int gene = first_child_gene[i];
-
 					// First, search index of gene in current child
-					final int gene_index = ArrayUtils.indexOf(first_child_gen_copy, gene);
+					final int gene_index = ArrayUtils.indexOf(first_child_gen_copy, current_gen);
 					current_gen = second_child_gen_copy[gene_index];
 				}
 
@@ -111,13 +102,11 @@ public class PMXCross extends CrossAlgorithmsP2 {
 			// Second child
 			// If element is already in the genes, search homologous
 			current_gen = second_child_gene[i];
-			if (second_child_new_gen.contains(current_gen) && second_child_gen_copy[i] != current_gen) {
+			if (second_child_gen_copy[i] == -1) {
 				current_gen = second_child_gene[i];
 				while (second_child_new_gen.contains(current_gen)) {
-					final int gene = second_child_gene[i];
-
 					// First, search index of gene in current child
-					final int gene_index = ArrayUtils.indexOf(second_child_gen_copy, gene);
+					final int gene_index = ArrayUtils.indexOf(second_child_gen_copy, current_gen);
 					current_gen = first_child_gen_copy[gene_index];
 				}
 

@@ -308,7 +308,7 @@ public class MainView extends JFrame {
 			String text = evt.getNewValue().toString();
 			final int result = clamp(Integer.parseInt(text), 10, 100000);
 			genSizeTextField.setText(Integer.toString(result));
-			controller.getAlgorithmData().poblation_size = result;
+			controller.setPoblationSize(result);
 		});
 
 		JLabel numGenLabel = new JLabel("Número de generaciones");
