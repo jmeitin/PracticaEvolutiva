@@ -82,7 +82,7 @@ public class InsertionMutation extends MutationAlgorithm{
 					old_pos++;					
 				}
 			}		
-
+			chromosome.setGenes(new_genes);
 			new_population[i] = chromosome;
 		}
 

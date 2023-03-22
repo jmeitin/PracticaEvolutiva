@@ -36,6 +36,14 @@ public class ChromosomeP2 extends Chromosome<Integer, Integer> {
 		
 		return genes_copy;
 	}
+	
+	public boolean setGenes(int[] g) {
+		if (g.length == genes.length) {
+			genes = g.clone();
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public double evaluate() {
