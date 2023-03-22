@@ -1,6 +1,9 @@
 package CrossAlgorithms.P2;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import Chromosomes.Chromosome;
@@ -26,14 +29,64 @@ public abstract class CrossAlgorithmsP2 extends CrossAlgorithm {
 		for (int i = 0; i < first_child_gene.length; i++) {
 			// If the gene is already in the set, it is repeated, throw an exception
 			if (!first_child_set.add(first_child_gene[i])) {
-				throw new RuntimeException("Repeated gene in first child");
+				String error_message = "\nRepeated gene in first child.\nGene: " + first_child_gene[i];
+				error_message += "\nIndexes: " + formatArray(getIndex(first_child_gene, first_child_gene[i]));
+				error_message += "\nGenes:" + formatArray(first_child_gene);
+				error_message += "\nGenes:" + formatArray(fillArray(second_child_gene));
+				throw new RuntimeException(error_message);
 			}
 
 			if (!second_child_set.add(second_child_gene[i])) {
-				throw new RuntimeException("Repeated gene in second child");
+				String error_message = "\nRepeated gene in second child.\nGene: " + second_child_gene[i];
+				error_message += "\nIndex: " + formatArray(getIndex(second_child_gene, second_child_gene[i]));
+				error_message += "\nGenes:" + formatArray(second_child_gene);
+				error_message += "\nGenes:" + formatArray(fillArray(second_child_gene));
+				throw new RuntimeException(error_message);
 			}
 		}
 	}
 
+	public static String formatArray(int[] array)
+	{
+		String text = "[";
+		for(int i = 0; i < array.length; i++)
+		{
+			int num = array[i];
+			if(num < 10)
+				text += "0";
+			
+			text += num + ", ";
+		}
+		
+		text = text.substring(0, text.length() -2);
+		text += "]";
+		return text;
+	}
+	
+	public static int[] fillArray(int[] array)
+	{
+		int new_array[] = new int[array.length];
+		
+		for(int i = 0; i < array.length; i++)
+			new_array[i] = i;
+		
+		return new_array;
+	}
+	
+	public static int[] getIndex(final int[] array, final int element){
+	    List<Integer> list = new ArrayList<Integer>();
+		for(int i=0; i<array.length; i++){
+	    	if(array[i] == element)
+	    		list.add(i);
+	    }
+	    
+		int array_out[] = new int[list.size()];
+
+		for(int i = 0; i < list.size(); i++)
+			array_out[i] = list.get(i);
+
+	    return array_out;
+	}
+	
 	protected abstract void cross(ChromosomeP2 first_child, ChromosomeP2 second_child);
 }

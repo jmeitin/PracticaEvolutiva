@@ -116,7 +116,7 @@ public class MainView extends JFrame {
 	private JComboBox problemSelectionComboBox;
 	private JFormattedTextField dimensionsTextField;
 	private JLabel lblDimensions;
-	
+
 	private DefaultComboBoxModel p1Model;
 	private DefaultComboBoxModel p2Model;
 
@@ -138,6 +138,7 @@ public class MainView extends JFrame {
 
 	/***
 	 * Shows a dialog bog with an "ok" button
+	 * 
 	 * @param message
 	 * @param ex
 	 */
@@ -147,9 +148,9 @@ public class MainView extends JFrame {
 				"FlatLaf", JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	
 	/***
 	 * Sets the solution text of the view
+	 * 
 	 * @param solutionText The text you want to appear in the view
 	 */
 	public void setSolutionText(String solutionText) {
@@ -158,9 +159,11 @@ public class MainView extends JFrame {
 
 	/***
 	 * Updates the view of the graph with new data
-	 * @param average_fitnesses Average fitness of the poblation
+	 * 
+	 * @param average_fitnesses       Average fitness of the poblation
 	 * @param best_absolute_fitnesses Best absolute fitness of the poblation
-	 * @param best_fitnesses Best fitness of the poblation in each iteration
+	 * @param best_fitnesses          Best fitness of the poblation in each
+	 *                                iteration
 	 */
 	public void updateGraph(double[] average_fitnesses, double[] best_absolute_fitnesses, double[] best_fitnesses) {
 		this.average_fitnesses = average_fitnesses;
@@ -203,7 +206,9 @@ public class MainView extends JFrame {
 
 	/***
 	 * Method to enable/disable options "Aritmético" y "BLX-α"
-	 * @param enabled Determines wheter enable or disable options "Aritmético" y "BLX-α" 
+	 * 
+	 * @param enabled Determines wheter enable or disable options "Aritmético" y
+	 *                "BLX-α"
 	 */
 	private void enableCrossTypeOptions(boolean enabled) {
 		ComboBoxModel<SelectableType> model = (ComboBoxModel<SelectableType>) crossTypeComboBox.getModel();
@@ -251,30 +256,26 @@ public class MainView extends JFrame {
 		controller.setDimensions(Integer.parseInt(dimensionsTextField.getText()));
 	}
 
-	private int clamp(int value, int min, int max)
-	{
+	private int clamp(int value, int min, int max) {
 		return Math.max(min, Math.min(max, value));
 	}
-	
-	private double clamp(double value, double min, double max)
-	{
+
+	private double clamp(double value, double min, double max) {
 		return Math.max(min, Math.min(max, value));
 	}
-	
-	private void setCrossModelP1()
-	{
+
+	private void setCrossModelP1() {
 		crossTypeComboBox.setModel(p1Model);
 	}
-	
-	private void setCrossModelP2()
-	{
-		crossTypeComboBox.setModel(p2Model);		
+
+	private void setCrossModelP2() {
+		crossTypeComboBox.setModel(p2Model);
 	}
-	
+
 	/**
-	 * Create the frame.
-	 * Most of the code was generated with windowbuildertool. 
-	 * Some snippets (cell renderer, jformattedclass) where added manually to fit our needs.
+	 * Create the frame. Most of the code was generated with windowbuildertool. Some
+	 * snippets (cell renderer, jformattedclass) where added manually to fit our
+	 * needs.
 	 */
 	public MainView() {
 		FlatLightLaf.setup();
@@ -282,7 +283,7 @@ public class MainView extends JFrame {
 		this.setTitle("Practica 1 - PEV");
 		this.setResizable(true);
 		this.setMinimumSize(new Dimension(512, 256));
-		this.setSize(new Dimension(1280,720));
+		this.setSize(new Dimension(1280, 720));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 
@@ -297,7 +298,7 @@ public class MainView extends JFrame {
 		genSizeTextField.setText("100");
 		genSizeTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
-			final int result = clamp(Integer.parseInt(text), 10 , 100000);
+			final int result = clamp(Integer.parseInt(text), 10, 100000);
 			genSizeTextField.setText(Integer.toString(result));
 			controller.getAlgorithmData().poblation_size = result;
 		});
@@ -309,7 +310,7 @@ public class MainView extends JFrame {
 		numGenTextField.setColumns(10);
 		numGenTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
-			final int result = clamp(Integer.parseInt(text), 10 , 100000);
+			final int result = clamp(Integer.parseInt(text), 10, 100000);
 			numGenTextField.setText(Integer.toString(result));
 			controller.setGenSize(result);
 		});
@@ -363,12 +364,12 @@ public class MainView extends JFrame {
 				}
 			}
 		});
-		p1Model = new DefaultComboBoxModel<>(
-				new SelectableType[] { new SelectableType("Monopunto", true), new SelectableType("Multipunto", true), new SelectableType("Uniforme", true),
-						new SelectableType("Aritmético", false), new SelectableType("BLX-α", false) });
-		p2Model = new DefaultComboBoxModel<>(
-				new SelectableType[] { new SelectableType("PMX", true), new SelectableType("OX", true), new SelectableType("OX-PP", true),
-						new SelectableType("OX-PO", true), new SelectableType("CX", true),new SelectableType("ERX", true),new SelectableType("CO", true) });
+		p1Model = new DefaultComboBoxModel<>(new SelectableType[] { new SelectableType("Monopunto", true),
+				new SelectableType("Multipunto", true), new SelectableType("Uniforme", true),
+				new SelectableType("Aritmético", false), new SelectableType("BLX-α", false) });
+		p2Model = new DefaultComboBoxModel<>(new SelectableType[] { new SelectableType("PMX", true),
+				new SelectableType("OX", true), new SelectableType("OX-PP", true), new SelectableType("OX-PO", true),
+				new SelectableType("CX", true), new SelectableType("ERX", true), new SelectableType("CO", true) });
 		setCrossModelP1();
 		crossTypeComboBox.setRenderer(new ListCellRenderer<SelectableType>() {
 			private final DefaultListCellRenderer DEFAULT_RENDERER = new DefaultListCellRenderer();
@@ -395,7 +396,7 @@ public class MainView extends JFrame {
 		crossProbabilityTextField = new JFormattedTextField(decimalFormat);
 		crossProbabilityTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
-			final double result = clamp(Double.parseDouble(text), 0.0 , 100.0);
+			final double result = clamp(Double.parseDouble(text), 0.0, 100.0);
 			crossProbabilityTextField.setText(Double.toString(result).replace('.', ','));
 			controller.setMutationChance(result);
 		});
@@ -427,7 +428,7 @@ public class MainView extends JFrame {
 		mutationProbabilityTextField.setText("5,0");
 		mutationProbabilityTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
-			final double result = clamp(Double.parseDouble(text), 0.0 , 100.0);
+			final double result = clamp(Double.parseDouble(text), 0.0, 100.0);
 			mutationProbabilityTextField.setText(Double.toString(result).replace('.', ','));
 			controller.setMutationChance(result);
 		});
@@ -461,15 +462,19 @@ public class MainView extends JFrame {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					String selectedFunction = e.getItem().toString();
-					if(e.getItem().equals("P2"))
+					if (e.getItem().equals("P2"))
 						setCrossModelP2();
 					else
 						setCrossModelP1();
 					// enabled or disable options "Aritmético" y "BLX-α"
 					enableCrossTypeOptions(selectedFunction.equals("P1 - Funcion 4B"));
-					boolean dimensionsVisible = selectedFunction.equals("P1 - Funcion 4B") || selectedFunction.equals("P1 - Funcion 4A");
-					lblDimensions.setVisible(dimensionsVisible);
-					dimensionsTextField.setVisible(dimensionsVisible);
+					boolean dimensionsVisible = selectedFunction.equals("P1 - Funcion 4B")
+							|| selectedFunction.equals("P1 - Funcion 4A");
+					if (lblDimensions != null) {
+
+						lblDimensions.setVisible(dimensionsVisible);
+						dimensionsTextField.setVisible(dimensionsVisible);
+					}
 				}
 
 				controller.setFunction(e.getItem().toString().toUpperCase());
@@ -477,6 +482,7 @@ public class MainView extends JFrame {
 		});
 		problemSelectionComboBox.setModel(new DefaultComboBoxModel(new String[] { "P1 - Funcion 1", "P1 - Funcion 2",
 				"P1 - Funcion 3", "P1 - Funcion 4A", "P1 - Funcion 4B", "P2" }));
+		problemSelectionComboBox.setSelectedIndex(5);
 
 		JPanel themePanel = new JPanel();
 		themePanel.setBorder(new TitledBorder("Tema"));
@@ -521,7 +527,7 @@ public class MainView extends JFrame {
 		elitismProbabilityTextField = new JFormattedTextField(decimalFormat);
 		elitismProbabilityTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
-			final double result = clamp(Double.parseDouble(text), 0.0 , 100.0);
+			final double result = clamp(Double.parseDouble(text), 0.0, 100.0);
 			elitismProbabilityTextField.setText(Double.toString(result).replace('.', ','));
 			controller.setElitism(result);
 		});
@@ -535,7 +541,7 @@ public class MainView extends JFrame {
 		toleranceTextField = new JFormattedTextField(decimalFormat);
 		toleranceTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();
-			final double result = clamp(Double.parseDouble(text), 0.001 , 1.0);
+			final double result = clamp(Double.parseDouble(text), 0.001, 1.0);
 			toleranceTextField.setText(Double.toString(result).replace('.', ','));
 			controller.setTolerance(result);
 		});
@@ -609,25 +615,28 @@ public class MainView extends JFrame {
 			controller.setDimensions(dimensions);
 		});
 		GroupLayout gl_problemPanel = new GroupLayout(problemPanel);
-		gl_problemPanel.setHorizontalGroup(
-			gl_problemPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_problemPanel.createSequentialGroup()
-					.addComponent(lblSeleccionaProblema, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-					.addComponent(problemSelectionComboBox, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_problemPanel.createSequentialGroup()
-					.addComponent(lblDimensions, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-					.addComponent(dimensionsTextField, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE))
-		);
-		gl_problemPanel.setVerticalGroup(
-			gl_problemPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_problemPanel.createSequentialGroup()
-					.addGroup(gl_problemPanel.createParallelGroup(Alignment.LEADING)
+		gl_problemPanel
+				.setHorizontalGroup(gl_problemPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_problemPanel.createSequentialGroup()
+								.addComponent(lblSeleccionaProblema, GroupLayout.PREFERRED_SIZE, 135,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(problemSelectionComboBox, GroupLayout.PREFERRED_SIZE, 135,
+										GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_problemPanel.createSequentialGroup()
+								.addComponent(lblDimensions, GroupLayout.PREFERRED_SIZE, 135,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(dimensionsTextField, GroupLayout.PREFERRED_SIZE, 135,
+										GroupLayout.PREFERRED_SIZE)));
+		gl_problemPanel.setVerticalGroup(gl_problemPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_problemPanel
+				.createSequentialGroup()
+				.addGroup(gl_problemPanel.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblSeleccionaProblema, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-						.addComponent(problemSelectionComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGroup(gl_problemPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(problemSelectionComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_problemPanel.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblDimensions, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-						.addComponent(dimensionsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-		);
+						.addComponent(dimensionsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE))));
 		problemPanel.setLayout(gl_problemPanel);
 		gl_westPanel.setAutoCreateGaps(true);
 		gl_westPanel.setAutoCreateContainerGaps(true);
