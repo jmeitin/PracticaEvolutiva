@@ -1,6 +1,7 @@
 package CrossAlgorithms.P1;
 
 import Chromosomes.Chromosome;
+import CrossAlgorithms.CrossAlgorithm;
 /*
  * Intercambiamos cada par de alelos con una probabilidad dada (0.5).
 */

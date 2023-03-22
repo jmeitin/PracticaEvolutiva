@@ -2,6 +2,7 @@ package CrossAlgorithms.P1;
 
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP1F4b;
+import CrossAlgorithms.CrossAlgorithm;
 
 public class BLXAlphaCross extends CrossAlgorithm {
 	@Override

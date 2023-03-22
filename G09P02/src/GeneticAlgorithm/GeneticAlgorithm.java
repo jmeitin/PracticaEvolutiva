@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeFactory;
-import CrossAlgorithms.P1.CrossAlgorithm;
+import CrossAlgorithms.CrossAlgorithm;
 import MutationAlgorithm.MutationAlgorithm;
 import SelectionAlgorithms.SelectionAlgorithm;
 
@@ -180,9 +180,9 @@ public class GeneticAlgorithm<T, U> {
 			if (elitism)
 				selectElite();
 
-			select();
-			cross();
-			mutate();
+//			select();
+//			cross();
+//			mutate();
 
 			if (elitism)
 				insertElite();

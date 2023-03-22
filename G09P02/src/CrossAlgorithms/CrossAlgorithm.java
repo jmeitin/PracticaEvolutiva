@@ -1,4 +1,4 @@
-package CrossAlgorithms.P1;
+package CrossAlgorithms;
 
 import java.util.Random;
 

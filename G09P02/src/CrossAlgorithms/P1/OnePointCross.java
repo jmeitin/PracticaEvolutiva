@@ -1,6 +1,7 @@
 package CrossAlgorithms.P1;
 
 import Chromosomes.Chromosome;
+import CrossAlgorithms.CrossAlgorithm;
 
 /*
  * Corta los 2 progenitores en una posición aleatoria e intercambia los respectivos segmentos. 

@@ -2,6 +2,7 @@ package CrossAlgorithms.P1;
 
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP1F4b;
+import CrossAlgorithms.CrossAlgorithm;
 
 /*
  * Realiza una combinación lineal entre los cromosomas de los padres. 
