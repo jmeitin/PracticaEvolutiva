@@ -30,12 +30,14 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
 
@@ -92,7 +94,7 @@ public class MainView extends JFrame {
 	private Plot2DPanel plot;
 	NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
 	DecimalFormat decimalFormat = (DecimalFormat) numberFormat;
-	private JTextField solutionTextField;
+	private JTextArea solutionTextField;
 	private final Color LIGHT_BLUE = new Color(34, 235, 249);
 	private final Color LIGHT_GREEN = new Color(67, 249, 34);
 	private final Color LIGHT_RED = new Color(249, 34, 34);
@@ -631,10 +633,16 @@ public class MainView extends JFrame {
 		solutionLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		solutionLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
-		solutionTextField = new JTextField();
+		solutionTextField = new JTextArea();
 		solutionTextField.setText("Here will be solution");
 		solutionTextField.setEditable(false);
 		solutionTextField.setColumns(10);
+		solutionTextField.setLineWrap(true);
+		solutionTextField.setWrapStyleWord(true);
+		Border border = BorderFactory.createLineBorder(Color.black);
+		Border margin = BorderFactory.createEmptyBorder(5, 8, 5, 8);
+		Border compound = BorderFactory.createCompoundBorder(border, margin);
+		solutionTextField.setBorder(compound);
 		GroupLayout gl_solutionPanel = new GroupLayout(solutionPanel);
 		gl_solutionPanel.setHorizontalGroup(gl_solutionPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_solutionPanel.createSequentialGroup().addContainerGap().addComponent(solutionLabel)
