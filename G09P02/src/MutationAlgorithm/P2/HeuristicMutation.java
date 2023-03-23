@@ -1,6 +1,8 @@
 package MutationAlgorithm.P2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import Chromosomes.Chromosome;
@@ -17,64 +19,103 @@ public class HeuristicMutation extends MutationAlgorithm {
 		if(num_genes < 4) 
 			return poblation;
 		
-		Chromosome[] new_population = new Chromosome[poblation_size];
+		Chromosome[] new_population = new Chromosome[poblation_size];		
+		Random rand = new Random();		
+		int[] index_in_permutation = new int[num_selected_genes];	
 		
-		Random rand = new Random();
-		int num_cases = calculateFactorial(num_selected_genes);
-		
-		int[] selected_nums = new int[num_selected_genes];		
-		int [][] combinations = new int[num_cases][num_selected_genes];
-		
-		for (int i = 0; i < poblation_size; i++) {
-			
+		for (int i = 0; i < poblation_size; i++) {			
+			//CALCULATE RANDOM INDEX--------------------------------------------
 			for (int n = 0; n < num_selected_genes; n++) {
-				selected_nums[n] = (int)(rand.nextDouble()*(num_genes-1));			
+				index_in_permutation[n] = (int)(rand.nextDouble()*(num_genes-1));	
+			}
+			//SORT
+			Arrays.sort(index_in_permutation);
+			
+			//initialize chromosome
+			ChromosomeP2 chromosome = (ChromosomeP2) poblation[i].getCopy();	
+			//calculate permutations 
+			List<int[]> permutations = CalculatePermutations(index_in_permutation);
+			
+			// LOOP ALL POSSIBLE PERMUTATIONS--------------------------------
+			List<int[]> all_possible_genes = new ArrayList<int[]>();			
+			int[] current_genes = chromosome.getGenesCopy();			
+			
+			for (int p = 0; p < permutations.size(); p++) {
+				int[] possible_genes = current_genes.clone();
+				
+				int [] permutation = permutations.get(p);
+				for (int elem = 0; elem < permutation.length; elem++) {
+					int new_index = index_in_permutation[elem]; // sorted array
+					int old_index = permutation[elem];
+					// UPDATE GENE
+					possible_genes[new_index] = current_genes[old_index];
+				}
+				
+				all_possible_genes.add(possible_genes);
 			}
 			
-			for (int i1 = 0; i1 < num_cases; i1++) {
-				for (int j = 0; j < num_selected_genes; j++) {
-					combinations[i1][j] = selected_nums[j];
+			//CALCULATE SCORE OF ALL POSSIBLE PERMUTATIONS----------------------
+			ChromosomeP2 aux_chromosome = (ChromosomeP2) poblation[i].getCopy();
+			double best_score = Integer.MAX_VALUE; // MAXIMIZE, MINIM?????????????????????????????????????????
+			
+			for (int p = 0; p < all_possible_genes.size(); p++) {
+				aux_chromosome.setGenes(all_possible_genes.get(p));
+				aux_chromosome.calculateFenotypes(); // NO SE SI ES NECESARIO HACERLO CADA VEZ QUE HACES SET GENES
+				double brute_fitness = aux_chromosome.evaluate();
+				
+				// UPDATE CHROMOSOME WITH BEST FOUND------------------------------
+				if(brute_fitness < best_score) {
+					best_score = brute_fitness;
+					chromosome.setGenes(aux_chromosome.getGenesCopy());
 				}
 			}
 			
-			///???????????????????????????????????????????????????'
-			ChromosomeP2 chromosome = (ChromosomeP2) poblation[i].getCopy();
+			new_population[i] = chromosome.getCopy();
 			
-			// SELECT CUT POINTS--------------------------------------
-			int[] points = new int[2];
-			points[0] = 1 + (int)(rand.nextDouble() * (num_genes -2));
-			points[1] = points[0];
-			while (points[1] == points[0])
-				points[1] = 1 + (int)(rand.nextDouble() * (num_genes -2));
-			Arrays.sort(points);
-			
-			//APPLY DEFAULT VALUE-------------------------------------
-			int[] new_genes = chromosome.getGenesCopy();
-			
-			// SWAP INNER SEGMENT-------------------------------------
-			int[] swap = new int[points[1] - points[0]];
-			
-			for (int g = 0; g < swap.length / 2; g++) {
-				int first = points[0] + g;
-				int last = points[1] - g -1;
-				int aux = new_genes[first];
-				new_genes[first] = new_genes[last];
-				new_genes[last] = aux;
-			}
-			
-			chromosome.setGenes(new_genes);
-			new_population[i] = chromosome;
 		}
 
 		return new_population;	
 	}
 	
-	private int calculateFactorial (int num) {
-		if(num <= 0)
-			return 1;
-		return num * calculateFactorial(num -1);
+	/*
+	 * CALCULATE PERMUTATIONS OF INTS IN ARRAY numbers
+	 * RETURNS List<int[]> WITH ALL POSSIBLE PERMUTATIONS OF numbers
+	 * */
+	public static List<int[]> CalculatePermutations(int[] numbers) {
+		List<int[]> permutations = new ArrayList<int[]>();
 		
-	}
-	
-	//int allelePoint = calculateNextPoint(rand, 1 * alleleLength, (length - 1) * alleleLength);
+	    // RETURN CURRENT ELEMENT BY DEFAULT
+	    if (numbers.length == 1) {
+	    	permutations.add(numbers);
+	      return permutations;
+	    }
+
+	    // IF LENGTH > 1 ==> CALCULATE SUB PERMUTATIONS
+	    for (int i = 0; i < numbers.length; i++) {
+	      // CREATE AUX ARRAY WITHOUT CURRENT ELEMENT-------------------------------
+	      int[] aux = new int[numbers.length - 1];
+	      // arraycopy: "Método que copia desde la posición origen de un array a un array destino en una posición específica."
+	      // src = numbers, src_pos = 0, dst = aux, dst_pos = 0, num_eltos_copiados = i;
+	      // COPY ELEMENTS BEFORE i:
+	      System.arraycopy(numbers, 0, aux, 0, i);
+	      // COPY ELEMENTS AFTER i:
+	      System.arraycopy(numbers, i + 1, aux, i, numbers.length - i - 1);
+
+	      // RECURSIVE CALL. CALCULATE SUB PERMUTATIONS OF AUX-----------------------
+	      List<int[]> sub_permutations = CalculatePermutations(aux);
+
+	      // ADD ELEMENT i TO SUB PERMUTATIONS---------------------------------------
+	      for (int j = 0; j < sub_permutations.size(); j++) {
+	        int[] perm = new int[numbers.length];
+	        // insert i at the start
+	        perm[0] = numbers[i]; 
+	        // copy sub_permutations after i
+	        System.arraycopy(sub_permutations.get(j), 0, perm, 1, aux.length);
+	        permutations.add(perm);
+	      }
+	    }
+
+	    // Devuelve todas las permutaciones
+	    return permutations;
+	  }
 }
