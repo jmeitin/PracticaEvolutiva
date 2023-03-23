@@ -7,6 +7,10 @@ import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
 import MutationAlgorithm.MutationAlgorithm;
 
+/*se aplica con una determinada probabilidad.
+ * Consiste en seleccionar 2 puntos del individuo al azar & invertir los elementos que hay entre dichos puntos. 
+*/
+
 public class InversionMutation extends MutationAlgorithm {
 
 	@Override

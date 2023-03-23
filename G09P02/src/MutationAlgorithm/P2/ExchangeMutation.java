@@ -6,7 +6,7 @@ import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
 import MutationAlgorithm.MutationAlgorithm;
 
-//A NIVEL DE GEN
+/*En este tipo de mutación se seleccionan 2 genes al azar y se intercambian sus valores. */
 
 public class ExchangeMutation extends MutationAlgorithm{
 	

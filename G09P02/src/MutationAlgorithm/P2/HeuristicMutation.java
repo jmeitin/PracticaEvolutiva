@@ -9,6 +9,13 @@ import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
 import MutationAlgorithm.MutationAlgorithm;
 
+/*
+ * Se seleccionan n ciudades al azar (N = 3 en ejemplo). 
+ * A continuación se generan todas las permutaciones de las ciudades seleccionadas. 
+ * De todos los individuos que se generan con dichas permutaciones se selecciona el mejor. 
+ * (Ejemplo: Seleccionas el 6, 4, 3. Las permutaciones son: 643, 634, 463, 436, 346 y 364. )
+ * De todas las posibilidades generadas, eliges la mejor.
+ * */
 public class HeuristicMutation extends MutationAlgorithm {
 	
 	static protected int num_selected_genes = 3;

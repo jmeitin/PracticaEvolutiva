@@ -6,7 +6,9 @@ import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
 import MutationAlgorithm.MutationAlgorithm;
 
-//A NIVEL DE GEN
+/*En este tipo de mutación se inserta una o varias ciudades elegidas al azar en unas posiciones también elegidas al azar.
+ *  El caso más simple es con una sola inserción, por ejemplo, seleccionamos el alelo/gen 4 y lo insertamos en la tercera posición, tal y como se muestra.
+*/
 
 public class InsertionMutation extends MutationAlgorithm{
 	
