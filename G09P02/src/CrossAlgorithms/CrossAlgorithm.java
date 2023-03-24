@@ -3,6 +3,7 @@ package CrossAlgorithms;
 import java.util.Random;
 
 import Chromosomes.Chromosome;
+import Utils.RandomUtils;
 
 public abstract class CrossAlgorithm {
 	
@@ -21,7 +22,7 @@ public abstract class CrossAlgorithm {
 			double chance = rand.nextDouble(); // [0, 1]
 			
 			// Cross happens
-			if(chance <= cross_chance) {
+			if(RandomUtils.getProbability(cross_chance)) {
 				// There is no first parent
 				if (parent_selected == - 1) { 
 					parent_selected = i;

@@ -243,12 +243,10 @@ public class MainView extends JFrame {
 		crossTypeComboBox.repaint();
 	}
 
-	
-	public void setProgressBarPercentage(int percentage)
-	{
+	public void setProgressBarPercentage(int percentage) {
 		this.progressBar.setValue(percentage);
 	}
-	
+
 	/**
 	 * Sets the controller data to match the view data.
 	 */
@@ -274,12 +272,20 @@ public class MainView extends JFrame {
 		return Math.max(min, Math.min(max, value));
 	}
 
-	private void setCrossModelP1() {
-		crossTypeComboBox.setModel(p1Model);
+	private void setModelsForP1() {
+		if (crossTypeComboBox != null)
+			crossTypeComboBox.setModel(p1Model);
+
+		if (mutationTypeComboBox != null)
+			mutationTypeComboBox.setModel(p1Mutations);
 	}
 
-	private void setCrossModelP2() {
-		crossTypeComboBox.setModel(p2Model);
+	private void setModelsForP2() {
+		if (crossTypeComboBox != null)
+			crossTypeComboBox.setModel(p2Model);
+
+		if (mutationTypeComboBox != null)
+			mutationTypeComboBox.setModel(p2Mutations);
 	}
 
 	/**
@@ -380,7 +386,7 @@ public class MainView extends JFrame {
 		p2Model = new DefaultComboBoxModel<>(new SelectableType[] { new SelectableType("PMX", true),
 				new SelectableType("OX", true), new SelectableType("OX-PP", true), new SelectableType("OX-PO", true),
 				new SelectableType("CX", true), new SelectableType("ERX", true), new SelectableType("CO", true) });
-		setCrossModelP1();
+		setModelsForP1();
 		crossTypeComboBox.setRenderer(new ListCellRenderer<SelectableType>() {
 			private final DefaultListCellRenderer DEFAULT_RENDERER = new DefaultListCellRenderer();
 			private final Color DISABLED_COLOR = Color.LIGHT_GRAY;
@@ -408,7 +414,7 @@ public class MainView extends JFrame {
 			String text = evt.getNewValue().toString();
 			final double result = clamp(Double.parseDouble(text), 0.0, 100.0);
 			crossProbabilityTextField.setText(Double.toString(result).replace('.', ','));
-			controller.setMutationChance(result);
+			controller.setCrossChance(result);
 		});
 		crossProbabilityTextField.setText("60,0");
 		crossPanel.add(crossProbabilityTextField);
@@ -428,9 +434,10 @@ public class MainView extends JFrame {
 				controller.setMutationType(mutationTypeComboBox.getSelectedItem().toString().toUpperCase());
 			}
 		});
-		
+
 		this.p1Mutations = new DefaultComboBoxModel(new String[] { "Básica" });
-		this.p2Mutations = new DefaultComboBoxModel(new String[] { "Intercambio", "Inversion", "Insercion", "Heuristica" });
+		this.p2Mutations = new DefaultComboBoxModel(
+				new String[] { "Intercambio", "Inversion", "Insercion", "Heuristica" });
 		mutationTypeComboBox.setModel(p2Mutations);
 		mutationPanel.add(mutationTypeComboBox);
 
@@ -477,9 +484,9 @@ public class MainView extends JFrame {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					String selectedFunction = e.getItem().toString();
 					if (e.getItem().equals("P2"))
-						setCrossModelP2();
+						setModelsForP2();
 					else
-						setCrossModelP1();
+						setModelsForP1();
 					// enabled or disable options "Aritmético" y "BLX-α"
 					enableCrossTypeOptions(selectedFunction.equals("P1 - Funcion 4B"));
 					boolean dimensionsVisible = selectedFunction.equals("P1 - Funcion 4B")
@@ -660,7 +667,7 @@ public class MainView extends JFrame {
 		eastPanel.setBorder(new TitledBorder(null, "Plot", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		getContentPane().add(eastPanel, BorderLayout.CENTER);
 		eastPanel.setLayout(new BoxLayout(eastPanel, BoxLayout.Y_AXIS));
-		
+
 		progressBar = new JProgressBar();
 		progressBar.setStringPainted(true);
 		eastPanel.add(progressBar);
