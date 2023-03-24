@@ -27,58 +27,59 @@ public class HeuristicMutation extends MutationAlgorithm {
 			return poblation;
 		
 		Chromosome[] new_population = new Chromosome[poblation_size];		
-		Random rand = new Random();		
 		int[] index_in_permutation = new int[num_selected_genes];	
 		
-		for (int i = 0; i < poblation_size; i++) {			
-			//CALCULATE RANDOM INDEX--------------------------------------------
-			for (int n = 0; n < num_selected_genes; n++) {
-				index_in_permutation[n] = (int)(rand.nextDouble()*(num_genes-1));	
-			}
-			//SORT
-			Arrays.sort(index_in_permutation);
-			
+		for (int i = 0; i < poblation_size; i++) {		
 			//initialize chromosome
 			ChromosomeP2 chromosome = (ChromosomeP2) poblation[i].getCopy();	
-			//calculate permutations 
-			List<int[]> permutations = CalculatePermutations(index_in_permutation);
 			
-			// LOOP ALL POSSIBLE PERMUTATIONS--------------------------------
-			List<int[]> all_possible_genes = new ArrayList<int[]>();			
-			int[] current_genes = chromosome.getGenesCopy();			
-			
-			for (int p = 0; p < permutations.size(); p++) {
-				int[] possible_genes = current_genes.clone();
+			if(rand.nextDouble() < mutation_chance) {
+				//CALCULATE RANDOM INDEX--------------------------------------------
+				for (int n = 0; n < num_selected_genes; n++) {
+					index_in_permutation[n] = (int)(rand.nextDouble()*(num_genes-1));	
+				}
+				//SORT
+				Arrays.sort(index_in_permutation);
 				
-				int [] permutation = permutations.get(p);
-				for (int elem = 0; elem < permutation.length; elem++) {
-					int new_index = index_in_permutation[elem]; // sorted array
-					int old_index = permutation[elem];
-					// UPDATE GENE
-					possible_genes[new_index] = current_genes[old_index];
+				//calculate permutations 
+				List<int[]> permutations = CalculatePermutations(index_in_permutation);
+				
+				// LOOP ALL POSSIBLE PERMUTATIONS--------------------------------
+				List<int[]> all_possible_genes = new ArrayList<int[]>();			
+				int[] current_genes = chromosome.getGenesCopy();			
+				
+				for (int p = 0; p < permutations.size(); p++) {
+					int[] possible_genes = current_genes.clone();
+					
+					int [] permutation = permutations.get(p);
+					for (int elem = 0; elem < permutation.length; elem++) {
+						int new_index = index_in_permutation[elem]; // sorted array
+						int old_index = permutation[elem];
+						// UPDATE GENE
+						possible_genes[new_index] = current_genes[old_index];
+					}
+					
+					all_possible_genes.add(possible_genes);
 				}
 				
-				all_possible_genes.add(possible_genes);
-			}
-			
-			//CALCULATE SCORE OF ALL POSSIBLE PERMUTATIONS----------------------
-			ChromosomeP2 aux_chromosome = (ChromosomeP2) poblation[i].getCopy();
-			double best_score = Integer.MAX_VALUE; // MAXIMIZE, MINIM?????????????????????????????????????????
-			
-			for (int p = 0; p < all_possible_genes.size(); p++) {
-				aux_chromosome.setGenes(all_possible_genes.get(p));
-				aux_chromosome.calculateFenotypes(); // NO SE SI ES NECESARIO HACERLO CADA VEZ QUE HACES SET GENES
-				double brute_fitness = aux_chromosome.evaluate();
+				//CALCULATE SCORE OF ALL POSSIBLE PERMUTATIONS----------------------
+				ChromosomeP2 aux_chromosome = (ChromosomeP2) poblation[i].getCopy();
+				double best_score = Integer.MAX_VALUE; // MAXIMIZE, MINIM?????????????????????????????????????????
 				
-				// UPDATE CHROMOSOME WITH BEST FOUND------------------------------
-				if(brute_fitness < best_score) {
-					best_score = brute_fitness;
-					chromosome.setGenes(aux_chromosome.getGenesCopy());
-				}
+				for (int p = 0; p < all_possible_genes.size(); p++) {
+					aux_chromosome.setGenes(all_possible_genes.get(p));
+					aux_chromosome.calculateFenotypes(); // NO SE SI ES NECESARIO HACERLO CADA VEZ QUE HACES SET GENES
+					double brute_fitness = aux_chromosome.evaluate();
+					
+					// UPDATE CHROMOSOME WITH BEST FOUND------------------------------
+					if(brute_fitness < best_score) {
+						best_score = brute_fitness;
+						chromosome.setGenes(aux_chromosome.getGenesCopy());
+					}
+				}				
 			}
 			
-			new_population[i] = chromosome.getCopy();
-			
+			new_population[i] = chromosome.getCopy();			
 		}
 
 		return new_population;	

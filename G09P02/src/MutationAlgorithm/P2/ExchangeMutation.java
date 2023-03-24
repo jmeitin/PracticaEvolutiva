@@ -17,19 +17,19 @@ public class ExchangeMutation extends MutationAlgorithm{
 		
 		Chromosome[] new_population = new Chromosome[poblation_size];
 		
-		Random rand = new Random();
-		
 		for (int i = 0; i < poblation_size; i++) {
 			ChromosomeP2 chromosome = (ChromosomeP2) poblation[i].getCopy();
 			
-			// SELECT GENES--------------------------------------
-			int pointA = (int)(rand.nextDouble() * (num_genes-1));
-			int pointB = (int)(rand.nextDouble() * (num_genes-1));
-			
-			//EXCHANGE GENES------------------------------------
-			int aux = chromosome.getGeneInt(pointA);
-			chromosome.setGene(pointA, chromosome.getGeneInt(pointB));
-			chromosome.setGene(pointB, aux);
+			if(rand.nextDouble() < mutation_chance) {
+				// SELECT GENES--------------------------------------
+				int pointA = (int)(rand.nextDouble() * (num_genes-1));
+				int pointB = (int)(rand.nextDouble() * (num_genes-1));
+				
+				//EXCHANGE GENES------------------------------------
+				int aux = chromosome.getGeneInt(pointA);
+				chromosome.setGene(pointA, chromosome.getGeneInt(pointB));
+				chromosome.setGene(pointB, aux);				
+			}
 			
 			new_population[i] = chromosome;
 		}
