@@ -1,6 +1,7 @@
 package CrossAlgorithms.P2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -22,7 +23,7 @@ public class COCross extends CrossAlgorithmsP2 {
 		// CALCULATE POSITIONS ARRAY		
 		int[] positions1 = GetPositionsInDynamicList(first_child);
 		int[] positions2 = GetPositionsInDynamicList(second_child);
-		
+
 		// ONE POINT CROSS
 		Random rand = new Random();
 		int num_genes = first_child.getNumOfGenes();
@@ -38,6 +39,9 @@ public class COCross extends CrossAlgorithmsP2 {
 		// PARSE POSITIONS IN DYNAMIC LIST TO GENES
 		int[] genes1 = ConvertPositionsToGenes(positions1);
 		int[] genes2 = ConvertPositionsToGenes(positions2);
+		
+		System.out.println("==== Genes1 ====");
+		System.out.println(Arrays.toString(genes1));
 		
 		first_child.setGenes(genes1);
 		second_child.setGenes(genes2);
@@ -59,6 +63,7 @@ public class COCross extends CrossAlgorithmsP2 {
 	 * CALCULATES POS OF EACH CITY IN DYNAMIC LIST
 	 * */
 	private int[] GetPositionsInDynamicList(ChromosomeP2 chromosome) {
+		System.out.println("==== Start GetPositionsInDynamicList ====");
 		int num_genes = chromosome.getNumOfGenes();
 		List<Integer> values = InitializeDynamicList(num_genes);
 		
@@ -73,10 +78,16 @@ public class COCross extends CrossAlgorithmsP2 {
 			while (pos < values.size() && values.get(pos) != value)
 				pos++;
 			
-			//NO ESTOY SEGURO DE SI HABRIA QUE SEPARAR en caso pos < size
-			positions[i] = pos;
-			values.remove(pos);
+			if(pos > values.size()) {
+				positions[i] = pos;
+				values.remove(pos);				
+			}
+			else {
+				
+			}
 		}
+		
+		System.out.println("==== End GetPositionsInDynamicList ====");
 		
 		return positions;
 	}
@@ -84,6 +95,7 @@ public class COCross extends CrossAlgorithmsP2 {
 	/*
 	 * */
 	private int[] ConvertPositionsToGenes(int[] positions) {
+		System.out.println("==== Start ConvertPositionsToGenes ====");
 		int num_genes = positions.length;
 		List<Integer> values = InitializeDynamicList(num_genes);
 		int[] genes = new int[num_genes];
@@ -96,10 +108,16 @@ public class COCross extends CrossAlgorithmsP2 {
 			while (value < values.size() && values.get(value) != pos)
 				value++;
 			//NO ESTOY SEGURO DE SI HABRIA QUE SEPARAR en caso value < size
-			genes[i] = value;
-			values.remove(value);
+			if(value < values.size()) {
+				genes[i] = value;
+				values.remove(value);				
+			}
+			else {
+				
+			}
 		}
 		
+		System.out.println("==== End ConvertPositionsToGenes ====");
 		return genes;			
 	}
 }
