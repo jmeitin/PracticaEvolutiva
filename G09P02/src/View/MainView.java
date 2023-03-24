@@ -276,16 +276,20 @@ public class MainView extends JFrame {
 		if (crossTypeComboBox != null)
 			crossTypeComboBox.setModel(p1Model);
 
-		if (mutationTypeComboBox != null)
+		if (mutationTypeComboBox != null) {
 			mutationTypeComboBox.setModel(p1Mutations);
+			controller.setMutationType(mutationTypeComboBox.getSelectedItem().toString().toUpperCase());
+		}
 	}
 
 	private void setModelsForP2() {
 		if (crossTypeComboBox != null)
 			crossTypeComboBox.setModel(p2Model);
 
-		if (mutationTypeComboBox != null)
+		if (mutationTypeComboBox != null) {
 			mutationTypeComboBox.setModel(p2Mutations);
+			controller.setMutationType(mutationTypeComboBox.getSelectedItem().toString().toUpperCase());
+		}
 	}
 
 	/**
