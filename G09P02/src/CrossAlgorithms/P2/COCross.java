@@ -2,6 +2,7 @@ package CrossAlgorithms.P2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -37,11 +38,8 @@ public class COCross extends CrossAlgorithmsP2 {
 		}
 		
 		// PARSE POSITIONS IN DYNAMIC LIST TO GENES
-		int[] genes1 = ConvertPositionsToGenes(positions1);
-		int[] genes2 = ConvertPositionsToGenes(positions2);
-		
-		System.out.println("==== Genes1 ====");
-		System.out.println(Arrays.toString(genes1));
+		int[] genes1 = ConvertPositionsToGenes(positions1, first_child.getGenesCopy());
+		int[] genes2 = ConvertPositionsToGenes(positions2, second_child.getGenesCopy());
 		
 		first_child.setGenes(genes1);
 		second_child.setGenes(genes2);
@@ -49,12 +47,15 @@ public class COCross extends CrossAlgorithmsP2 {
 	
 	/*
 	 * */
-	private List<Integer> InitializeDynamicList(int num_genes){
+	
+	private List<Integer> InitializeDynamicList(int [] genes){
 		List<Integer> values = new ArrayList<Integer>();
 		
-		for(int i = 0; i < num_genes; i++) {
-			values.add(i);
+		for(int i = 0; i < genes.length; i++) {
+			values.add(genes[i]);
 		}
+		
+		Collections.sort(values);
 		
 		return values;
 	}
@@ -63,61 +64,51 @@ public class COCross extends CrossAlgorithmsP2 {
 	 * CALCULATES POS OF EACH CITY IN DYNAMIC LIST
 	 * */
 	private int[] GetPositionsInDynamicList(ChromosomeP2 chromosome) {
-		System.out.println("==== Start GetPositionsInDynamicList ====");
 		int num_genes = chromosome.getNumOfGenes();
-		List<Integer> values = InitializeDynamicList(num_genes);
-		
+		int[] genes = chromosome.getGenesCopy();
+		List<Integer> values = InitializeDynamicList(genes);
+
 		// DETERMINE POS IN genes
 		int[] positions = new int[num_genes];
-		int[] genes = chromosome.getGenesCopy();
 		for (int i = 0; i < genes.length; i++) {
-			int value = genes[i];
+			int gene = genes[i];
 			
 			// SEARCH FOR CURRENT POS IN LIST
 			int pos = 0;
-			while (pos < values.size() && values.get(pos) != value)
+			while (pos < values.size() && values.get(pos) != gene)
 				pos++;
 			
-			if(pos > values.size()) {
+			if(pos < values.size()) {
 				positions[i] = pos;
 				values.remove(pos);				
 			}
 			else {
-				
+				positions[i] = 0;
 			}
 		}
-		
-		System.out.println("==== End GetPositionsInDynamicList ====");
-		
+	
 		return positions;
 	}
 
 	/*
 	 * */
-	private int[] ConvertPositionsToGenes(int[] positions) {
-		System.out.println("==== Start ConvertPositionsToGenes ====");
+	private int[] ConvertPositionsToGenes(int[] positions, int[] old_genes) {
 		int num_genes = positions.length;
-		List<Integer> values = InitializeDynamicList(num_genes);
-		int[] genes = new int[num_genes];
+		List<Integer> values = InitializeDynamicList(old_genes);
+		int[] new_genes = new int[num_genes];
 		
 		for(int i = 0; i < num_genes; i++) {
 			int pos = positions[i];
 			
-			// SEARCH FOR CURRENT POS IN LIST
-			int value = 0;
-			while (value < values.size() && values.get(value) != pos)
-				value++;
-			//NO ESTOY SEGURO DE SI HABRIA QUE SEPARAR en caso value < size
-			if(value < values.size()) {
-				genes[i] = value;
-				values.remove(value);				
+			if(pos < values.size()) {
+				new_genes[i] = values.get(pos);
+				values.remove(pos);	
 			}
 			else {
 				
-			}
+			}	
 		}
 		
-		System.out.println("==== End ConvertPositionsToGenes ====");
-		return genes;			
+		return new_genes;			
 	}
 }
