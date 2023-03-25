@@ -211,6 +211,17 @@ public class MainView extends JFrame {
 	 * Uses the current data to redraw the graph
 	 */
 	private void plotData() {
+		this.enableDisableStopButton(false);
+		try {
+			Thread.sleep(5);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// The wait is necessary because Plot2DPanel lib is broken and sometimes launches exception that makes 
+		// stop button not hide correctly
+		
 		if (average_fitnesses == null || best_fitnesses == null || best_absolute_fitnesses == null)
 			return;
 
