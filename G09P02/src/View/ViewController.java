@@ -1,7 +1,10 @@
 package View;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeFactory;
@@ -85,10 +88,12 @@ public class ViewController implements Runnable {
 
 	// Ranged values
 	private boolean ranged_mode = false;
-	private final int RANGED_STEPS = 4; // Num of tests for range
+	private final int RANGED_STEPS = 5; // Num of tests for range
+	private final int MAX_THREADS = 8; // Num of tests for range
 	private RangedValue<Integer> poblation_size_range;
 	private RangedValue<Double> cross_range;
 	private RangedValue<Double> mutation_range;
+	private ExecutorService executor;
 
 	/**
 	 * Shortcut to log a string if debug mode is enabled
@@ -141,6 +146,8 @@ public class ViewController implements Runnable {
 			interrupted = Thread.interrupted();
 		}
 
+		view.enableDisableStopButton(false);
+		
 		if (interrupted) {
 			view.setProgressBarPercentage(0);
 			tryStopThread(modelThread);
@@ -155,56 +162,41 @@ public class ViewController implements Runnable {
 	private void runSlider() {
 	    // Get the number of combinations to test
 	    final int num_combinations = poblation_size_range.getNumSteps() * cross_range.getNumSteps() * mutation_range.getNumSteps();
-	    Thread[] threads = new Thread[num_combinations];
 	    ModelRunner[] models = new ModelRunner[num_combinations];
+	    executor = Executors.newFixedThreadPool(MAX_THREADS);
 	    
 	    // Create semaphore with 10 permits
 	    // So even if all threads are executing only 10 are doing the hard work, the others are sleeping
-	    Semaphore semaphore = new Semaphore(RANGED_STEPS * 2);
-	    
-	    // Loop through each combination of values to create the threads
 	    int i = 0;
 	    for (int poblation_size : poblation_size_range) {
 	        for (double cross_chance : cross_range) {
 	            for (double mutation_chance : mutation_range) {
 	                // Acquire permit from semaphore
 	                models[i] = new ModelRunner(poblation_size, cross_chance, mutation_chance);
-	                final int index = i;
-	                threads[i] = new Thread(() -> {
-	                	try {
-							semaphore.acquire();
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-	                    // Run algorithm
-	                    models[index].run();
-	                    
-	                    // Release permit from semaphore
-	                    semaphore.release();
-	                }, "Model Thread with P:" + poblation_size + "C: " + cross_chance + "M:" + mutation_chance);
-	                
-	                threads[i].start();
+	                executor.execute(models[i]);
 	                i++;
 	            }
 	        }
 	    }
 	    
-	    boolean finished = false;
-	    while (!finished) {
-	        int progress = 0;
-	        
-	        // Assume we finished, if any thread is still running it will turn to false
-	        finished = true;
-	        for (int j = 0; j < num_combinations; j++) {
-	            if (threads[j].isAlive())
-	                finished = false;
-	            
+	    // No more threads will be added
+	    executor.shutdown();
+	    
+	    int progress = 0;
+	    while (!executor.isTerminated()) {
+	        progress = 0;
+	    	for (int j = 0; j < num_combinations; j++)
 	            progress += models[j].getCompletion();
-	        }
 	        
 	        // Update progress bar with 'progress' value
-	        view.setProgressBarPercentage(progress / num_combinations);
+	    	progress /= num_combinations;
+	        view.setProgressBarPercentage(progress);
+	        
+	        if(Thread.interrupted())
+	        {
+	        	executor.shutdownNow();
+	        	return;
+	        }
 	    }
 	    	    
 	    // Check which model has the best result
@@ -222,6 +214,7 @@ public class ViewController implements Runnable {
 
 	    // Update view
 	    view.setProgressBarPercentage(100);
+	    view.enableDisableStopButton(false);
 		updateGraphsView();
 		updateSolution();
 	}
@@ -232,6 +225,7 @@ public class ViewController implements Runnable {
 	 * thread is already running, it will be stopped and a new one will be created
 	 */
 	public void run() {
+		view.enableDisableStopButton(true);
 		tryStopThread(controllerRunThread);
 
 		controllerRunThread = new Thread(new Runnable() {
@@ -612,6 +606,8 @@ public class ViewController implements Runnable {
 
 	public void stop() {
 		tryStopThread(controllerRunThread);
+		view.setProgressBarPercentage(0);
+		view.enableDisableStopButton(false);
 	}
 
 }

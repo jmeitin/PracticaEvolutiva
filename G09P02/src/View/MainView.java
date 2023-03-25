@@ -184,6 +184,11 @@ public class MainView extends JFrame {
 		plotData();
 	}
 
+	public void enableDisableStopButton(boolean enabled)
+	{
+		this.stopButton.setVisible(enabled);
+	}
+	
 	/***
 	 * Cleans the graph view
 	 */
@@ -313,6 +318,7 @@ public class MainView extends JFrame {
 
 	private boolean slider_mode = false;
 	private JLabel toleranceLabel;
+	private JButton stopButton;
 
 	private void toggleSliderMode() {
 		slider_mode = !slider_mode;
@@ -494,13 +500,14 @@ public class MainView extends JFrame {
 			}
 		});
 
-		JButton restartButton = new JButton("Reiniciar");
-		restartButton.addActionListener(new ActionListener() {
+		stopButton = new JButton("Stop");
+		stopButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cleanPlot();
 				controller.stop();
 			}
 		});
+		stopButton.setVisible(false);
 
 		JButton sliderButton = new JButton("Alternar Slider");
 		sliderButton.addActionListener(new ActionListener() {
@@ -640,7 +647,7 @@ public class MainView extends JFrame {
 								.addComponent(problemPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
 										Short.MAX_VALUE)
 								.addComponent(sliderButton, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-								.addComponent(restartButton, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+								.addComponent(stopButton, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
 								.addComponent(executeButton, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
 								.addComponent(themePanel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
 								.addComponent(toleranceTextField, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
@@ -694,7 +701,7 @@ public class MainView extends JFrame {
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addComponent(themePanel, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.RELATED).addComponent(executeButton)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(restartButton)
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(stopButton)
 						.addPreferredGap(ComponentPlacement.RELATED).addComponent(sliderButton).addGap(51)));
 
 		mutationSlider = new RangeSlider();
