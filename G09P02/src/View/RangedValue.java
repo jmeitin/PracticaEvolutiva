@@ -17,6 +17,11 @@ public class RangedValue<T extends Number> implements Iterable<T> {
         this.num_steps = num_steps;
     }
 
+    public int getNumSteps()
+    {
+    	return num_steps;
+    }
+    
     public Iterator<T> iterator() {
         return new RangedValueIterator();
     }

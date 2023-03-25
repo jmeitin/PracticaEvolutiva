@@ -39,13 +39,38 @@ import SelectionAlgorithms.TruncationSelection;
 public class ViewController implements Runnable {
 
 	private class ModelRunner implements Runnable {
+		private final GeneticAlgorithmData data;
+		public Chromosome best_chromosome = null;
+		private boolean ranged = false;
+		GeneticAlgorithm algorithm = null;
+
+		public int getCompletion()
+		{
+			if(algorithm == null)
+				return 0;
+			
+			return (algorithm.getCurrent_generation() * 100 / algorithm.getMax_gen_num());
+		}
+		
+		public ModelRunner(int poblation_size, double cross_chance, double mutation_chance) {
+			data = getFromRange(poblation_size, cross_chance, mutation_chance);
+			ranged = true;
+		}
+
+		public ModelRunner() {
+			data = getAlgorithmData();
+		}
+
 		@Override
 		public void run() {
-			geneticAlgorithm = new GeneticAlgorithm<Boolean, Double>(getAlgorithmData());
+			algorithm = new GeneticAlgorithm<Boolean, Double>(data);
 
 			log("Running: " + Thread.currentThread().getName());
-			while (!Thread.interrupted() && geneticAlgorithm.runSequentially()) {
+			while (!Thread.interrupted() && algorithm.runSequentially()) {
 			}
+			
+			if(!ranged)
+				geneticAlgorithm = algorithm;
 		}
 	}
 
@@ -62,7 +87,7 @@ public class ViewController implements Runnable {
 	private RangedValue<Integer> poblation_size_range;
 	private RangedValue<Double> cross_range;
 	private RangedValue<Double> mutation_range;
-	
+
 	/**
 	 * Shortcut to log a string if debug mode is enabled
 	 * 
@@ -93,19 +118,25 @@ public class ViewController implements Runnable {
 	 */
 	private void runAux() {
 		log("Running: " + Thread.currentThread().getName());
+		runNormal();
+		if (!ranged_mode)
+			runNormal();
+		else
+			runSlider();
+	}
 
-		modelThread = new Thread(new ModelRunner(), "Model Thread");
+	private void runNormal() {
+		ModelRunner model = new ModelRunner();
+		modelThread = new Thread(model, "Model Thread");
 		modelThread.start();
 
 		boolean interrupted = false;
 		while (modelThread.isAlive() && !interrupted) {
 			// Here we can track the percentage of completion of the model
 			// This runs in its own thread to not halt the UI
-			// Calculate percentage of completion using getCurrent_generation and getMax_gen_num
-			int percentage = 0;
-			if (geneticAlgorithm != null)
-				percentage = (int) (geneticAlgorithm.getCurrent_generation() * 100 / geneticAlgorithm.getMax_gen_num());
-			view.setProgressBarPercentage(percentage);
+			// Calculate percentage of completion using getCurrent_generation and
+			// getMax_gen_num
+			view.setProgressBarPercentage(model.getCompletion());
 			interrupted = Thread.interrupted();
 		}
 
@@ -117,8 +148,28 @@ public class ViewController implements Runnable {
 			updateGraphsView();
 			updateSolution();
 		}
-
 	}
+
+	//
+	private void runSlider() {
+	    // Get the number of combinations to test
+	    final int num_combinations = poblation_size_range.getNumSteps() * cross_range.getNumSteps() * mutation_range.getNumSteps();
+	    Thread[] threads = new Thread[num_combinations];
+	    ModelRunner[] models = new ModelRunner[num_combinations];
+	    
+	    // Loop through each combination of values to create the threads
+	    int i = 0;
+	    for (int poblation_size : poblation_size_range) {
+	        for (double cross_chance : cross_range) {
+	            for (double mutation_chance : mutation_range) {
+	            	models[i] = new ModelRunner(poblation_size, cross_chance, mutation_chance);
+	                threads[i] = new Thread(models[i], "Model Thread with P:" + poblation_size + "C: " + cross_chance + "M:" + mutation_chance);
+	                i++;
+	            }
+	        }
+	    }
+	}
+
 
 	/**
 	 * Runs the genetic algorithm in a separate thread to not halt the view. If the
@@ -189,23 +240,23 @@ public class ViewController implements Runnable {
 	 * Updates the solution text in the view
 	 */
 	private void updateSolution() {
-		
+
 		Chromosome chromosome = this.geneticAlgorithm.getBest_chromosome();
-		// P1 function solution uses fenotypes. In P2 genotype and fenotype coincide, but
-		// we don`t want to write it like "Variable X+1", we want to write it like a list
-		// so we decided to do two similar methods. We know we could have done one parametriced but this approach gives are
-		// more flexibility in the future.	
-		if(chromosome instanceof ChromosomeP2)
-		{
+		// P1 function solution uses fenotypes. In P2 genotype and fenotype coincide,
+		// but
+		// we don`t want to write it like "Variable X+1", we want to write it like a
+		// list
+		// so we decided to do two similar methods. We know we could have done one
+		// parametriced but this approach gives are
+		// more flexibility in the future.
+		if (chromosome instanceof ChromosomeP2) {
 			updateSolutionP2(chromosome);
-		}
-		else
+		} else
 			updateSolutionP1(chromosome);
-		
+
 	}
-	
-	private void updateSolutionP1(Chromosome chromosome)
-	{
+
+	private void updateSolutionP1(Chromosome chromosome) {
 		String solutionText = "";
 		int i = 1;
 		for (Object fenotype : chromosome.getFenotypes()) {
@@ -216,9 +267,8 @@ public class ViewController implements Runnable {
 
 		this.view.setSolutionText(solutionText);
 	}
-	
-	private void updateSolutionP2(Chromosome chromosome)
-	{
+
+	private void updateSolutionP2(Chromosome chromosome) {
 		String solutionText = "Recorrido: [";
 		for (Object fenotype : chromosome.getFenotypes()) {
 			solutionText += fenotype + ", ";
@@ -236,10 +286,10 @@ public class ViewController implements Runnable {
 	public GeneticAlgorithmData getAlgorithmData() {
 		return algorithmData;
 	}
-	
+
 	// Create new GeneticAlgorithmData with the current ranged data for the thread
-	private GeneticAlgorithmData getFromRange(final int poblation_size, final  double cross_chance, final  double mutation_chance)
-	{
+	private GeneticAlgorithmData getFromRange(final int poblation_size, final double cross_chance,
+			final double mutation_chance) {
 		GeneticAlgorithmData data = this.algorithmData.getCopy();
 		data.poblation_size = poblation_size;
 		data.cross_chance = cross_chance;
@@ -247,12 +297,11 @@ public class ViewController implements Runnable {
 		return data;
 	}
 
-	public void setSliderMode(boolean ranged_mode)
-	{
+	public void setSliderMode(boolean ranged_mode) {
 		log("Slider mode: " + ranged_mode);
 		this.ranged_mode = ranged_mode;
 	}
-	
+
 	/**
 	 * 
 	 * @param poblation_size
@@ -261,9 +310,8 @@ public class ViewController implements Runnable {
 		log("Poblation Size: " + poblation_size);
 		this.algorithmData.poblation_size = poblation_size;
 	}
-	
-	public void setPoblationSizeRange(int min, int max)
-	{
+
+	public void setPoblationSizeRange(int min, int max) {
 		log("Poblation size range min-max: :" + min + ", " + max);
 		this.poblation_size_range.min_value = min;
 		this.poblation_size_range.max_value = max;
@@ -437,8 +485,8 @@ public class ViewController implements Runnable {
 	 */
 	public void setMutationType(String mutationType) {
 		log("Mutation Type: " + mutationType);
-		
-		//"Intercambio", "Inversion", "Insercion", "Heuristica"
+
+		// "Intercambio", "Inversion", "Insercion", "Heuristica"
 		switch (mutationType) {
 		case "BÁSICA":
 			this.algorithmData.mutation_algorithm = new BasicGenMutation();
@@ -478,13 +526,12 @@ public class ViewController implements Runnable {
 		this.algorithmData.cross_chance = cross_chance;
 	}
 
-	public void setCrossRangeChance(double min, double max)
-	{
+	public void setCrossRangeChance(double min, double max) {
 		log("Cross chance min-max: :" + min + ", " + max);
 		this.cross_range.min_value = min;
 		this.cross_range.max_value = max;
 	}
-	
+
 	/**
 	 * Sets mutation chance
 	 * 
@@ -494,9 +541,8 @@ public class ViewController implements Runnable {
 		log("Mutation chance: " + mutation_chance);
 		this.algorithmData.mutation_chance = mutation_chance;
 	}
-	
-	public void setMutationRangeChance(double min, double max)
-	{
+
+	public void setMutationRangeChance(double min, double max) {
 		log("Mutation chance min-max: :" + min + ", " + max);
 		this.mutation_range.min_value = min;
 		this.mutation_range.max_value = max;
