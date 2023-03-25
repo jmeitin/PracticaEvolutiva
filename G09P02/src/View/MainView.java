@@ -251,6 +251,13 @@ public class MainView extends JFrame {
 		crossTypeComboBox.repaint();
 	}
 
+	private void enableDisableTolerance(boolean enabled) {
+		if (this.toleranceTextField != null)
+			this.toleranceTextField.setVisible(enabled);
+		if (this.toleranceLabel != null)
+			this.toleranceLabel.setVisible(enabled);
+	}
+
 	public void setProgressBarPercentage(int percentage) {
 		this.progressBar.setValue(percentage);
 	}
@@ -273,6 +280,7 @@ public class MainView extends JFrame {
 		controller.setMutationRangeChance(mutationSlider.getValue(), mutationSlider.getUpperValue());
 		controller.setCrossRangeChance(crossSlider.getValue(), crossSlider.getUpperValue());
 		controller.setPoblationSizeRange(populationSlider.getValue(), populationSlider.getUpperValue());
+		enableDisableTolerance(false);
 	}
 
 	private int clamp(int value, int min, int max) {
@@ -304,6 +312,7 @@ public class MainView extends JFrame {
 	}
 
 	private boolean slider_mode = false;
+	private JLabel toleranceLabel;
 
 	private void toggleSliderMode() {
 		slider_mode = !slider_mode;
@@ -315,7 +324,7 @@ public class MainView extends JFrame {
 		genSizeTextField.setVisible(!slider_mode);
 		crossProbabilityTextField.setVisible(!slider_mode);
 		mutationProbabilityTextField.setVisible(!slider_mode);
-		
+
 		controller.setSliderMode(slider_mode);
 	}
 
@@ -414,7 +423,8 @@ public class MainView extends JFrame {
 				new SelectableType("Aritmético", false), new SelectableType("BLX-α", false) });
 		p2Model = new DefaultComboBoxModel<>(new SelectableType[] { new SelectableType("PMX", true),
 				new SelectableType("OX", true), new SelectableType("OX-PP", true), new SelectableType("OX-PO", true),
-				new SelectableType("CX", true), new SelectableType("ERX", true), new SelectableType("CO", true), new SelectableType("ORIGINAL", true) });
+				new SelectableType("CX", true), new SelectableType("ERX", true), new SelectableType("CO", true),
+				new SelectableType("ORIGINAL", true) });
 		setModelsForP1();
 		crossTypeComboBox.setRenderer(new ListCellRenderer<SelectableType>() {
 			private final DefaultListCellRenderer DEFAULT_RENDERER = new DefaultListCellRenderer();
@@ -517,6 +527,8 @@ public class MainView extends JFrame {
 						setModelsForP1();
 					// enabled or disable options "Aritmético" y "BLX-α"
 					enableCrossTypeOptions(selectedFunction.equals("P1 - Funcion 4B"));
+					enableDisableTolerance(
+							!(selectedFunction.equals("P1 - Funcion 4B") || selectedFunction.equals("P2")));
 					boolean dimensionsVisible = selectedFunction.equals("P1 - Funcion 4B")
 							|| selectedFunction.equals("P1 - Funcion 4A");
 					if (lblDimensions != null) {
@@ -584,7 +596,7 @@ public class MainView extends JFrame {
 		elitismProbabilityTextField.setColumns(10);
 		elitismPanel.add(elitismProbabilityTextField);
 
-		JLabel toleranceLabel = new JLabel("Tolerancia");
+		toleranceLabel = new JLabel("Tolerancia");
 		toleranceLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 
 		toleranceTextField = new JFormattedTextField(decimalFormat);
@@ -751,7 +763,7 @@ public class MainView extends JFrame {
 				controller.setCrossRangeChance(min, max);
 			}
 		});
-		
+
 		GroupLayout gl_crossPanel = new GroupLayout(crossPanel);
 		gl_crossPanel.setHorizontalGroup(gl_crossPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_crossPanel
 				.createSequentialGroup()
