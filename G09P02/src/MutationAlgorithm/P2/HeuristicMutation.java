@@ -21,15 +21,13 @@ public class HeuristicMutation extends MutationAlgorithm {
 	static protected int num_selected_genes = 3;
 
 	@Override
-	public Chromosome[] mutate(Chromosome[] poblation, int poblation_size, double mutation_chance){
-		System.out.println("=== HEURISTICA ===");
-		
+	public Chromosome[] mutate(Chromosome[] poblation, int poblation_size, double mutation_chance){		
 		int num_genes = poblation[0].getNumOfGenes();
 		if(num_genes < 4) 
 			return poblation;
 		
 		Chromosome[] new_population = new Chromosome[poblation_size];		
-		int[] index_in_permutation = new int[num_selected_genes];	
+		int[] selected_index = new int[num_selected_genes];	
 		
 		for (int i = 0; i < poblation_size; i++) {		
 			//initialize chromosome
@@ -38,53 +36,53 @@ public class HeuristicMutation extends MutationAlgorithm {
 			if(RandomUtils.getProbability(mutation_chance)) {
 				//CALCULATE RANDOM INDEX--------------------------------------------
 				for (int n = 0; n < num_selected_genes; n++) {
-					index_in_permutation[n] = (int)(rand.nextDouble()*(num_genes-1));	
+					int value = (int)(rand.nextDouble()*(num_genes-1));
+					
+					//DON'T REPEAT VALUES
+					while(contains(selected_index, value, i)) {
+						value = (int)(rand.nextDouble()*(num_genes-1));
+					}
+					selected_index[n] = value;	
 				}
 				//SORT
-				Arrays.sort(index_in_permutation);
+				Arrays.sort(selected_index);
 				
-				//calculate permutations 
-				System.out.println("=== 1. Calculate Permutations ===");
-				List<int[]> permutations = CalculatePermutations(index_in_permutation);
-				System.out.println("=== 2. Finished Calculating Permutations ===");
+				// CALCULATE PERMUTATIONS				
+				List<int[]> permutations = CalculatePermutations(selected_index);
 				
-				// LOOP ALL POSSIBLE PERMUTATIONS--------------------------------
-				List<int[]> all_possible_genes = new ArrayList<int[]>();			
-				int[] current_genes = chromosome.getGenesCopy();			
+				// SELECT PERMUTATION WITH BEST SCORE
+				int best_score = Integer.MAX_VALUE;
+				int[] old_genes = chromosome.getGenesCopy();
+				int[] new_genes = new int[num_genes];
+				ChromosomeP2 aux_chromosome = (ChromosomeP2)chromosome.getCopy();
 				
-				for (int p = 0; p < permutations.size(); p++) {
-					int[] possible_genes = current_genes.clone();
+				for (int l = 0; l < permutations.size(); l++) {
+					int index = 0;
+					int[] permutation = permutations.get(l);
 					
-					int [] permutation = permutations.get(p);
-					for (int elem = 0; elem < permutation.length; elem++) {
-						int new_index = index_in_permutation[elem]; // sorted array
-						int old_index = permutation[elem];
-						// UPDATE GENE
-						possible_genes[new_index] = current_genes[old_index];
+					// USE PERMUTATION TO GENERATE new_genes POSSIBLE CONFIGURATION
+					for(int g = 0; g < num_genes; g++) {
+						//INSERT
+						int old_index = g;
+						if(index < permutation.length && permutation[index] == g) {
+							old_index = permutation[index];
+							index++;
+						}
+
+						new_genes[g] = old_genes[old_index];
 					}
 					
-					all_possible_genes.add(possible_genes);
-				}
-				System.out.println("=== 3. Created all possible gene configurations ===");
-				//CALCULATE SCORE OF ALL POSSIBLE PERMUTATIONS----------------------
-				ChromosomeP2 aux_chromosome = (ChromosomeP2) poblation[i].getCopy();
-				double best_score = Integer.MAX_VALUE; // MAXIMIZE, MINIM?????????????????????????????????????????
-				
-				for (int p = 0; p < all_possible_genes.size(); p++) {
-					aux_chromosome.setGenes(all_possible_genes.get(p));
-					aux_chromosome.calculateFenotypes(); // NO SE SI ES NECESARIO HACERLO CADA VEZ QUE HACES SET GENES
+					// DETERMINE IF POSSIBLE CONFIGURATION HAS BETTER SCORE YET
+					aux_chromosome.setGenes(new_genes);
+					aux_chromosome.calculateFenotypes();
 					double brute_fitness = aux_chromosome.evaluate();
-					
-					// UPDATE CHROMOSOME WITH BEST FOUND------------------------------
 					if(brute_fitness < best_score) {
-						best_score = brute_fitness;
-						chromosome.setGenes(aux_chromosome.getGenesCopy());
+						best_score = (int)brute_fitness;
+						chromosome = (ChromosomeP2)aux_chromosome.getCopy();
 					}
-				}		
-				System.out.println("=== 4. Finished Mutating Chromosome ===");
+				}
 			}
-			
-			new_population[i] = chromosome.getCopy();			
+			new_population[i] = chromosome.getCopy();
 		}
 
 		return new_population;	
@@ -94,7 +92,7 @@ public class HeuristicMutation extends MutationAlgorithm {
 	 * CALCULATE PERMUTATIONS OF INTS IN ARRAY numbers
 	 * RETURNS List<int[]> WITH ALL POSSIBLE PERMUTATIONS OF numbers
 	 * */
-	public static List<int[]> CalculatePermutations(int[] numbers) {
+	public static List<int[]> CalculatePermutations(final int[] numbers) {
 		List<int[]> permutations = new ArrayList<int[]>();
 		
 	    // RETURN CURRENT ELEMENT BY DEFAULT
@@ -134,4 +132,15 @@ public class HeuristicMutation extends MutationAlgorithm {
 	    // Devuelve todas las permutaciones
 	    return permutations;
 	  }
+	
+	private boolean contains(int[] array, int v, final int i_max) {
+		if (i_max >= array.length || i_max < 0)
+			return false;
+		
+        int i = 0;
+        while (i <= i_max && array[i] != v)
+        	i++;
+
+        return i <= i_max; // true if value was found
+    }
 }
