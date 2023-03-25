@@ -5,6 +5,7 @@ import java.util.Arrays;
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
 import MutationAlgorithm.MutationAlgorithm;
+import Utils.RandomUtils;
 
 /*En este tipo de mutación se inserta una o varias ciudades elegidas al azar en unas posiciones también elegidas al azar.
  *  El caso más simple es con una sola inserción, por ejemplo, seleccionamos el alelo/gen 4 y lo insertamos en la tercera posición, tal y como se muestra.
@@ -27,7 +28,7 @@ public class InsertionMutation extends MutationAlgorithm{
 		for (int i = 0; i < poblation_size; i++) {		
 			ChromosomeP2 chromosome = (ChromosomeP2)poblation[i].getCopy();
 			
-			if(rand.nextDouble() < mutation_chance) {
+			if(RandomUtils.getProbability(mutation_chance)) {
 				//CALCULATE RANDOM INSERTION POINTS & NUMBERS TO INSERT-------------------------------
 				for(int j = 0; j < inserted_num; j++) {
 					move_pos[j] = (int)(rand.nextDouble() * (num_genes - 1));

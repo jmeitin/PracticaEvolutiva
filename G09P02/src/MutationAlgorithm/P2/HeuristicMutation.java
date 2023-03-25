@@ -7,6 +7,7 @@ import java.util.List;
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
 import MutationAlgorithm.MutationAlgorithm;
+import Utils.RandomUtils;
 
 /*
  * Se seleccionan n ciudades al azar (N = 3 en ejemplo). 
@@ -32,7 +33,7 @@ public class HeuristicMutation extends MutationAlgorithm {
 			//initialize chromosome
 			ChromosomeP2 chromosome = (ChromosomeP2) poblation[i].getCopy();	
 			
-			if(rand.nextDouble() < mutation_chance) {
+			if(RandomUtils.getProbability(mutation_chance)) {
 				//CALCULATE RANDOM INDEX--------------------------------------------
 				for (int n = 0; n < num_selected_genes; n++) {
 					index_in_permutation[n] = (int)(rand.nextDouble()*(num_genes-1));	

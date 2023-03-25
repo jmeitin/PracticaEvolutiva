@@ -5,6 +5,7 @@ import java.util.Arrays;
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
 import MutationAlgorithm.MutationAlgorithm;
+import Utils.RandomUtils;
 
 /*se aplica con una determinada probabilidad.
  * Consiste en seleccionar 2 puntos del individuo al azar & invertir los elementos que hay entre dichos puntos. 
@@ -23,7 +24,7 @@ public class InversionMutation extends MutationAlgorithm {
 		for (int i = 0; i < poblation_size; i++) {
 			ChromosomeP2 chromosome = (ChromosomeP2) poblation[i].getCopy();
 			
-			if(rand.nextDouble() < mutation_chance) {
+			if(RandomUtils.getProbability(mutation_chance)) {
 				// SELECT CUT POINTS--------------------------------------
 				int[] points = new int[2];
 				points[0] = 1 + (int)(rand.nextDouble() * (num_genes -2));

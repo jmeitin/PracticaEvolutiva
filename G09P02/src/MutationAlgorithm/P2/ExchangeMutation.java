@@ -1,5 +1,6 @@
 package MutationAlgorithm.P2;
 
+import Utils.RandomUtils;
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
 import MutationAlgorithm.MutationAlgorithm;
@@ -10,6 +11,7 @@ public class ExchangeMutation extends MutationAlgorithm{
 	
 	@Override
 	public Chromosome[] mutate(Chromosome[] poblation, int poblation_size, double mutation_chance){	
+		//System.out.println("HOLAAA " + mutation_chance);
 		
 		int num_genes = poblation[0].getNumOfGenes();
 		
@@ -18,7 +20,7 @@ public class ExchangeMutation extends MutationAlgorithm{
 		for (int i = 0; i < poblation_size; i++) {
 			ChromosomeP2 chromosome = (ChromosomeP2) poblation[i].getCopy();
 			
-			if(rand.nextDouble() < mutation_chance) {
+			if(RandomUtils.getProbability(mutation_chance)) {
 				// SELECT GENES--------------------------------------
 				int pointA = (int)(rand.nextDouble() * (num_genes-1));
 				int pointB = (int)(rand.nextDouble() * (num_genes-1));

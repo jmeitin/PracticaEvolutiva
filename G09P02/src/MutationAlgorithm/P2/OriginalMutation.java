@@ -3,6 +3,7 @@ package MutationAlgorithm.P2;
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
 import MutationAlgorithm.MutationAlgorithm;
+import Utils.RandomUtils;
 
 /* Algoritmo de Mutación original propio:
  * Se calcula un número aleatorio para cada gen y si este es > mutation_chance se muta.
@@ -37,7 +38,7 @@ public class OriginalMutation extends MutationAlgorithm {
 			
 			for(int g = 0; g < num_genes; g++) {
 				//will mutate
-				if(rand.nextDouble() < mutation_chance) {
+				if(RandomUtils.getProbability(mutation_chance)) {
 					has_mutated = true;
 					//calculate other pos
 					int pos = 1 + (int)(rand.nextDouble() * num_genes - 1);
