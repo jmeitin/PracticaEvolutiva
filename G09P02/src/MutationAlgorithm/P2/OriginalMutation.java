@@ -1,5 +1,7 @@
 package MutationAlgorithm.P2;
 
+import java.util.Arrays;
+
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
 import MutationAlgorithm.MutationAlgorithm;
@@ -32,38 +34,30 @@ public class OriginalMutation extends MutationAlgorithm {
 		
 		for (int i = 0; i < poblation_size; i++) {
 			ChromosomeP2 chromosome = (ChromosomeP2) poblation[i].getCopy();
-			
 			int[] genes = chromosome.getGenesCopy();
-			boolean has_mutated = false;
 			
-			for(int g = 0; g < num_genes; g++) {
-				//will mutate
-				if(RandomUtils.getProbability(mutation_chance)) {
-					has_mutated = true;
-					//calculate other pos
-					int pos = 1 + (int)(rand.nextDouble() * num_genes - 1);
-					pos = pos % num_genes;
-					//exchange genes
+			for (int g = 0; g < num_genes; g++) {
+				if (RandomUtils.getProbability(mutation_chance)) {
+					//EXCHANGE
+					int pos = (int)rand.nextDouble() * (num_genes-1);
+					pos = (g + pos) % num_genes;
+					
 					int aux = genes[pos];
 					genes[pos] = genes[g];
 					genes[g] = aux;
 					
-					//displace genes to the right
-					genes[0] = genes[num_genes - 1];
-					for (int j = 1; j < num_genes; j++) {
-					    aux = genes[j];
-					    genes[j] = genes[j-1];
-					    genes[j-1] = aux;
-					}
+					//DISPLACE
+					int last = genes[num_genes - 1];
+	                for (int j = num_genes - 2; j >= 0; j--) {
+	                    genes[j + 1] = genes[j];
+	                }
+	                genes[0] = last;
 				}
-			}			
-			if(has_mutated)
-				chromosome.setGenes(genes);
+			}
 			
-			new_population[i] = chromosome;
+			chromosome.setGenes(genes);
+			new_population[i] = chromosome.getCopy();
 		}
-
-		System.out.println("=== FIN MUTACION ORIGINAL ===");
 		return new_population;	
 	}
 	
