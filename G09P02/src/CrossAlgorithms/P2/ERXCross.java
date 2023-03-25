@@ -39,13 +39,11 @@ public class ERXCross extends CrossAlgorithmsP2 {
 		result_set.add(child1[0]);
 
 		// Use helper function to recursively explore paths until a valid Hamiltonian
-		// path is found
-		if (reconstructFromTableHelper(result, result_set, table, 1)) {
-			return result;
-		} else {
-			// If no path was found, retry with a different random starting vertex
-			return reconstructFromTable(child1, child2, table);
-		}
+		// path is found. It must always return a valid result
+		if(!reconstructFromTableHelper(result, result_set, table, 1))
+			throw new RuntimeException("ERX Cross failed");
+		
+		return result;
 	}
 
 	// Recursive helper function to explore potential paths for Hamiltonian paths
