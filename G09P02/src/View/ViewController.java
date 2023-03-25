@@ -57,6 +57,11 @@ public class ViewController implements Runnable {
 			return (algorithm.getCurrent_generation() * 100 / algorithm.getMax_gen_num());
 		}
 
+		public GeneticAlgorithmData getDataCopy()
+		{
+			return data.getCopy();
+		}
+		
 		public ModelRunner(int poblation_size, double cross_chance, double mutation_chance) {
 			data = getFromRange(poblation_size, cross_chance, mutation_chance);
 			ranged = true;
@@ -79,7 +84,7 @@ public class ViewController implements Runnable {
 		}
 	}
 
-	private final boolean debugMode = false; // Enables debug mode
+	private final boolean debugMode = true; // Enables debug mode
 	private final MainView view; // View to be controlled
 	private GeneticAlgorithm geneticAlgorithm; // Genetic algorithm to be run
 	private GeneticAlgorithmData algorithmData; // Genetic algorithm data
@@ -158,7 +163,6 @@ public class ViewController implements Runnable {
 		}
 	}
 
-	//
 	private void runSlider() {
 		// Get the number of combinations to test
 		final int num_combinations = poblation_size_range.getNumSteps() * cross_range.getNumSteps()
@@ -166,9 +170,6 @@ public class ViewController implements Runnable {
 		ModelRunner[] models = new ModelRunner[num_combinations];
 		executor = Executors.newFixedThreadPool(MAX_THREADS);
 
-		// Create semaphore with 10 permits
-		// So even if all threads are executing only 10 are doing the hard work, the
-		// others are sleeping
 		int i = 0;
 		for (int poblation_size : poblation_size_range) {
 			for (double cross_chance : cross_range) {
@@ -214,6 +215,9 @@ public class ViewController implements Runnable {
 		        .collect(Collectors.toList());
 
 		geneticAlgorithm = sortedModels.get(0).algorithm;
+		GeneticAlgorithmData model = sortedModels.get(0).getDataCopy(); 
+		// Print poblation size, cross chance and mutation chance of the best model
+		log("Best model: " + model.poblation_size + " " + model.cross_chance + " " + model.mutation_chance);
 
 		// Update view
 		view.setProgressBarPercentage(100);

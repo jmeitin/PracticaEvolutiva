@@ -510,7 +510,7 @@ public class MainView extends JFrame {
 			}
 		});
 
-		stopButton = new JButton("Stop");
+		stopButton = new JButton("Detener");
 		stopButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cleanPlot();

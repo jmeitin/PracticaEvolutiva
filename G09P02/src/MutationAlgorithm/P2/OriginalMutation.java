@@ -25,7 +25,7 @@ public class OriginalMutation extends MutationAlgorithm {
 
 	@Override
 	public Chromosome[] mutate(Chromosome[] poblation, int poblation_size, double mutation_chance){
-		System.out.println("=== MUTACION ORIGINAL ===");
+		//System.out.println("=== MUTACION ORIGINAL ===");
 		Chromosome[] new_population = new Chromosome[poblation_size];
 		
 		int num_genes = poblation[0].getNumOfGenes();
