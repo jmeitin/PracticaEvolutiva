@@ -1,6 +1,7 @@
 package View;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.Semaphore;
 
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeFactory;
@@ -18,19 +19,19 @@ import CrossAlgorithms.P1.UniformCross;
 import CrossAlgorithms.P2.COCross;
 import CrossAlgorithms.P2.CXCross;
 import CrossAlgorithms.P2.ERXCross;
-import CrossAlgorithms.P2.OriginalCross;
 import CrossAlgorithms.P2.OXCross;
 import CrossAlgorithms.P2.OXPOCross;
 import CrossAlgorithms.P2.OXPPCross;
+import CrossAlgorithms.P2.OriginalCross;
 import CrossAlgorithms.P2.PMXCross;
 import GeneticAlgorithm.GeneticAlgorithm;
 import GeneticAlgorithm.GeneticAlgorithmData;
 import MutationAlgorithm.BasicGenMutation;
 import MutationAlgorithm.P2.ExchangeMutation;
 import MutationAlgorithm.P2.HeuristicMutation;
-import MutationAlgorithm.P2.OriginalMutation;
 import MutationAlgorithm.P2.InsertionMutation;
 import MutationAlgorithm.P2.InversionMutation;
+import MutationAlgorithm.P2.OriginalMutation;
 import SelectionAlgorithms.DeterministicTournamentSelection;
 import SelectionAlgorithms.ProbabilisticTournamentSelection;
 import SelectionAlgorithms.RemainderSelection;
@@ -75,7 +76,7 @@ public class ViewController implements Runnable {
 		}
 	}
 
-	private final boolean debugMode = true; // Enables debug mode
+	private final boolean debugMode = false; // Enables debug mode
 	private final MainView view; // View to be controlled
 	private GeneticAlgorithm geneticAlgorithm; // Genetic algorithm to be run
 	private GeneticAlgorithmData algorithmData; // Genetic algorithm data
@@ -84,7 +85,7 @@ public class ViewController implements Runnable {
 
 	// Ranged values
 	private boolean ranged_mode = false;
-	private final int RANGED_STEPS = 5; // Num of tests for range
+	private final int RANGED_STEPS = 4; // Num of tests for range
 	private RangedValue<Integer> poblation_size_range;
 	private RangedValue<Double> cross_range;
 	private RangedValue<Double> mutation_range;
@@ -157,19 +158,37 @@ public class ViewController implements Runnable {
 	    Thread[] threads = new Thread[num_combinations];
 	    ModelRunner[] models = new ModelRunner[num_combinations];
 	    
+	    // Create semaphore with 10 permits
+	    // So even if all threads are executing only 10 are doing the hard work, the others are sleeping
+	    Semaphore semaphore = new Semaphore(10);
+	    
 	    // Loop through each combination of values to create the threads
 	    int i = 0;
 	    for (int poblation_size : poblation_size_range) {
 	        for (double cross_chance : cross_range) {
 	            for (double mutation_chance : mutation_range) {
-	            	models[i] = new ModelRunner(poblation_size, cross_chance, mutation_chance);
-	                threads[i] = new Thread(models[i], "Model Thread with P:" + poblation_size + "C: " + cross_chance + "M:" + mutation_chance);
+	                // Acquire permit from semaphore
+	                models[i] = new ModelRunner(poblation_size, cross_chance, mutation_chance);
+	                final int index = i;
+	                threads[i] = new Thread(() -> {
+	                	try {
+							semaphore.acquire();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	                    // Run algorithm
+	                    models[index].run();
+	                    
+	                    // Release permit from semaphore
+	                    semaphore.release();
+	                }, "Model Thread with P:" + poblation_size + "C: " + cross_chance + "M:" + mutation_chance);
+	                
 	                threads[i].start();
 	                i++;
 	            }
 	        }
 	    }
-	    
 	    boolean finished = false;
 	    while (!finished) {
 	        int progress = 0;
