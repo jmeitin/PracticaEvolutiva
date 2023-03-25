@@ -598,7 +598,6 @@ public class MainView extends JFrame {
 		toleranceTextField.setColumns(10);
 
 		populationSlider = new RangeSlider();
-		populationSlider.setMinimum(500);
 		populationSlider.setMinorTickSpacing(500);
 		populationSlider.setValue(2000);
 		populationSlider.setToolTipText("");
