@@ -10,10 +10,17 @@ import javax.swing.JSlider;
  * <p>Note that RangeSlider makes use of the default BoundedRangeModel, which 
  * supports an inner range defined by a value and an extent.  The upper value
  * returned by RangeSlider is simply the lower value plus the extent.</p>
+ * 
+ * Source: https://github.com/ernieyu/Swing-range-slider
  */
 public class RangeSlider extends JSlider {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
      * Constructs a RangeSlider with default minimum and maximum values of 0
      * and 100.
      */

@@ -31,7 +31,7 @@ public abstract class CrossAlgorithmsP2 extends CrossAlgorithm {
 				String error_message = "\nRepeated gene in first child.";
 				error_message += " Num of elements: " + first_child_gene.length;
 				error_message += "\nGene: " + first_child_gene[i];
-				error_message += "\nIndexes: " + formatArray(getIndex(first_child_gene, first_child_gene[i]));
+				error_message += "\nIndexes: " + formatArray(getAllIndex(first_child_gene, first_child_gene[i]));
 				error_message += "\nGenes:" + formatArray(first_child_gene);
 				error_message += "\nGenes:" + formatArray(fillArray(second_child_gene));
 				throw new RuntimeException(error_message);
@@ -41,7 +41,7 @@ public abstract class CrossAlgorithmsP2 extends CrossAlgorithm {
 				String error_message = "\nRepeated gene in second child.";
 				error_message += " Num of elements: " + second_child_gene.length;
 				error_message += "\nGene: " + second_child_gene[i];
-				error_message += "\nIndex: " + formatArray(getIndex(second_child_gene, second_child_gene[i]));
+				error_message += "\nIndex: " + formatArray(getAllIndex(second_child_gene, second_child_gene[i]));
 				error_message += "\nGenes:" + formatArray(second_child_gene);
 				error_message += "\nGenes:" + formatArray(fillArray(second_child_gene));
 				throw new RuntimeException(error_message);
@@ -73,7 +73,16 @@ public abstract class CrossAlgorithmsP2 extends CrossAlgorithm {
 		return new_array;
 	}
 
-	public static int[] getIndex(final int[] array, final int element) {
+	public static int getIndex(final int[] array, final int element) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == element)
+				return i;
+		}
+
+		return -1;
+	}
+
+	public static int[] getAllIndex(final int[] array, final int element) {
 		List<Integer> list = new ArrayList<Integer>();
 		for (int i = 0; i < array.length; i++) {
 			if (array[i] == element)
