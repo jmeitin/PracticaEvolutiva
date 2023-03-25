@@ -18,6 +18,7 @@ import CrossAlgorithms.P1.UniformCross;
 import CrossAlgorithms.P2.COCross;
 import CrossAlgorithms.P2.CXCross;
 import CrossAlgorithms.P2.ERXCross;
+import CrossAlgorithms.P2.OriginalCross;
 import CrossAlgorithms.P2.OXCross;
 import CrossAlgorithms.P2.OXPOCross;
 import CrossAlgorithms.P2.OXPPCross;
@@ -27,6 +28,7 @@ import GeneticAlgorithm.GeneticAlgorithmData;
 import MutationAlgorithm.BasicGenMutation;
 import MutationAlgorithm.P2.ExchangeMutation;
 import MutationAlgorithm.P2.HeuristicMutation;
+import MutationAlgorithm.P2.OriginalMutation;
 import MutationAlgorithm.P2.InsertionMutation;
 import MutationAlgorithm.P2.InversionMutation;
 import SelectionAlgorithms.DeterministicTournamentSelection;
@@ -409,6 +411,9 @@ public class ViewController implements Runnable {
 		case "PMX":
 			this.algorithmData.cross_algorithm = new PMXCross();
 			break;
+		case "ORIGINAL":
+			this.algorithmData.cross_algorithm = new OriginalCross();
+			break;
 		case "OX":
 			this.algorithmData.cross_algorithm = new OXCross();
 			break;
@@ -454,6 +459,9 @@ public class ViewController implements Runnable {
 			break;
 		case "HEURISTICA":
 			this.algorithmData.mutation_algorithm = new HeuristicMutation();
+			break;
+		case "ORIGINAL":
+			this.algorithmData.mutation_algorithm = new OriginalMutation();
 			break;
 		}
 	}

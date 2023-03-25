@@ -411,7 +411,7 @@ public class MainView extends JFrame {
 				new SelectableType("Aritmético", false), new SelectableType("BLX-α", false) });
 		p2Model = new DefaultComboBoxModel<>(new SelectableType[] { new SelectableType("PMX", true),
 				new SelectableType("OX", true), new SelectableType("OX-PP", true), new SelectableType("OX-PO", true),
-				new SelectableType("CX", true), new SelectableType("ERX", true), new SelectableType("CO", true) });
+				new SelectableType("CX", true), new SelectableType("ERX", true), new SelectableType("CO", true), new SelectableType("ORIGINAL", true) });
 		setModelsForP1();
 		crossTypeComboBox.setRenderer(new ListCellRenderer<SelectableType>() {
 			private final DefaultListCellRenderer DEFAULT_RENDERER = new DefaultListCellRenderer();
@@ -458,7 +458,7 @@ public class MainView extends JFrame {
 
 		this.p1Mutations = new DefaultComboBoxModel(new String[] { "Básica" });
 		this.p2Mutations = new DefaultComboBoxModel(
-				new String[] { "Intercambio", "Inversion", "Insercion", "Heuristica" });
+				new String[] { "Intercambio", "Inversion", "Insercion", "Heuristica", "Original" });
 		mutationTypeComboBox.setModel(p2Mutations);
 
 		JLabel mutationProbabilityLabel = new JLabel("% Mutación");
