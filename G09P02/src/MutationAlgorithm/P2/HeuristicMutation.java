@@ -22,6 +22,8 @@ public class HeuristicMutation extends MutationAlgorithm {
 
 	@Override
 	public Chromosome[] mutate(Chromosome[] poblation, int poblation_size, double mutation_chance){
+		System.out.println("=== HEURISTICA ===");
+		
 		int num_genes = poblation[0].getNumOfGenes();
 		if(num_genes < 4) 
 			return poblation;
@@ -42,7 +44,9 @@ public class HeuristicMutation extends MutationAlgorithm {
 				Arrays.sort(index_in_permutation);
 				
 				//calculate permutations 
+				System.out.println("=== 1. Calculate Permutations ===");
 				List<int[]> permutations = CalculatePermutations(index_in_permutation);
+				System.out.println("=== 2. Finished Calculating Permutations ===");
 				
 				// LOOP ALL POSSIBLE PERMUTATIONS--------------------------------
 				List<int[]> all_possible_genes = new ArrayList<int[]>();			
@@ -61,7 +65,7 @@ public class HeuristicMutation extends MutationAlgorithm {
 					
 					all_possible_genes.add(possible_genes);
 				}
-				
+				System.out.println("=== 3. Created all possible gene configurations ===");
 				//CALCULATE SCORE OF ALL POSSIBLE PERMUTATIONS----------------------
 				ChromosomeP2 aux_chromosome = (ChromosomeP2) poblation[i].getCopy();
 				double best_score = Integer.MAX_VALUE; // MAXIMIZE, MINIM?????????????????????????????????????????
@@ -76,7 +80,8 @@ public class HeuristicMutation extends MutationAlgorithm {
 						best_score = brute_fitness;
 						chromosome.setGenes(aux_chromosome.getGenesCopy());
 					}
-				}				
+				}		
+				System.out.println("=== 4. Finished Mutating Chromosome ===");
 			}
 			
 			new_population[i] = chromosome.getCopy();			
@@ -93,7 +98,10 @@ public class HeuristicMutation extends MutationAlgorithm {
 		List<int[]> permutations = new ArrayList<int[]>();
 		
 	    // RETURN CURRENT ELEMENT BY DEFAULT
-	    if (numbers.length == 1) {
+		if(numbers.length == 0) {
+			return permutations;
+		}
+		else if (numbers.length == 1) {
 	    	permutations.add(numbers);
 	      return permutations;
 	    }
