@@ -1,6 +1,7 @@
 package CrossAlgorithms.P2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import Chromosomes.ChromosomeP2;
@@ -19,6 +20,8 @@ public class OriginalCross extends CrossAlgorithmsP2 {
 	protected void cross(ChromosomeP2 first_child, ChromosomeP2 second_child) {
 		
 		int num_genes = first_child.getNumOfGenes();
+		int[] values = first_child.getGenesCopy();
+		Arrays.sort(values);
 		int[] genes1 = first_child.getGenesCopy();
 		int[] genes2 = second_child.getGenesCopy();
 		
@@ -26,8 +29,8 @@ public class OriginalCross extends CrossAlgorithmsP2 {
 		List<Integer> genes_not_used2 = new ArrayList<Integer>();
 		
 		for(int i = 0; i < num_genes; i++) {
-			genes_not_used1.add(i);
-			genes_not_used2.add(i);
+			genes_not_used1.add(values[i]);
+			genes_not_used2.add(values[i]);
 		}
 		
 		int[] solution1 = new int[num_genes];
@@ -51,11 +54,15 @@ public class OriginalCross extends CrossAlgorithmsP2 {
 	private void SetGeneInCross(List<Integer> genes_not_used, int[] solution, int i, int num) {
 		if(genes_not_used.contains(num)) {
 			solution[i] = num;
-			genes_not_used.remove(num);
+			
+			int index = 0;
+			while (genes_not_used.get(index) != num)
+				index++;
+			genes_not_used.remove(index);
 		}
 		else {
 			solution[i] = genes_not_used.get(0);
-			genes_not_used.remove(solution[i]);
+			genes_not_used.remove(0);
 		}
 	}
 }
