@@ -598,6 +598,7 @@ public class MainView extends JFrame {
 		toleranceTextField.setColumns(10);
 
 		populationSlider = new RangeSlider();
+		populationSlider.setMinimum(500);
 		populationSlider.setMinorTickSpacing(500);
 		populationSlider.setValue(2000);
 		populationSlider.setToolTipText("");
@@ -606,7 +607,7 @@ public class MainView extends JFrame {
 		populationSlider.setPaintTicks(true);
 		populationSlider.setMajorTickSpacing(1000);
 		populationSlider.setMaximum(5000);
-		populationSlider.setUpperValue(4000);
+		populationSlider.setUpperValue(1000);
 		populationSlider.setVisible(false);
 		populationSlider.addMouseListener(new MouseAdapter() {
 			@Override
