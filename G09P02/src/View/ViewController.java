@@ -160,7 +160,7 @@ public class ViewController implements Runnable {
 	    
 	    // Create semaphore with 10 permits
 	    // So even if all threads are executing only 10 are doing the hard work, the others are sleeping
-	    Semaphore semaphore = new Semaphore(10);
+	    Semaphore semaphore = new Semaphore(RANGED_STEPS * 2);
 	    
 	    // Loop through each combination of values to create the threads
 	    int i = 0;
@@ -189,6 +189,7 @@ public class ViewController implements Runnable {
 	            }
 	        }
 	    }
+	    
 	    boolean finished = false;
 	    while (!finished) {
 	        int progress = 0;
