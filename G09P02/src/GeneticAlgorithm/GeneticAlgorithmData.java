@@ -18,4 +18,22 @@ public class GeneticAlgorithmData {
 	public SelectionAlgorithm selection_algorithm;
 	public CrossAlgorithm cross_algorithm;
 	public MutationAlgorithm mutation_algorithm;
+	
+	public GeneticAlgorithmData getCopy()
+	{
+		GeneticAlgorithmData copy = new GeneticAlgorithmData();
+		copy.poblation_size = poblation_size;
+		copy.max_gen_num = max_gen_num;
+		copy.cross_chance = cross_chance;
+		copy.mutation_chance = mutation_chance;
+		copy.tolerance = tolerance;
+		copy.elitism_percentage = elitism_percentage;
+		copy.maximize = maximize;
+		copy.dimensions = dimensions;
+		copy.chromosome_factory = chromosome_factory;
+		copy.selection_algorithm = selection_algorithm;
+		copy.cross_algorithm = cross_algorithm;
+		copy.mutation_algorithm = mutation_algorithm;
+		return copy;
+	}
 }
