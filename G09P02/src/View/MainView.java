@@ -670,6 +670,7 @@ public class MainView extends JFrame {
 						.addPreferredGap(ComponentPlacement.RELATED).addComponent(sliderButton).addGap(51)));
 
 		mutationSlider = new RangeSlider();
+		mutationSlider.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		mutationSlider.setValue(5);
 		mutationSlider.setUpperValue(15);
 		mutationSlider.setPaintLabels(true);
@@ -712,6 +713,7 @@ public class MainView extends JFrame {
 		mutationPanel.setLayout(gl_mutationPanel);
 		
 		crossSlider = new RangeSlider();
+		crossSlider.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		crossSlider.setValue(30);
 		crossSlider.setUpperValue(60);
 		crossSlider.setPaintLabels(true);
