@@ -29,18 +29,23 @@ public class RangedValue<T extends Number> implements Iterable<T> {
     private class RangedValueIterator implements Iterator<T> {
         private double step;
         private double current;
-        
+
         public RangedValueIterator() {
             step = (max_value.doubleValue() - min_value.doubleValue()) / (double) (num_steps - 1);
             current = min_value.doubleValue();
         }
-        
+
         public boolean hasNext() {
             return current <= max_value.doubleValue();
         }
 
         public T next() {
-            T value = (T) (Double) current;
+            T value = null;
+            if (min_value instanceof Integer) {
+                value = (T) (Integer) (int) current;
+            } else if (min_value instanceof Double) {
+                value = (T) (Double) current;
+            } // Añade más casos según los tipos que quieras aceptar
             current += step;
             return value;
         }
@@ -49,4 +54,5 @@ public class RangedValue<T extends Number> implements Iterable<T> {
             throw new UnsupportedOperationException();
         }
     }
+
 }

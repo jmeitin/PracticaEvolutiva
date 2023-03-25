@@ -40,9 +40,8 @@ public class ViewController implements Runnable {
 
 	private class ModelRunner implements Runnable {
 		private final GeneticAlgorithmData data;
-		public Chromosome best_chromosome = null;
 		private boolean ranged = false;
-		GeneticAlgorithm algorithm = null;
+		public GeneticAlgorithm algorithm = null;
 
 		public int getCompletion()
 		{
@@ -118,7 +117,6 @@ public class ViewController implements Runnable {
 	 */
 	private void runAux() {
 		log("Running: " + Thread.currentThread().getName());
-		runNormal();
 		if (!ranged_mode)
 			runNormal();
 		else
@@ -164,10 +162,46 @@ public class ViewController implements Runnable {
 	            for (double mutation_chance : mutation_range) {
 	            	models[i] = new ModelRunner(poblation_size, cross_chance, mutation_chance);
 	                threads[i] = new Thread(models[i], "Model Thread with P:" + poblation_size + "C: " + cross_chance + "M:" + mutation_chance);
+	                threads[i].start();
 	                i++;
 	            }
 	        }
 	    }
+	    
+	    boolean finished = false;
+	    while (!finished) {
+	        int progress = 0;
+	        
+	        // Assume we finished, if any thread is still running it will turn to false
+	        finished = true;
+	        for (int j = 0; j < num_combinations; j++) {
+	            if (threads[j].isAlive())
+	                finished = false;
+	            
+	            progress += models[j].getCompletion();
+	        }
+	        
+	        // Update progress bar with 'progress' value
+	        view.setProgressBarPercentage(progress / num_combinations);
+	    }
+	    	    
+	    // Check which model has the best result
+	    boolean maximize = getAlgorithmData().maximize; 
+	    double best_value = maximize ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
+
+	    for (ModelRunner model : models) {
+	        Chromosome model_best = model.algorithm.getBest_chromosome();
+	        double model_best_value = model_best.evaluate();
+	        if ((maximize && model_best_value > best_value) || (!maximize && model_best_value < best_value)) {
+	            geneticAlgorithm = model.algorithm;
+	            best_value = model_best_value;
+	        }
+	    }
+
+	    // Update view
+	    view.setProgressBarPercentage(100);
+		updateGraphsView();
+		updateSolution();
 	}
 
 

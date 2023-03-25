@@ -270,6 +270,9 @@ public class MainView extends JFrame {
 		controller.setElitism(Double.parseDouble(elitismProbabilityTextField.getText().replace(',', '.')));
 		controller.setFunction((problemSelectionComboBox.getSelectedItem()).toString().toUpperCase());
 		controller.setDimensions(Integer.parseInt(dimensionsTextField.getText()));
+		controller.setMutationRangeChance(mutationSlider.getValue(), mutationSlider.getUpperValue());
+		controller.setCrossRangeChance(crossSlider.getValue(), crossSlider.getUpperValue());
+		controller.setPoblationSizeRange(populationSlider.getValue(), populationSlider.getUpperValue());
 	}
 
 	private int clamp(int value, int min, int max) {
