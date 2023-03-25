@@ -49,6 +49,8 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
+import View.Slider.RangeSlider;
+
 public class MainView extends JFrame {
 	private static final long serialVersionUID = 1L;
 
@@ -124,7 +126,10 @@ public class MainView extends JFrame {
 	private DefaultComboBoxModel p1Mutations;
 	private DefaultComboBoxModel p2Mutations;
 	private JProgressBar progressBar;
-
+	private RangeSlider populationSlider;
+	private RangeSlider mutationSlider;
+	private RangeSlider crossSlider;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -293,6 +298,19 @@ public class MainView extends JFrame {
 		}
 	}
 
+	private boolean slider_mode = false;
+	private void toggleSliderMode() {
+		slider_mode = !slider_mode;
+
+		mutationSlider.setVisible(slider_mode);
+		populationSlider.setVisible(slider_mode);
+		crossSlider.setVisible(slider_mode);
+
+		genSizeTextField.setVisible(!slider_mode);
+		crossProbabilityTextField.setVisible(!slider_mode);
+		mutationProbabilityTextField.setVisible(!slider_mode);
+	}
+
 	/**
 	 * Create the frame. Most of the code was generated with windowbuildertool. Some
 	 * snippets (cell renderer, jformattedclass) where added manually to fit our
@@ -357,11 +375,9 @@ public class MainView extends JFrame {
 
 		JPanel crossPanel = new JPanel();
 		crossPanel.setBorder(new TitledBorder("Cruce"));
-		crossPanel.setLayout(new GridLayout(0, 2, 0, 0));
 
 		JLabel crossTypeLabel = new JLabel("Tipo de cruce");
 		crossTypeLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		crossPanel.add(crossTypeLabel);
 
 		crossTypeComboBox = new JComboBox();
 		crossTypeComboBox.addItemListener(new ItemListener() {
@@ -409,10 +425,8 @@ public class MainView extends JFrame {
 				return renderer;
 			}
 		});
-		crossPanel.add(crossTypeComboBox);
 
 		JLabel crossProbabilityLabel = new JLabel("% Cruce");
-		crossPanel.add(crossProbabilityLabel);
 
 		crossProbabilityTextField = new JFormattedTextField(decimalFormat);
 		crossProbabilityTextField.addPropertyChangeListener("value", evt -> {
@@ -422,16 +436,13 @@ public class MainView extends JFrame {
 			controller.setCrossChance(result);
 		});
 		crossProbabilityTextField.setText("60,0");
-		crossPanel.add(crossProbabilityTextField);
 		crossProbabilityTextField.setColumns(10);
 
 		JPanel mutationPanel = new JPanel();
 		mutationPanel.setBorder(new TitledBorder("Mutaci\u00F3n"));
-		mutationPanel.setLayout(new GridLayout(0, 2, 0, 0));
 
 		JLabel mutationTypeLabel = new JLabel("Tipo de mutación");
 		mutationTypeLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		mutationPanel.add(mutationTypeLabel);
 
 		mutationTypeComboBox = new JComboBox();
 		mutationTypeComboBox.addActionListener(new ActionListener() {
@@ -444,10 +455,8 @@ public class MainView extends JFrame {
 		this.p2Mutations = new DefaultComboBoxModel(
 				new String[] { "Intercambio", "Inversion", "Insercion", "Heuristica" });
 		mutationTypeComboBox.setModel(p2Mutations);
-		mutationPanel.add(mutationTypeComboBox);
 
 		JLabel mutationProbabilityLabel = new JLabel("% Mutación");
-		mutationPanel.add(mutationProbabilityLabel);
 
 		mutationProbabilityTextField = new JFormattedTextField(decimalFormat);
 		mutationProbabilityTextField.setText("5,0");
@@ -458,7 +467,6 @@ public class MainView extends JFrame {
 			controller.setMutationChance(result);
 		});
 		mutationProbabilityTextField.setColumns(10);
-		mutationPanel.add(mutationProbabilityTextField);
 
 		JButton executeButton = new JButton("Ejecutar");
 		executeButton.addActionListener(new ActionListener() {
@@ -475,14 +483,14 @@ public class MainView extends JFrame {
 				controller.stop();
 			}
 		});
-		
-		JButton sliderButton = new JButton("Slider");
+
+		JButton sliderButton = new JButton("Alternar Slider");
 		sliderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			
+				toggleSliderMode();
 			}
 		});
-		
+
 		JPanel problemPanel = new JPanel();
 		problemPanel.setBorder(new TitledBorder("Problema"));
 
@@ -580,72 +588,159 @@ public class MainView extends JFrame {
 		});
 		toleranceTextField.setText("0,025");
 		toleranceTextField.setColumns(10);
-		
-		JSlider populationSlider = new JSlider();
+
+		populationSlider = new RangeSlider();
+		populationSlider.setMinimum(500);
+		populationSlider.setMinorTickSpacing(500);
+		populationSlider.setValue(2000);
+		populationSlider.setToolTipText("");
+		populationSlider.setSnapToTicks(true);
+		populationSlider.setPaintLabels(true);
+		populationSlider.setPaintTicks(true);
+		populationSlider.setMajorTickSpacing(1000);
+		populationSlider.setMaximum(5000);
+		populationSlider.setUpperValue(4000);
 		populationSlider.setVisible(false);
-		
+
 		GroupLayout gl_westPanel = new GroupLayout(westPanel);
-		gl_westPanel.setHorizontalGroup(
-			gl_westPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_westPanel.createSequentialGroup()
-					.addGroup(gl_westPanel.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_westPanel.createSequentialGroup()
-							.addGap(10)
-							.addGroup(gl_westPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(populationSlider, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-								.addComponent(problemPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+		gl_westPanel.setHorizontalGroup(gl_westPanel.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING,
+				gl_westPanel.createSequentialGroup().addGroup(gl_westPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_westPanel.createSequentialGroup().addGap(10).addGroup(gl_westPanel
+								.createParallelGroup(Alignment.LEADING)
+								.addComponent(populationSlider, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
+										Short.MAX_VALUE)
+								.addComponent(problemPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
+										Short.MAX_VALUE)
 								.addComponent(sliderButton, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
 								.addComponent(restartButton, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
 								.addComponent(executeButton, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
 								.addComponent(themePanel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
 								.addComponent(toleranceTextField, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-								.addComponent(elitismPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-								.addComponent(mutationPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+								.addComponent(elitismPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
+										Short.MAX_VALUE)
+								.addComponent(mutationPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
+										Short.MAX_VALUE)
 								.addComponent(crossPanel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-								.addComponent(selectionPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-								.addComponent(numGenTextField, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-								.addComponent(numGenLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-								.addComponent(genSizeTextField, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-								.addComponent(genSizeLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+								.addComponent(selectionPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
+										Short.MAX_VALUE)
+								.addComponent(numGenTextField, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
+										Short.MAX_VALUE)
+								.addComponent(numGenLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
+										Short.MAX_VALUE)
+								.addComponent(genSizeTextField, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
+										Short.MAX_VALUE)
+								.addComponent(genSizeLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
+										Short.MAX_VALUE)
 								.addComponent(toleranceLabel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE))))
-					.addGap(10))
-		);
-		gl_westPanel.setVerticalGroup(
-			gl_westPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_westPanel.createSequentialGroup()
-					.addGap(1)
-					.addComponent(genSizeLabel, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(genSizeTextField, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(populationSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addComponent(numGenLabel)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(numGenTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(toleranceLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(toleranceTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(selectionPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(crossPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(mutationPanel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-					.addGap(1)
-					.addComponent(elitismPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(problemPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(themePanel, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(executeButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(restartButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(sliderButton)
-					.addGap(51))
-		);
+						.addGap(10)));
+		gl_westPanel.setVerticalGroup(gl_westPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_westPanel.createSequentialGroup().addGap(1)
+						.addComponent(genSizeLabel, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(genSizeTextField, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(populationSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(numGenLabel).addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(numGenTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(toleranceLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(toleranceTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(selectionPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(crossPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(mutationPanel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+						.addGap(1)
+						.addComponent(elitismPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(problemPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(themePanel, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(executeButton)
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(restartButton)
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(sliderButton).addGap(51)));
+
+		mutationSlider = new RangeSlider();
+		mutationSlider.setValue(5);
+		mutationSlider.setUpperValue(15);
+		mutationSlider.setPaintLabels(true);
+		mutationSlider.setMajorTickSpacing(10);
+		mutationSlider.setMaximum(40);
+		mutationSlider.setVisible(false);
+		
+		GroupLayout gl_mutationPanel = new GroupLayout(mutationPanel);
+		gl_mutationPanel.setHorizontalGroup(gl_mutationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_mutationPanel.createSequentialGroup()
+						.addGroup(gl_mutationPanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_mutationPanel.createSequentialGroup()
+										.addComponent(mutationTypeLabel, GroupLayout.PREFERRED_SIZE, 135,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(mutationTypeComboBox, GroupLayout.PREFERRED_SIZE, 135,
+												GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_mutationPanel.createSequentialGroup()
+										.addComponent(mutationProbabilityLabel, GroupLayout.PREFERRED_SIZE, 135,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(mutationProbabilityTextField, GroupLayout.PREFERRED_SIZE, 135,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(mutationSlider, GroupLayout.PREFERRED_SIZE, 135,
+														GroupLayout.PREFERRED_SIZE)))
+						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		gl_mutationPanel.setVerticalGroup(gl_mutationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_mutationPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_mutationPanel.createSequentialGroup()
+								.addGroup(gl_mutationPanel.createParallelGroup(Alignment.LEADING)
+										.addComponent(mutationTypeLabel, GroupLayout.PREFERRED_SIZE, 25,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(mutationTypeComboBox, GroupLayout.PREFERRED_SIZE, 25,
+												GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_mutationPanel.createParallelGroup(Alignment.LEADING)
+										.addComponent(mutationProbabilityLabel, GroupLayout.PREFERRED_SIZE, 25,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(mutationProbabilityTextField, GroupLayout.PREFERRED_SIZE, 25,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(mutationSlider, GroupLayout.PREFERRED_SIZE, 25,
+												GroupLayout.PREFERRED_SIZE)))));
+		mutationPanel.setLayout(gl_mutationPanel);
+		
+		crossSlider = new RangeSlider();
+		crossSlider.setValue(30);
+		crossSlider.setUpperValue(60);
+		crossSlider.setPaintLabels(true);
+		crossSlider.setMajorTickSpacing(25);
+		crossSlider.setVisible(false);
+		GroupLayout gl_crossPanel = new GroupLayout(crossPanel);
+		gl_crossPanel.setHorizontalGroup(
+			gl_crossPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_crossPanel.createSequentialGroup()
+					.addGroup(gl_crossPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_crossPanel.createSequentialGroup()
+							.addComponent(crossTypeLabel, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+							.addComponent(crossTypeComboBox, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_crossPanel.createSequentialGroup()
+							.addComponent(crossProbabilityLabel, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+							.addComponent(crossProbabilityTextField, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+							.addComponent(crossSlider, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)))));
+		gl_crossPanel.setVerticalGroup(
+			gl_crossPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_crossPanel.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_crossPanel.createSequentialGroup()
+						.addGroup(gl_crossPanel.createParallelGroup(Alignment.LEADING)
+							.addComponent(crossTypeLabel, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+							.addComponent(crossTypeComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_crossPanel.createParallelGroup(Alignment.LEADING)
+							.addComponent(crossProbabilityLabel, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+							.addComponent(crossProbabilityTextField, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+							.addComponent(crossSlider, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)))));
+		crossPanel.setLayout(gl_crossPanel);
 
 		lblDimensions = new JLabel("Dimensiones");
 		lblDimensions.setHorizontalAlignment(SwingConstants.LEFT);
@@ -661,18 +756,20 @@ public class MainView extends JFrame {
 			controller.setDimensions(dimensions);
 		});
 		GroupLayout gl_problemPanel = new GroupLayout(problemPanel);
-		gl_problemPanel
-				.setHorizontalGroup(gl_problemPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_problemPanel.createSequentialGroup()
-								.addComponent(lblSeleccionaProblema, GroupLayout.PREFERRED_SIZE, 135,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(problemSelectionComboBox, GroupLayout.PREFERRED_SIZE, 135,
-										GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_problemPanel.createSequentialGroup()
-								.addComponent(lblDimensions, GroupLayout.PREFERRED_SIZE, 135,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(dimensionsTextField, GroupLayout.PREFERRED_SIZE, 135,
-										GroupLayout.PREFERRED_SIZE)));
+		gl_problemPanel.setHorizontalGroup(gl_problemPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_problemPanel.createSequentialGroup()
+						.addGroup(gl_problemPanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_problemPanel.createSequentialGroup()
+										.addComponent(lblSeleccionaProblema, GroupLayout.PREFERRED_SIZE, 135,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(problemSelectionComboBox, GroupLayout.PREFERRED_SIZE, 135,
+												GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_problemPanel.createSequentialGroup()
+										.addComponent(lblDimensions, GroupLayout.PREFERRED_SIZE, 135,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(dimensionsTextField, GroupLayout.PREFERRED_SIZE, 135,
+												GroupLayout.PREFERRED_SIZE)))
+						.addContainerGap(206, Short.MAX_VALUE)));
 		gl_problemPanel.setVerticalGroup(gl_problemPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_problemPanel
 				.createSequentialGroup()
 				.addGroup(gl_problemPanel.createParallelGroup(Alignment.LEADING)
