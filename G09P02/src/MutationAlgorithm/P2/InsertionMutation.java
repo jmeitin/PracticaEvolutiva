@@ -1,10 +1,13 @@
 package MutationAlgorithm.P2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
 import MutationAlgorithm.MutationAlgorithm;
+import Utils.RandomUtils;
 
 /*En este tipo de mutación se inserta una o varias ciudades elegidas al azar en unas posiciones también elegidas al azar.
  *  El caso más simple es con una sola inserción, por ejemplo, seleccionamos el alelo/gen 4 y lo insertamos en la tercera posición, tal y como se muestra.
@@ -20,90 +23,42 @@ public class InsertionMutation extends MutationAlgorithm{
 			inserted_num = 1;		
 		
 		int num_genes = poblation[0].getNumOfGenes();
-		int [] move_pos = new int[inserted_num]; // indicates genes that will be moves
-		int [] insert_pos = new int[inserted_num];
 		Chromosome[] new_population = new Chromosome[poblation_size];
+		// WE USE DYNAMIC LISTS TO INSERT & REMOVE GENES
+		List<Integer> old_genes = new ArrayList<Integer>();
+		List<Integer> new_genes = new ArrayList<Integer>();
 		
-		for (int i = 0; i < poblation_size; i++) {		
+		for(int i = 0; i < poblation_size; i++) {
 			ChromosomeP2 chromosome = (ChromosomeP2)poblation[i].getCopy();
+			int [] genes = chromosome.getGenesCopy();
 			
-			if(rand.nextDouble() < mutation_chance) {
-				//CALCULATE RANDOM INSERTION POINTS & NUMBERS TO INSERT-------------------------------
-				for(int j = 0; j < inserted_num; j++) {
-					move_pos[j] = (int)(rand.nextDouble() * (num_genes - 1));
-					insert_pos[j] = (int)(rand.nextDouble() * (num_genes - 1));
-				}
-				Arrays.sort(move_pos); //order array <
-				Arrays.sort(insert_pos); //order array <
-				
-				//MUTATE CHROMOSOME---------------------------------------------------
-				
-				int[] genes = chromosome.getGenesCopy();
-				int[] new_genes = new int[num_genes];
-				int i_insert = 0;
-				// INSERT NUMBERS FIRST---------------------------------------------------
-				for(int g = 0; g < num_genes; g++) {
-					// I want to insert number here
-					if(insert_pos[i_insert] == g) {
-						//Pos where number that wants to be inserted is found
-						int old_pos = move_pos[i_insert];
-						//Move gene
-						new_genes[g] = genes[old_pos];
-						
-						//IN CASE THAT A NUMBER (move_pos or insert_pos) WAS SELECTED MULTIPLE TIMES
-						if (i_insert + 1 < inserted_num && 
-								(move_pos[i_insert] == move_pos[i_insert + 1] || insert_pos[i_insert] == insert_pos[i_insert + 1])) {
-							while (i_insert + 1 < inserted_num && 
-									(move_pos[i_insert] == move_pos[i_insert + 1] || insert_pos[i_insert] == insert_pos[i_insert + 1]))
-								i_insert++;
-						}
-						//MOVE TO NEXT INSERT NUMBER
-						else { 
-							i_insert++;
-						}
-					}
-					// NON VALID DISTANCE
-					else new_genes[g] = -1; 
-				}
-				
-				// DISPLACE NUMBERS WITH NON VALID DISTANCE-----------------------------------------------
-				int old_pos = 0;
-				int new_pos = 0;
-				while (new_pos < num_genes && old_pos < num_genes) {
-					
-					// THIS NUMBER HAS ALREADY BEEN INSERTED ELSEWHERE
-					while(old_pos < num_genes && numberExistsInArray(move_pos, old_pos)) {
-						old_pos++;
-					}
-					// THIS IS AN INSERTED NUMBER (For loop above)
-					while(new_pos < num_genes && new_genes[new_pos] != -1) {
-						new_pos++;
-					}
-					// WE HAVE A VALID move_pos & insert_pos
-					if (new_pos < num_genes && old_pos < num_genes) {
-						new_genes[new_pos] = genes[old_pos];
-						new_pos++;
-						old_pos++;					
-					}
-				}		
-				chromosome.setGenes(new_genes);
+			for(int g = 0; g < num_genes; g++) {
+				old_genes.add(genes[g]);
 			}
 			
+			//MUTATE
+			for(int g = 0; g < num_genes; g++) {
+				int pos = 0;
+				//INSERT
+				if (RandomUtils.getProbability(mutation_chance)) {
+					// Random number between 0 and max (both inclusive)
+					pos = RandomUtils.getRandomInt(old_genes.size() - 1); 
+				}
+				
+				new_genes.add(old_genes.get(pos));
+				old_genes.remove(pos);
+			}
+			
+			// UPDATE GENES
+			for(int g = 0; g < num_genes; g++) {
+				genes[g] = new_genes.get(0);
+				new_genes.remove(0);
+			}
+			
+			chromosome.setGenes(genes);
 			new_population[i] = chromosome;
 		}
 
 		return new_population;	
-	}
-	
-	private boolean numberExistsInArray(int[] positions, int value) {
-		int i = 0; 
-		while (i < positions.length && positions[i] != value)
-			i++;
-		//returns true if value was found in array
-		return i != positions.length; 
-	}
-	
-	public void setInsertedNum(int n) {
-		inserted_num = n;
 	}
 }

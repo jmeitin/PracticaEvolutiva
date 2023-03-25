@@ -70,7 +70,7 @@ public class ChromosomeP1F4a extends Chromosome<Boolean, Double> {
 		if(0 <= pos && pos < num_of_genes){
 			//Random rand = new Random();
 			for (int j = 0; j < this.genes[pos].getLenght(); j++) {
-				if (rand.nextDouble() < mutation_chance) {
+				if (rand.nextDouble() * 100 < mutation_chance) {
 					this.genes[pos].setAllele(j, rand.nextBoolean());
 					cambios = true;
 				}				
