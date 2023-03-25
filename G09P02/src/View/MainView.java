@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -129,7 +131,7 @@ public class MainView extends JFrame {
 	private RangeSlider populationSlider;
 	private RangeSlider mutationSlider;
 	private RangeSlider crossSlider;
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -299,6 +301,7 @@ public class MainView extends JFrame {
 	}
 
 	private boolean slider_mode = false;
+
 	private void toggleSliderMode() {
 		slider_mode = !slider_mode;
 
@@ -309,6 +312,8 @@ public class MainView extends JFrame {
 		genSizeTextField.setVisible(!slider_mode);
 		crossProbabilityTextField.setVisible(!slider_mode);
 		mutationProbabilityTextField.setVisible(!slider_mode);
+		
+		controller.setSliderMode(slider_mode);
 	}
 
 	/**
@@ -601,6 +606,14 @@ public class MainView extends JFrame {
 		populationSlider.setMaximum(5000);
 		populationSlider.setUpperValue(4000);
 		populationSlider.setVisible(false);
+		populationSlider.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				final int min = populationSlider.getValue();
+				final int max = populationSlider.getUpperValue();
+				controller.setPoblationSizeRange(min, max);
+			}
+		});
 
 		GroupLayout gl_westPanel = new GroupLayout(westPanel);
 		gl_westPanel.setHorizontalGroup(gl_westPanel.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING,
@@ -677,7 +690,15 @@ public class MainView extends JFrame {
 		mutationSlider.setMajorTickSpacing(10);
 		mutationSlider.setMaximum(40);
 		mutationSlider.setVisible(false);
-		
+		mutationSlider.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				final double min = mutationSlider.getValue();
+				final double max = mutationSlider.getUpperValue();
+				controller.setMutationRangeChance(min, max);
+			}
+		});
+
 		GroupLayout gl_mutationPanel = new GroupLayout(mutationPanel);
 		gl_mutationPanel.setHorizontalGroup(gl_mutationPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_mutationPanel.createSequentialGroup()
@@ -693,7 +714,7 @@ public class MainView extends JFrame {
 										.addComponent(mutationProbabilityTextField, GroupLayout.PREFERRED_SIZE, 135,
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(mutationSlider, GroupLayout.PREFERRED_SIZE, 135,
-														GroupLayout.PREFERRED_SIZE)))
+												GroupLayout.PREFERRED_SIZE)))
 						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		gl_mutationPanel.setVerticalGroup(gl_mutationPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_mutationPanel.createParallelGroup(Alignment.TRAILING)
@@ -711,7 +732,7 @@ public class MainView extends JFrame {
 										.addComponent(mutationSlider, GroupLayout.PREFERRED_SIZE, 25,
 												GroupLayout.PREFERRED_SIZE)))));
 		mutationPanel.setLayout(gl_mutationPanel);
-		
+
 		crossSlider = new RangeSlider();
 		crossSlider.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		crossSlider.setValue(30);
@@ -719,29 +740,46 @@ public class MainView extends JFrame {
 		crossSlider.setPaintLabels(true);
 		crossSlider.setMajorTickSpacing(25);
 		crossSlider.setVisible(false);
+		crossSlider.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				final double min = crossSlider.getValue();
+				final double max = crossSlider.getUpperValue();
+				controller.setCrossRangeChance(min, max);
+			}
+		});
+		
 		GroupLayout gl_crossPanel = new GroupLayout(crossPanel);
-		gl_crossPanel.setHorizontalGroup(
-			gl_crossPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_crossPanel.createSequentialGroup()
-					.addGroup(gl_crossPanel.createParallelGroup(Alignment.LEADING)
+		gl_crossPanel.setHorizontalGroup(gl_crossPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_crossPanel
+				.createSequentialGroup()
+				.addGroup(gl_crossPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_crossPanel.createSequentialGroup()
-							.addComponent(crossTypeLabel, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-							.addComponent(crossTypeComboBox, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE))
+								.addComponent(crossTypeLabel, GroupLayout.PREFERRED_SIZE, 135,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(crossTypeComboBox, GroupLayout.PREFERRED_SIZE, 135,
+										GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_crossPanel.createSequentialGroup()
-							.addComponent(crossProbabilityLabel, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-							.addComponent(crossProbabilityTextField, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-							.addComponent(crossSlider, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)))));
-		gl_crossPanel.setVerticalGroup(
-			gl_crossPanel.createParallelGroup(Alignment.LEADING)
+								.addComponent(crossProbabilityLabel, GroupLayout.PREFERRED_SIZE, 135,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(crossProbabilityTextField, GroupLayout.PREFERRED_SIZE, 135,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(crossSlider, GroupLayout.PREFERRED_SIZE, 135,
+										GroupLayout.PREFERRED_SIZE)))));
+		gl_crossPanel.setVerticalGroup(gl_crossPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_crossPanel.createParallelGroup(Alignment.TRAILING)
-					.addGroup(gl_crossPanel.createSequentialGroup()
-						.addGroup(gl_crossPanel.createParallelGroup(Alignment.LEADING)
-							.addComponent(crossTypeLabel, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
-							.addComponent(crossTypeComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_crossPanel.createParallelGroup(Alignment.LEADING)
-							.addComponent(crossProbabilityLabel, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
-							.addComponent(crossProbabilityTextField, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
-							.addComponent(crossSlider, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)))));
+						.addGroup(gl_crossPanel.createSequentialGroup()
+								.addGroup(gl_crossPanel.createParallelGroup(Alignment.LEADING)
+										.addComponent(crossTypeLabel, GroupLayout.PREFERRED_SIZE, 22,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(crossTypeComboBox, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_crossPanel.createParallelGroup(Alignment.LEADING)
+										.addComponent(crossProbabilityLabel, GroupLayout.PREFERRED_SIZE, 22,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(crossProbabilityTextField, GroupLayout.PREFERRED_SIZE, 22,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(crossSlider, GroupLayout.PREFERRED_SIZE, 22,
+												GroupLayout.PREFERRED_SIZE)))));
 		crossPanel.setLayout(gl_crossPanel);
 
 		lblDimensions = new JLabel("Dimensiones");

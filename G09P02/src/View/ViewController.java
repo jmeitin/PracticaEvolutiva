@@ -49,13 +49,20 @@ public class ViewController implements Runnable {
 		}
 	}
 
-	private final boolean debugMode = false; // Enables debug mode
+	private final boolean debugMode = true; // Enables debug mode
 	private final MainView view; // View to be controlled
 	private GeneticAlgorithm geneticAlgorithm; // Genetic algorithm to be run
 	private GeneticAlgorithmData algorithmData; // Genetic algorithm data
 	private Thread modelThread; // Thread that runs the genetic algorithm
 	private Thread controllerRunThread; // Thread that runs the controller
 
+	// Ranged values
+	private boolean ranged_mode = false;
+	private final int RANGED_STEPS = 5; // Num of tests for range
+	private RangedValue<Integer> poblation_size_range;
+	private RangedValue<Double> cross_range;
+	private RangedValue<Double> mutation_range;
+	
 	/**
 	 * Shortcut to log a string if debug mode is enabled
 	 * 
@@ -74,6 +81,9 @@ public class ViewController implements Runnable {
 	public ViewController(final MainView view) {
 		this.view = view;
 		algorithmData = new GeneticAlgorithmData();
+		poblation_size_range = new RangedValue(RANGED_STEPS);
+		cross_range = new RangedValue(RANGED_STEPS);
+		mutation_range = new RangedValue(RANGED_STEPS);
 	}
 
 	/**
@@ -226,7 +236,23 @@ public class ViewController implements Runnable {
 	public GeneticAlgorithmData getAlgorithmData() {
 		return algorithmData;
 	}
+	
+	// Create new GeneticAlgorithmData with the current ranged data for the thread
+	private GeneticAlgorithmData getFromRange(final int poblation_size, final  double cross_chance, final  double mutation_chance)
+	{
+		GeneticAlgorithmData data = this.algorithmData.getCopy();
+		data.poblation_size = poblation_size;
+		data.cross_chance = cross_chance;
+		data.mutation_chance = mutation_chance;
+		return data;
+	}
 
+	public void setSliderMode(boolean ranged_mode)
+	{
+		log("Slider mode: " + ranged_mode);
+		this.ranged_mode = ranged_mode;
+	}
+	
 	/**
 	 * 
 	 * @param poblation_size
@@ -234,6 +260,13 @@ public class ViewController implements Runnable {
 	public void setPoblationSize(int poblation_size) {
 		log("Poblation Size: " + poblation_size);
 		this.algorithmData.poblation_size = poblation_size;
+	}
+	
+	public void setPoblationSizeRange(int min, int max)
+	{
+		log("Poblation size range min-max: :" + min + ", " + max);
+		this.poblation_size_range.min_value = min;
+		this.poblation_size_range.max_value = max;
 	}
 
 	/**
@@ -445,6 +478,13 @@ public class ViewController implements Runnable {
 		this.algorithmData.cross_chance = cross_chance;
 	}
 
+	public void setCrossRangeChance(double min, double max)
+	{
+		log("Cross chance min-max: :" + min + ", " + max);
+		this.cross_range.min_value = min;
+		this.cross_range.max_value = max;
+	}
+	
 	/**
 	 * Sets mutation chance
 	 * 
@@ -453,6 +493,13 @@ public class ViewController implements Runnable {
 	public void setMutationChance(double mutation_chance) {
 		log("Mutation chance: " + mutation_chance);
 		this.algorithmData.mutation_chance = mutation_chance;
+	}
+	
+	public void setMutationRangeChance(double min, double max)
+	{
+		log("Mutation chance min-max: :" + min + ", " + max);
+		this.mutation_range.min_value = min;
+		this.mutation_range.max_value = max;
 	}
 
 	public void stop() {
