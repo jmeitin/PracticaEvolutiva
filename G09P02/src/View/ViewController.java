@@ -1,10 +1,11 @@
 package View;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeFactory;
@@ -49,14 +50,13 @@ public class ViewController implements Runnable {
 		private boolean ranged = false;
 		public GeneticAlgorithm algorithm = null;
 
-		public int getCompletion()
-		{
-			if(algorithm == null)
+		public int getCompletion() {
+			if (algorithm == null)
 				return 0;
-			
+
 			return (algorithm.getCurrent_generation() * 100 / algorithm.getMax_gen_num());
 		}
-		
+
 		public ModelRunner(int poblation_size, double cross_chance, double mutation_chance) {
 			data = getFromRange(poblation_size, cross_chance, mutation_chance);
 			ranged = true;
@@ -73,8 +73,8 @@ public class ViewController implements Runnable {
 			log("Running: " + Thread.currentThread().getName());
 			while (!Thread.interrupted() && algorithm.runSequentially()) {
 			}
-			
-			if(!ranged)
+
+			if (!ranged)
 				geneticAlgorithm = algorithm;
 		}
 	}
@@ -147,7 +147,7 @@ public class ViewController implements Runnable {
 		}
 
 		view.enableDisableStopButton(false);
-		
+
 		if (interrupted) {
 			view.setProgressBarPercentage(0);
 			tryStopThread(modelThread);
@@ -160,65 +160,67 @@ public class ViewController implements Runnable {
 
 	//
 	private void runSlider() {
-	    // Get the number of combinations to test
-	    final int num_combinations = poblation_size_range.getNumSteps() * cross_range.getNumSteps() * mutation_range.getNumSteps();
-	    ModelRunner[] models = new ModelRunner[num_combinations];
-	    executor = Executors.newFixedThreadPool(MAX_THREADS);
-	    
-	    // Create semaphore with 10 permits
-	    // So even if all threads are executing only 10 are doing the hard work, the others are sleeping
-	    int i = 0;
-	    for (int poblation_size : poblation_size_range) {
-	        for (double cross_chance : cross_range) {
-	            for (double mutation_chance : mutation_range) {
-	                // Acquire permit from semaphore
-	                models[i] = new ModelRunner(poblation_size, cross_chance, mutation_chance);
-	                executor.execute(models[i]);
-	                i++;
-	            }
-	        }
-	    }
-	    
-	    // No more threads will be added
-	    executor.shutdown();
-	    
-	    int progress = 0;
-	    while (!executor.isTerminated()) {
-	        progress = 0;
-	    	for (int j = 0; j < num_combinations; j++)
-	            progress += models[j].getCompletion();
-	        
-	        // Update progress bar with 'progress' value
-	    	progress /= num_combinations;
-	        view.setProgressBarPercentage(progress);
-	        
-	        if(Thread.interrupted())
-	        {
-	        	executor.shutdownNow();
-	        	return;
-	        }
-	    }
-	    	    
-	    // Check which model has the best result
-	    boolean maximize = getAlgorithmData().maximize; 
-	    double best_value = maximize ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
+		// Get the number of combinations to test
+		final int num_combinations = poblation_size_range.getNumSteps() * cross_range.getNumSteps()
+				* mutation_range.getNumSteps();
+		ModelRunner[] models = new ModelRunner[num_combinations];
+		executor = Executors.newFixedThreadPool(MAX_THREADS);
 
-	    for (ModelRunner model : models) {
-	        Chromosome model_best = model.algorithm.getBest_chromosome();
-	        double model_best_value = model_best.evaluate();
-	        if ((maximize && model_best_value > best_value) || (!maximize && model_best_value < best_value)) {
-	            geneticAlgorithm = model.algorithm;
-	            best_value = model_best_value;
-	        }
-	    }
+		// Create semaphore with 10 permits
+		// So even if all threads are executing only 10 are doing the hard work, the
+		// others are sleeping
+		int i = 0;
+		for (int poblation_size : poblation_size_range) {
+			for (double cross_chance : cross_range) {
+				for (double mutation_chance : mutation_range) {
+					// Acquire permit from semaphore
+					models[i] = new ModelRunner(poblation_size, cross_chance, mutation_chance);
+					executor.execute(models[i]);
+					i++;
+				}
+			}
+		}
 
-	    // Update view
-	    view.setProgressBarPercentage(100);
-	    view.enableDisableStopButton(false);
+		// No more threads will be added
+		executor.shutdown();
+
+		int progress = 0;
+		while (!executor.isTerminated()) {
+			progress = 0;
+			for (int j = 0; j < num_combinations; j++)
+				progress += models[j].getCompletion();
+
+			// Update progress bar with 'progress' value
+			progress /= num_combinations;
+			view.setProgressBarPercentage(progress);
+
+			if (Thread.interrupted()) {
+				executor.shutdownNow();
+				return;
+			}
+		}
+
+		// We order the models using a stream to get the one with the biggest or lower value
+		// (depends on algorithmData.maximize field)
+		List<ModelRunner> modelList = Arrays.asList(models);
+		List<ModelRunner> sortedModels = modelList.stream()
+		        .sorted((model1, model2) -> {
+		            Chromosome bestChromosome1 = model1.algorithm.getBest_chromosome();
+		            Chromosome bestChromosome2 = model2.algorithm.getBest_chromosome();
+		            double bestValue1 = bestChromosome1.evaluate();
+		            double bestValue2 = bestChromosome2.evaluate();
+		            return getAlgorithmData().maximize ? Double.compare(bestValue2, bestValue1) : Double.compare(bestValue1, bestValue2);
+		        })
+		        .collect(Collectors.toList());
+
+		geneticAlgorithm = sortedModels.get(0).algorithm;
+
+		// Update view
+		view.setProgressBarPercentage(100);
+		view.enableDisableStopButton(false);
 		updateGraphsView();
 		updateSolution();
 	}
-
 
 	/**
 	 * Runs the genetic algorithm in a separate thread to not halt the view. If the

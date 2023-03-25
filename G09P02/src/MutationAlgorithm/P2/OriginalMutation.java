@@ -1,7 +1,5 @@
 package MutationAlgorithm.P2;
 
-import java.util.Arrays;
-
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
 import MutationAlgorithm.MutationAlgorithm;

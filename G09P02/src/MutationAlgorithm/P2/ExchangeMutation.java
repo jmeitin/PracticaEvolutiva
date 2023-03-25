@@ -1,9 +1,9 @@
 package MutationAlgorithm.P2;
 
-import Utils.RandomUtils;
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP2;
 import MutationAlgorithm.MutationAlgorithm;
+import Utils.RandomUtils;
 
 /*En este tipo de mutación se seleccionan 2 genes al azar y se intercambian sus valores. */
 

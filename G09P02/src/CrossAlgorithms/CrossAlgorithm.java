@@ -19,8 +19,6 @@ public abstract class CrossAlgorithm {
 		
 		int parent_selected = -1; // 1st parent hasn't been selected yet
 		for (int i = 0; i < poblation_size; i++) {
-			double chance = rand.nextDouble(); // [0, 1]
-			
 			// Cross happens
 			if(RandomUtils.getProbability(cross_chance)) {
 				// There is no first parent
