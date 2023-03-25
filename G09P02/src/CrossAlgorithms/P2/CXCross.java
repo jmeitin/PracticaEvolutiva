@@ -11,7 +11,7 @@ public class CXCross extends CrossAlgorithmsP2 {
 	protected void cross(ChromosomeP2 first_child, ChromosomeP2 second_child) {
 		final int[] first_child_gene = first_child.getGenesRef();
 		final int[] second_child_gene = second_child.getGenesRef();
-		
+
 		first_child.setGenes(getChildFromCicle(first_child_gene,second_child_gene));
 		second_child.setGenes(getChildFromCicle(second_child_gene,first_child_gene));
 	}
@@ -19,6 +19,9 @@ public class CXCross extends CrossAlgorithmsP2 {
 	int[] getChildFromCicle(final int[] child1, final int[] child2)
 	{
 		int[] result = new int[child1.length];
+		for(int i = 0; i < result.length; i++)
+			result[i] = -1;
+		
 		Set<Integer> first_child_new_gen = new HashSet<Integer>();
 		
 		// Init algorithm
@@ -38,7 +41,7 @@ public class CXCross extends CrossAlgorithmsP2 {
 		// Finally, we fill the rest of the array with the remaining values from the other child
 		// If the value is not in the set, we put the value in that index from the other child
 		for(int i = 0; i < result.length; i++)
-			if(!first_child_new_gen.contains(result[i]))
+			if(result[i] == -1)
 				result[i] = child2[i];
 		
 		return result;
