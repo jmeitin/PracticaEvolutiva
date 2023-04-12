@@ -51,6 +51,8 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import View.Slider.RangeSlider;
+import javax.swing.JTabbedPane;
+import java.awt.FlowLayout;
 
 public class MainView extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -96,7 +98,7 @@ public class MainView extends JFrame {
 	private JTextField crossProbabilityTextField;
 	private JTextField mutationProbabilityTextField;
 	JComboBox crossTypeComboBox;
-	private Plot2DPanel plot;
+	private Plot2DPanel fitnessPlot;
 	NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
 	DecimalFormat decimalFormat = (DecimalFormat) numberFormat;
 	private JTextArea solutionTextField;
@@ -180,21 +182,20 @@ public class MainView extends JFrame {
 		this.average_fitnesses = average_fitnesses;
 		this.best_absolute_fitnesses = best_absolute_fitnesses;
 		this.best_fitnesses = best_fitnesses;
-		plotData();
+		plotFitnessData();
 	}
 
-	public void enableDisableStopButton(boolean enabled)
-	{
+	public void enableDisableStopButton(boolean enabled) {
 		this.stopButton.setVisible(enabled);
 	}
-	
+
 	/***
 	 * Cleans the graph view
 	 */
 	public void cleanPlot() {
-		plot.removeAllPlots();
-		plot.removeLegend();
-		plot.addLegend("SOUTH");
+		fitnessPlot.removeAllPlots();
+		fitnessPlot.removeLegend();
+		fitnessPlot.addLegend("SOUTH");
 	}
 
 	/***
@@ -209,7 +210,7 @@ public class MainView extends JFrame {
 	/***
 	 * Uses the current data to redraw the graph
 	 */
-	private void plotData() {
+	private void plotFitnessData() {
 		this.enableDisableStopButton(false);
 		try {
 			Thread.sleep(5);
@@ -217,18 +218,19 @@ public class MainView extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		// The wait is necessary because Plot2DPanel lib is broken and sometimes launches exception that makes 
+
+		// The wait is necessary because Plot2DPanel lib is broken and sometimes
+		// launches exception that makes
 		// stop button not hide correctly
-		
+
 		if (average_fitnesses == null || best_fitnesses == null || best_absolute_fitnesses == null)
 			return;
 
 		cleanPlot();
 
-		plot.addLinePlot("Mejor Absoluto", isDarkTheme ? LIGHT_RED : DARK_RED, best_absolute_fitnesses);
-		plot.addLinePlot("Mejor Generación", isDarkTheme ? LIGHT_BLUE : DARK_BLUE, best_fitnesses);
-		plot.addLinePlot("Media Generación", isDarkTheme ? LIGHT_GREEN : DARK_GREEN, average_fitnesses);
+		fitnessPlot.addLinePlot("Mejor Absoluto", isDarkTheme ? LIGHT_RED : DARK_RED, best_absolute_fitnesses);
+		fitnessPlot.addLinePlot("Mejor Generación", isDarkTheme ? LIGHT_BLUE : DARK_BLUE, best_fitnesses);
+		fitnessPlot.addLinePlot("Media Generación", isDarkTheme ? LIGHT_GREEN : DARK_GREEN, average_fitnesses);
 	}
 
 	/***
@@ -329,6 +331,7 @@ public class MainView extends JFrame {
 	private boolean slider_mode = false;
 	private JLabel toleranceLabel;
 	private JButton stopButton;
+	private Plot2DPanel graphicPlot;
 
 	private void toggleSliderMode() {
 		slider_mode = !slider_mode;
@@ -580,11 +583,11 @@ public class MainView extends JFrame {
 					if (theme.equals("Claro")) {
 						FlatLightLaf.setup();
 						isDarkTheme = false;
-						plotData();
+						plotFitnessData();
 					} else {
 						FlatDarkLaf.setup();
 						isDarkTheme = true;
-						plotData();
+						plotFitnessData();
 					}
 
 					FlatLaf.updateUI();
@@ -866,21 +869,42 @@ public class MainView extends JFrame {
 		progressBar.setStringPainted(true);
 		eastPanel.add(progressBar);
 
-		plot = new Plot2DPanel();
-		plot.plotCanvas.setAutoBounds(1);
-		plot.plotCanvas.setAxisLabels(new String[] { "X", "Y" });
-		plot.plotCanvas.setBackground(UIManager.getColor("Button.light"));
-		plot.plotLegend.setBackground(UIManager.getColor("Button.light"));
-		plot.plotToolBar.setBackground(UIManager.getColor("Button.light"));
-		eastPanel.add(plot);
-		plotData();
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		eastPanel.add(tabbedPane);
 
+		fitnessPlot = new Plot2DPanel();
+		fitnessPlot.plotCanvas.setAutoBounds(1);
+		fitnessPlot.plotCanvas.setAxisLabels(new String[] { "X", "Y" });
+		fitnessPlot.plotCanvas.setBackground(UIManager.getColor("Button.light"));
+		fitnessPlot.plotLegend.setBackground(UIManager.getColor("Button.light"));
+		fitnessPlot.plotToolBar.setBackground(UIManager.getColor("Button.light"));
+		tabbedPane.addTab("Fitness Evolution", fitnessPlot);
+		plotFitnessData();
+
+		graphicPlot = new Plot2DPanel();
+		graphicPlot.plotCanvas.setBackground(UIManager.getColor("Button.light"));
+		graphicPlot.plotLegend.setBackground(UIManager.getColor("Button.light"));
+		graphicPlot.plotToolBar.setBackground(UIManager.getColor("Button.light"));
+		tabbedPane.addTab("Graphic result", graphicPlot);
+
+		double[] x = new double[101];
+		double[] y = new double[101];
+		for (int i = 0; i <= 100; i++) {
+			x[i] = -5 + i * 0.1;
+			y[i] = x[i] * x[i];
+		}
+
+		// Agregar la función al plot
+		graphicPlot.addLinePlot("Función", x, y);
+
+		// Centrar el eje del plot
+		graphicPlot.setAxisLabels("X", "Y");
+		graphicPlot.setFixedBounds(0, -5, 5);
+		graphicPlot.setFixedBounds(1, 0, 30);
+
+		
 		JPanel solutionPanel = new JPanel();
-		eastPanel.add(solutionPanel);
-
-		JLabel solutionLabel = new JLabel("Solution:");
-		solutionLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		solutionLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		tabbedPane.addTab("Solution", solutionPanel);
 
 		solutionTextField = new JTextArea();
 		solutionTextField.setText("Here will be solution");
@@ -891,21 +915,9 @@ public class MainView extends JFrame {
 		Border border = BorderFactory.createLineBorder(Color.black);
 		Border margin = BorderFactory.createEmptyBorder(5, 8, 5, 8);
 		Border compound = BorderFactory.createCompoundBorder(border, margin);
+		solutionPanel.setLayout(new BoxLayout(solutionPanel, BoxLayout.X_AXIS));
 		solutionTextField.setBorder(compound);
-		GroupLayout gl_solutionPanel = new GroupLayout(solutionPanel);
-		gl_solutionPanel.setHorizontalGroup(gl_solutionPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_solutionPanel.createSequentialGroup().addContainerGap().addComponent(solutionLabel)
-						.addGap(18).addComponent(solutionTextField, GroupLayout.DEFAULT_SIZE, 899, Short.MAX_VALUE)
-						.addContainerGap()));
-		gl_solutionPanel
-				.setVerticalGroup(gl_solutionPanel.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING,
-						gl_solutionPanel.createSequentialGroup().addContainerGap()
-								.addGroup(gl_solutionPanel.createParallelGroup(Alignment.TRAILING)
-										.addComponent(solutionTextField, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(solutionLabel, GroupLayout.DEFAULT_SIZE, 14, Short.MAX_VALUE))
-								.addGap(11)));
-		solutionPanel.setLayout(gl_solutionPanel);
+		solutionPanel.add(solutionTextField);
 
 		window = new JPanel();
 		window.setLayout(new BorderLayout());
