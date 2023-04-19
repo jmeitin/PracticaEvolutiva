@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class BinaryTree {
 	Random rand = new Random();
-	private String[] node_functions = {"add", "sub", "mul", ""};
+	private String[] node_functions = {"add", "sub", "mul"};
 	private String[] leaf_terminals = {"x", "-2", "-1", "0", "1", "2"};
 	
 	protected String root = null;
@@ -23,21 +23,23 @@ public class BinaryTree {
 	public int getDepth() {	return depth;	}
 	
 	// METODOS PUBLICOS =======================================
-	BinaryTree(int n, boolean r){
-		is_root = r;
+	BinaryTree(int n){
+		is_root = true;
 		initializeRandomTree(n);
 	}
 	
+	//Constructor for sub-trees
+	BinaryTree(int n, boolean r){
+		is_root = r;
+		initializeRandomTree(n);
+	}	
 	
-	// Método que inicializa el árbol con n nodos aleatorios y equilibrados
-    public void initializeRandomTree(int n) {
-        // Creamos la raíz del árbol
-       
+    public void initializeRandomTree(int n) {       
     	int index = 0;
-    	 this.num_nodes = 1;
-         this.max_depth = 1;
+    	this.num_nodes = 1;
+        this.max_depth = 1;
          
-        // LEAF
+        // IS LEAF/TERMINAL
         if (n == 1) {
         	is_leaf = true;
         	index = (int)(rand.nextDouble() * (leaf_terminals.length - 1));
@@ -46,9 +48,9 @@ public class BinaryTree {
             return;
         }
         
+        // IS FUNCTION/TERMINAL
         index = (int)(rand.nextDouble() * (node_functions.length - 1));
     	this.root = node_functions[index];
-        
         
         // Dividimos el número de nodos restantes en dos sub-árboles
         int num_nodes_left = n / 2;
@@ -57,12 +59,10 @@ public class BinaryTree {
         // Generate 2 sub-trees
         BinaryTree left_child = new BinaryTree(num_nodes_left, false); //isn't root
         BinaryTree right_child = new BinaryTree(num_nodes_right, false); //isn't root
-        
-        // Asignamos los sub-árboles generados a la raíz
         this.left_child = left_child;
         this.right_child = right_child;
         
-        // Actualizamos el número de nodos y la profundidad del árbol
+        // Update num_nodes and max_depth
         this.num_nodes += num_nodes_left + num_nodes_right;
         this.max_depth = 1 + Math.max(left_child.max_depth, right_child.max_depth);
     }
@@ -83,27 +83,7 @@ public class BinaryTree {
 	}
 	
 	public void insert(String value) {
-	    if (root == null) {
-	        root = value;
-	        depth++;
-	    }
 	    
-	    else if (left_child == null) {
-	    	left_child = new BinaryTree();
-	    	left_child.insert(value);
-	    	depth++;
-	    }
-	    else if (right_child == null) {
-	    	right_child = new BinaryTree();
-	    	right_child.insert(value);
-	    }
-	    else if(left_child.getDepth() == right_child.getDepth()) {
-	    	left_child = new BinaryTree();
-	    	left_child.insert(value);
-	    	depth++;
-	    }
-
-	   
 	}
 	
 	
