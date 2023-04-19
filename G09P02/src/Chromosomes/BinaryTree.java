@@ -13,8 +13,7 @@ public class BinaryTree {
 	protected BinaryTree right_child = null;
 	
 	private int num_nodes = 0;
-	private int max_depth = 0;
-	private int depth;
+	private int depth = 0;
 	private boolean useIF;
 	private boolean is_leaf = false;
 	private boolean is_root = false;
@@ -23,48 +22,81 @@ public class BinaryTree {
 	public int getDepth() {	return depth;	}
 	
 	// METODOS PUBLICOS =======================================
-	BinaryTree(int n){
-		is_root = true;
-		initializeRandomTree(n);
-	}
-	
-	//Constructor for sub-trees
-	BinaryTree(int n, boolean r){
+	BinaryTree(boolean r){ //true if you are creating tree from scratch
 		is_root = r;
-		initializeRandomTree(n);
 	}	
-	
-    public void initializeRandomTree(int n) {       
-    	int index = 0;
-    	this.num_nodes = 1;
-        this.max_depth = 1;
-         
-        // IS LEAF/TERMINAL
-        if (n == 1) {
-        	is_leaf = true;
-        	index = (int)(rand.nextDouble() * (leaf_terminals.length - 1));
-        	this.root = leaf_terminals[index];
+
+    public void FullInitalization(int profundidad) {   
+    	if (profundidad > 0) {
+    		int index = 0;
+        	this.num_nodes = (int)Math.pow(2,  profundidad) - 1;
+            this.depth = profundidad;
+             
+            // IS LEAF/TERMINAL
+            if (profundidad == 1) {
+            	is_leaf = true;
+            	index = (int)(rand.nextDouble() * (leaf_terminals.length - 1));
+            	this.root = leaf_terminals[index];
+            	
+                return;
+            }
+            
+            // IS FUNCTION/TERMINAL
+            index = (int)(rand.nextDouble() * (node_functions.length - 1));
+        	this.root = node_functions[index];
+            
+            // CREATE LEFT CHILD & RIGHT CHILD
+            left_child = new BinaryTree(false); //isn't root
+            right_child = new BinaryTree(false); //isn't root
+            left_child.FullInitalization(profundidad - 1);
+            right_child.FullInitalization(profundidad - 1);
+    	}
+    }
+    
+    public void GrowInitalization(int profundidad) {   
+    	if (profundidad > 0) {
+    		int index = 0;
+        	this.num_nodes = 1;
+            this.depth = 1;
+             
+            // IS LEAF/TERMINAL
+            if (profundidad == 1) {
+            	is_leaf = true;
+            	index = (int)(rand.nextDouble() * (leaf_terminals.length - 1));
+            	this.root = leaf_terminals[index];
+            	
+                return;
+            }
+            
+            // IS FUNCTION/TERMINAL
+            index = (int)(rand.nextDouble() * (node_functions.length - 1));
+        	this.root = node_functions[index];
         	
-            return;
-        }
-        
-        // IS FUNCTION/TERMINAL
-        index = (int)(rand.nextDouble() * (node_functions.length - 1));
-    	this.root = node_functions[index];
-        
-        // Dividimos el número de nodos restantes en dos sub-árboles
-        int num_nodes_left = n / 2;
-        int num_nodes_right = n - num_nodes_left - 1;
-        
-        // Generate 2 sub-trees
-        BinaryTree left_child = new BinaryTree(num_nodes_left, false); //isn't root
-        BinaryTree right_child = new BinaryTree(num_nodes_right, false); //isn't root
-        this.left_child = left_child;
-        this.right_child = right_child;
-        
-        // Update num_nodes and max_depth
-        this.num_nodes += num_nodes_left + num_nodes_right;
-        this.max_depth = 1 + Math.max(left_child.max_depth, right_child.max_depth);
+        	//CALCULATE DEPTHS:
+        	// one of the 2 sides must have depth == [profundidad - 1]
+        	// the other one doesn't matter ?
+        	int left_depth = profundidad - 1;
+        	int right_depth = profundidad - 1;
+        	//choose side
+        	boolean select_left = rand.nextBoolean();
+        	if(select_left)
+        		left_depth = 1 + (int)(rand.nextDouble() * (profundidad - 2)); // [1, profundiad - 1]
+        	else right_depth = 1 + (int)(rand.nextDouble() * (profundidad - 2)); // [1, profundiad - 1]
+            
+            // CREATE LEFT CHILD & RIGHT CHILD
+            left_child = new BinaryTree(false); //isn't root
+            right_child = new BinaryTree(false); //isn't root
+            left_child.FullInitalization(left_depth);
+            right_child.FullInitalization(right_depth);
+            
+            // Update num_nodes and max_depth
+            this.num_nodes += left_child.num_nodes + right_child.num_nodes;
+            this.depth = 1 + Math.max(left_child.depth, right_child.depth);
+    	}
+    }
+    
+    public void RampedAndHalfInitalization(int profundidad) {   
+    	//IMPLEMENT ===============================================================================
     }
     
 	// Devuelve el arbol en forma de array
@@ -82,35 +114,5 @@ public class BinaryTree {
 		}
 	}
 	
-	public void insert(String value) {
-	    
-	}
-	
-	
-	private void toArrayAux(ArrayList<String> array, BinaryTree a){
-//		array.add(a.root);
-//		for(int i = 0; i < a.hijos.size(); i++){
-//			toArrayAux(array, a.hijos.get(i));
-//		}
-	}
-	
-//	public int inicializacionCompleta(int p, int nodos){
-//		int n = nodos;
-//		int nHijos = 2;
-//		if(p < max_prof){
-//			setProfundidad(p);
-//			Random rnd = new Random();
-//			int func = 0;
-//			if(useIF){
-//				func = rnd.nextInt(Cromosoma.funciones.length);
-//			}
-//			else{
-//				func = rnd.nextInt(Cromosoma.funciones.length-1);
-//			}
-//			this.valor = Cromosoma.funciones[func];
-//			this.setEsRaiz(true)
-//		}
-//	}
-
 
 }

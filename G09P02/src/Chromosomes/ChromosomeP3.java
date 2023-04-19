@@ -4,29 +4,36 @@ import java.util.Random;
 
 public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 	//protected int[] genes;
-	
-	public static final String terminales[] = { "A0", "A1", "D0", "D1", "D2", "D3" };
-	public static final String funciones[] = { "AND", "OR", "NOT", "IF" };
+
+	private int min_depth = 2;
+	private int max_depth = 5;
+	Random rand = new Random();
 	private BinaryTree tree;
 	private String fenotype;
+	private String creation_type = "";
 	
-	public ChromosomeP3(double tolerance) {
-		super(10);
-//		arbol = new BinaryTree(profundidad, useIf);
-//		switch(tipoCreacion){
-//		case 0:
-//			arbol.inicializacionCreciente(0);
-//		break;
-//		case 1:
-//			arbol.inicializacionCompleta(0,0);
-//		break;
-//		case 2:
-//			int ini = new Random().nextInt(2);
-//			if(ini == 0) 
-//				arbol.inicializacionCreciente(0);
-//			else arbol.inicializacionCompleta(0,0);
-//		break;
-//		}
+	public ChromosomeP3(double tolerance, String t) {
+		super(10); // ????????????????
+		
+		//calculate random depth for tree
+		int depth = (int)(min_depth + (rand.nextDouble() * (max_depth - min_depth)));
+		//create tree
+		tree = new BinaryTree(true); //is root
+		
+		//Init tree
+		creation_type = t;
+		
+		switch(creation_type){
+		case "Full": 
+			tree.FullInitalization(depth);
+		break;
+		case "Grow":
+			tree.GrowInitalization(depth);
+		break;
+		case "Ramped and Half":
+			tree.RampedAndHalfInitalization(depth);
+		break;
+		}
 		
 		initGenes();
 		calculateFenotypes();
