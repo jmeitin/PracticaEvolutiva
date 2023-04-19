@@ -1,22 +1,72 @@
 package Chromosomes;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BinaryTree {
+	Random rand = new Random();
+	private String[] node_functions = {"add", "sub", "mul", ""};
+	private String[] leaf_terminals = {"x", "-2", "-1", "0", "1", "2"};
+	
 	protected String root = null;
 	protected BinaryTree left_child = null;
 	protected BinaryTree right_child = null;
 	
-	private int num_nodes;
-	private int max_depth;
+	private int num_nodes = 0;
+	private int max_depth = 0;
 	private int depth;
 	private boolean useIF;
-	private boolean is_leaf;
-	private boolean is_root;
+	private boolean is_leaf = false;
+	private boolean is_root = false;
 	
-	public int getDepth() {
-		return depth;
+	// GETS====================================================
+	public int getDepth() {	return depth;	}
+	
+	// METODOS PUBLICOS =======================================
+	BinaryTree(int n, boolean r){
+		is_root = r;
+		initializeRandomTree(n);
 	}
+	
+	
+	// Método que inicializa el árbol con n nodos aleatorios y equilibrados
+    public void initializeRandomTree(int n) {
+        // Creamos la raíz del árbol
+       
+    	int index = 0;
+    	 this.num_nodes = 1;
+         this.max_depth = 1;
+         
+        // LEAF
+        if (n == 1) {
+        	is_leaf = true;
+        	index = (int)(rand.nextDouble() * (leaf_terminals.length - 1));
+        	this.root = leaf_terminals[index];
+        	
+            return;
+        }
+        
+        index = (int)(rand.nextDouble() * (node_functions.length - 1));
+    	this.root = node_functions[index];
+        
+        
+        // Dividimos el número de nodos restantes en dos sub-árboles
+        int num_nodes_left = n / 2;
+        int num_nodes_right = n - num_nodes_left - 1;
+        
+        // Generate 2 sub-trees
+        BinaryTree left_child = new BinaryTree(num_nodes_left, false); //isn't root
+        BinaryTree right_child = new BinaryTree(num_nodes_right, false); //isn't root
+        
+        // Asignamos los sub-árboles generados a la raíz
+        this.left_child = left_child;
+        this.right_child = right_child;
+        
+        // Actualizamos el número de nodos y la profundidad del árbol
+        this.num_nodes += num_nodes_left + num_nodes_right;
+        this.max_depth = 1 + Math.max(left_child.max_depth, right_child.max_depth);
+    }
+    
 	// Devuelve el arbol en forma de array
 	public ArrayList<String> toArray(){
 		ArrayList<String> array = new ArrayList<String>();
