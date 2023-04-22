@@ -3,8 +3,7 @@ package Chromosomes;
 import java.util.Random;
 
 public class ChromosomeP3 extends Chromosome<Integer, Integer> {
-	//protected int[] genes;
-
+	
 	private int min_depth = 2;
 	private int max_depth = 5;
 	Random rand = new Random();
@@ -53,15 +52,14 @@ public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 	
 
 	@Override
-	public double evaluate() {
-		
+	public double evaluate() {		
 		
 		return brute_fitness;
 	}
 
 	@Override
 	protected Chromosome getNewInstance() {
-		return new ChromosomeP2(this.tolerance);
+		return new ChromosomeP3(this.tolerance, "Full");
 	}
 
 	@Override
@@ -75,15 +73,23 @@ public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 	@Override
 	public Chromosome getCopy()
 	{
-		ChromosomeP2 chromosome = (ChromosomeP2) getNewInstance();
+		ChromosomeP3 chromosome = (ChromosomeP3) getNewInstance();
 		chromosome.setFitness(this.fitness);	
 		chromosome.setBruteFitness(this.brute_fitness);
 		chromosome.setScore(this.score);
 		chromosome.setAccumulatedScore(this.scoreAccumulated);
 		chromosome.fenotypes = this.fenotypes;
 		chromosome.num_of_genes = this.num_of_genes;
-		//chromosome.genes = this.getGenesCopy();
+		chromosome.tree = this.tree.getCopy();
+		//FALTAN COSAS?????????????????????????????????????????????????????????????????
 		
 		return chromosome;
 	};
+	
+	// MUTATE==========================================================================
+	public void mutateTerminal() {
+		if(tree != null) {
+			tree.MutateTerminal(tree);
+		}
+	}
 }
