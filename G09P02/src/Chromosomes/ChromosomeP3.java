@@ -30,8 +30,8 @@ public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 		case "Grow":
 			tree.GrowInitalization(depth);
 		break;
-		case "Ramped and Half":
-			tree.RampedAndHalfInitalization(depth);
+		default:
+			tree.FullInitalization(depth);
 		break;
 		}
 		

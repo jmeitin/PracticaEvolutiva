@@ -22,7 +22,7 @@ public class BinaryTree {
 	public int getDepth() {	return depth;	}
 	
 	// METODOS PUBLICOS =======================================
-	BinaryTree(boolean r){ //true if you are creating tree from scratch
+	public BinaryTree(boolean r){ //true if you are creating tree from scratch
 		is_root = r;
 	}	
 
@@ -95,8 +95,23 @@ public class BinaryTree {
     	}
     }
     
-    public void RampedAndHalfInitalization(int profundidad) {   
-    	//IMPLEMENT ===============================================================================
+    //SET=============================================
+    public void setRoot(String r) {
+    	root = r;
+    }
+    public boolean setLeftChild(BinaryTree left) {
+    	if(root != null) {
+    		left_child = left;
+    		return true;
+    	}
+    	return false;
+    }
+    public boolean setRightChild(BinaryTree right) {
+    	if(root != null) {
+    		right_child = right;
+    		return true;
+    	}
+    	return false;
     }
     
 	// Devuelve el arbol en forma de array
