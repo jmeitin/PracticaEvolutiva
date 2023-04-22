@@ -85,4 +85,11 @@ public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 		
 		return chromosome;
 	};
+	
+	// MUTATE==========================================================================
+	public void mutateTerminal() {
+		if(tree != null) {
+			tree.MutateTerminal(tree);
+		}
+	}
 }

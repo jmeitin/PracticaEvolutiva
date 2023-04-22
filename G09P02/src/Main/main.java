@@ -12,11 +12,11 @@ public class main {
 		BinaryTree auxLeft = new BinaryTree(false);
 		auxLeft.setRoot("mul", false, false);
 		BinaryTree auxRight = new BinaryTree(false);
-		auxRight.setRoot("x", false, false);
+		auxRight.setRoot("1", false, true);
 		BinaryTree auxLeftLeft = new BinaryTree(false);
 		auxLeftLeft.setRoot("2", false, true); //leaf
 		BinaryTree auxLeftRight = new BinaryTree(false);
-		auxLeftRight.setRoot("1", false, true); //leaf
+		auxLeftRight.setRoot("x", false, true); //leaf
 		auxLeft.setLeftChild(auxLeftLeft, false, false);
 		auxLeft.setRightChild(auxLeftRight, false, false);
 		tree.setLeftChild(auxLeft, false, false); 
@@ -25,12 +25,7 @@ public class main {
 		ArrayList<String> a = tree.toArray();		
 		System.out.println(a);
 		
-		BinaryTree t = tree.getCopy();
-		t.setRoot("mull", true, false);
-		a = t.toArray();		
-		System.out.println(a);
-		
-		
+		tree.MutateTerminal(tree);
 		a = tree.toArray();		
 		System.out.println(a);
 		

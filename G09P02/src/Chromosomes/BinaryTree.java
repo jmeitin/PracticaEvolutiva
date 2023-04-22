@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BinaryTree {
-	Random rand = new Random();
-	private String[] node_functions = {"add", "sub", "mul"};
-	private String[] leaf_terminals = {"x", "-2", "-1", "0", "1", "2"};
+	static Random rand = new Random();
+	static private String[] node_functions = {"add", "sub", "mul"};
+	static private String[] leaf_terminals = {"x", "-2", "-1", "0", "1", "2"};
 	
 	protected String root = null;
 	protected BinaryTree left_child = null;
@@ -158,5 +158,31 @@ public class BinaryTree {
 		}
 	}
 	
-
+	//MUTATE =================================================================================
+	public static void MutateTerminal(BinaryTree aux) {
+		// IS LEAF
+		if(aux.left_child == null && aux.right_child == null) {
+			if(aux.is_leaf) {
+				int index = (int)(rand.nextDouble() * (leaf_terminals.length - 1));
+            	aux.root = leaf_terminals[index];
+			}
+			else {
+				System.out.println("SE ENCONTRÓ Tree con left/right child == NULL && is_leaf == FALSE");
+				int index = (int)(rand.nextDouble() * (leaf_terminals.length - 1));
+            	aux.root = leaf_terminals[index];
+			}
+		}
+		// HAS LEFT AND RIGHT CHILDREN
+		else if (aux.left_child != null && aux.right_child != null) {
+			double d = rand.nextDouble();
+			if(d <= 0.5)
+				MutateTerminal(aux.left_child);
+			else MutateTerminal(aux.right_child);
+		}
+		//LEFT
+		else if(aux.left_child != null)
+			MutateTerminal(aux.left_child);
+		//RIGHT
+		else MutateTerminal(aux.right_child);
+	}
 }
