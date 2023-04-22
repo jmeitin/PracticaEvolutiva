@@ -185,4 +185,30 @@ public class BinaryTree {
 		//RIGHT
 		else MutateTerminal(aux.right_child);
 	}
+	
+	public static void MutateFunction(BinaryTree aux, double mutation_chance) {
+		// IS LEAF
+		if(aux.left_child == null && aux.right_child == null) {
+			// NOTHING======================================0
+		}
+		else {
+			double d = rand.nextDouble();
+			if(d < mutation_chance) {
+				int index = (int)(rand.nextDouble() * (node_functions.length - 1));
+            	aux.root = node_functions[index];
+			}
+			else if (aux.left_child != null && aux.right_child != null) {
+				d = rand.nextDouble();
+				if(d <= 0.5)
+					MutateFunction(aux.left_child, mutation_chance);
+				else MutateFunction(aux.right_child, mutation_chance);
+			}
+			//LEFT
+			else if(aux.left_child != null)
+				MutateFunction(aux.left_child, mutation_chance);
+			//RIGHT
+			else MutateFunction(aux.right_child, mutation_chance);
+		}
+		
+	}
 }

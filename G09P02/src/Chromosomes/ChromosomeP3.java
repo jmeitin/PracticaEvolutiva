@@ -92,4 +92,9 @@ public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 			tree.MutateTerminal(tree);
 		}
 	}
+	public void mutateFunction(double mutation_chance) {
+		if(tree != null) {
+			tree.MutateFunction(tree, mutation_chance);
+		}
+	}
 }

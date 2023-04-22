@@ -10,7 +10,7 @@ import Utils.RandomUtils;
 y se sustituye por otro diferente del conjunto de símbolos terminales posibles 
 */
 
-public class TerminalMutation extends MutationAlgorithm {
+public class FunctionMutation extends MutationAlgorithm {
 
 	@Override
 	public Chromosome[] mutate(Chromosome[] poblation, int poblation_size, double mutation_chance){
@@ -21,7 +21,7 @@ public class TerminalMutation extends MutationAlgorithm {
 			ChromosomeP3 chromosome = (ChromosomeP3) poblation[i].getCopy();
 			
 			//Mutate
-			chromosome.mutateTerminal();
+			chromosome.mutateFunction(mutation_chance);
 			
 			
 			new_population[i] = chromosome.getCopy();

@@ -25,7 +25,7 @@ public class main {
 		ArrayList<String> a = tree.toArray();		
 		System.out.println(a);
 		
-		tree.MutateTerminal(tree);
+		tree.MutateFunction(tree, 0.6);
 		a = tree.toArray();		
 		System.out.println(a);
 		
