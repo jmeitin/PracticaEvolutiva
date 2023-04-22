@@ -18,9 +18,6 @@ public class BinaryTree {
 	private boolean is_leaf = false;
 	private boolean is_root = false;
 	
-	// GETS====================================================
-	public int getDepth() {	return depth;	}
-	
 	// METODOS PUBLICOS =======================================
 	public BinaryTree(boolean r){ //true if you are creating tree from scratch
 		is_root = r;
@@ -95,32 +92,64 @@ public class BinaryTree {
     	}
     }
     
-    //SET=============================================
-    public void setRoot(String r) {
-    	root = r;
+    //SET===========================================================================
+    public void setRoot(String value, boolean r, boolean l) {
+    	root = value;
+    	is_root = r;
+    	is_leaf = l;
     }
-    public boolean setLeftChild(BinaryTree left) {
+    public boolean setLeftChild(BinaryTree left, boolean r, boolean l) {
     	if(root != null) {
     		left_child = left;
+    		is_root = r;
+        	is_leaf = l;
     		return true;
     	}
     	return false;
     }
-    public boolean setRightChild(BinaryTree right) {
+    public boolean setRightChild(BinaryTree right, boolean r, boolean l) {
     	if(root != null) {
     		right_child = right;
+    		is_root = r;
+        	is_leaf = l;
     		return true;
     	}
     	return false;
     }
     
-	// Devuelve el arbol en forma de array
+	// GET ======================================================================
+    // Devuelve el arbol en forma de array
+    public int getDepth() {	return depth;	}
+    
+    public BinaryTree getCopy() {
+    	BinaryTree aux =new BinaryTree(true);
+    	aux.getCopyAux(this);
+    	
+    	return aux;
+    }
+    
+    private void getCopyAux(BinaryTree aux) {
+    	root = aux.root;
+    	if(aux.left_child != null) {
+    		left_child = new BinaryTree(false);
+    		left_child.getCopyAux(aux.left_child);
+    	}
+    	if(aux.right_child != null) {
+    		right_child = new BinaryTree(false);
+    		right_child.getCopyAux(aux.right_child);
+    	}
+    	else if (aux.left_child == null && root != null) {
+    		is_leaf = true;
+    	}
+    }
+    
+    // Returns Array with Tree in INORDEN
 	public ArrayList<String> toArray(){
 		ArrayList<String> array = new ArrayList<String>();
 		inorderTraversal(array, this);
 		return array;
 	}
-	
+	//Aux Method for toArray
 	private void inorderTraversal(ArrayList<String> array, BinaryTree tree) {
 		if(tree != null) {
 			inorderTraversal(array, tree.left_child);
