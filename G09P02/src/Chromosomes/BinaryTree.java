@@ -2,6 +2,7 @@ package Chromosomes;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.function.Function;
 
 public class BinaryTree {
 	static Random rand = new Random();
@@ -157,6 +158,42 @@ public class BinaryTree {
 			inorderTraversal(array, tree.right_child);
 		}
 	}
+	
+	// Obtener función del arbol
+	public Function<Double, Double> getFunction() {
+		ArrayList<String> treeArray = toArray();
+		Function<Double, Double> result = x -> {
+			double res = Double.parseDouble(treeArray.get(0));
+
+			for (int i = 1; i < treeArray.size() - 1; i += 2) {
+				String current = treeArray.get(i);
+				String nextString = treeArray.get(i + 1);
+				double nextValue = 0;
+				if (nextString == "x")
+					nextValue = x;
+				else
+					nextValue = Double.parseDouble(nextString);
+
+				switch (current) {
+				case "add":
+					res += nextValue;
+					break;
+				case "sub":
+					res -= nextValue;
+					break;
+				case "mul":
+					res *= nextValue;
+					break;
+				default:
+					throw new IllegalArgumentException("Unknown operator: " + current);
+				}
+			}
+			return res;
+		};
+
+		return result;
+	}
+
 	
 	//MUTATE =================================================================================
 	public static void MutateTerminal(BinaryTree aux) {
