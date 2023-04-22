@@ -6,12 +6,12 @@ import MutationAlgorithm.MutationAlgorithm;
 import Utils.RandomUtils;
 
 /* 
- *  Se selecciona al azar una función dentro del individuo, y se
-sustituye por otra diferente del conjunto de funciones posibles con el mismo
-número de operandos
+ *  Se selecciona un subárbol del individuo, se elimina totalmente
+el subárbol seleccionado y en su lugar se incorpora un nuevo subárbol generado
+aleatoriamente
 */
 
-public class FunctionMutation extends MutationAlgorithm {
+public class TreeSubTreeMutation extends MutationAlgorithm {
 
 	@Override
 	public Chromosome[] mutate(Chromosome[] poblation, int poblation_size, double mutation_chance){
@@ -22,7 +22,7 @@ public class FunctionMutation extends MutationAlgorithm {
 			ChromosomeP3 chromosome = (ChromosomeP3) poblation[i].getCopy();
 			
 			//Mutate
-			chromosome.mutateFunction(mutation_chance);
+			chromosome.mutateSubTree(mutation_chance);
 			
 			
 			new_population[i] = chromosome.getCopy();

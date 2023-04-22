@@ -24,15 +24,15 @@ public class main {
         tree.setLeftChild(auxLeft, false, false); 
         tree.setRightChild(auxRight, false, false); 
 
-		Function<Double, Double> function = tree.getFunction();
-		System.out.println(function.apply(1d)); // 3
-		System.out.println(function.apply(0.5)); // 2
-		System.out.println(function.apply(2d)); // 5
+//		Function<Double, Double> function = tree.getFunction();
+//		System.out.println(function.apply(1d)); // 3
+//		System.out.println(function.apply(0.5)); // 2
+//		System.out.println(function.apply(2d)); // 5
 		
         ArrayList<String> a = tree.toArray();
         System.out.println(a);
 		
-		tree.MutateFunction(tree, 0.6);
+		tree.MutateSubTree(tree, 0.6);
 		a = tree.toArray();		
 		System.out.println(a);
 		

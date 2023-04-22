@@ -197,55 +197,97 @@ public class BinaryTree {
 	
 	//MUTATE =================================================================================
 	public static void MutateTerminal(BinaryTree aux) {
-		// IS LEAF
-		if(aux.left_child == null && aux.right_child == null) {
-			if(aux.is_leaf) {
-				int index = (int)(rand.nextDouble() * (leaf_terminals.length - 1));
-            	aux.root = leaf_terminals[index];
+		if(aux != null) {
+			// IS LEAF
+			if(aux.left_child == null && aux.right_child == null) {
+				if(aux.is_leaf) {
+					int index = (int)(rand.nextDouble() * (leaf_terminals.length - 1));
+	            	aux.root = leaf_terminals[index];
+				}
+				else {
+					System.out.println("SE ENCONTRÓ Tree con left/right child == NULL && is_leaf == FALSE");
+					int index = (int)(rand.nextDouble() * (leaf_terminals.length - 1));
+	            	aux.root = leaf_terminals[index];
+				}
 			}
-			else {
-				System.out.println("SE ENCONTRÓ Tree con left/right child == NULL && is_leaf == FALSE");
-				int index = (int)(rand.nextDouble() * (leaf_terminals.length - 1));
-            	aux.root = leaf_terminals[index];
-			}
-		}
-		// HAS LEFT AND RIGHT CHILDREN
-		else if (aux.left_child != null && aux.right_child != null) {
-			double d = rand.nextDouble();
-			if(d <= 0.5)
-				MutateTerminal(aux.left_child);
-			else MutateTerminal(aux.right_child);
-		}
-		//LEFT
-		else if(aux.left_child != null)
-			MutateTerminal(aux.left_child);
-		//RIGHT
-		else MutateTerminal(aux.right_child);
-	}
-	
-	public static void MutateFunction(BinaryTree aux, double mutation_chance) {
-		// IS LEAF
-		if(aux.left_child == null && aux.right_child == null) {
-			// NOTHING======================================0
-		}
-		else {
-			double d = rand.nextDouble();
-			if(d < mutation_chance) {
-				int index = (int)(rand.nextDouble() * (node_functions.length - 1));
-            	aux.root = node_functions[index];
-			}
+			// HAS LEFT AND RIGHT CHILDREN
 			else if (aux.left_child != null && aux.right_child != null) {
-				d = rand.nextDouble();
+				double d = rand.nextDouble();
 				if(d <= 0.5)
-					MutateFunction(aux.left_child, mutation_chance);
-				else MutateFunction(aux.right_child, mutation_chance);
+					MutateTerminal(aux.left_child);
+				else MutateTerminal(aux.right_child);
 			}
 			//LEFT
 			else if(aux.left_child != null)
-				MutateFunction(aux.left_child, mutation_chance);
+				MutateTerminal(aux.left_child);
 			//RIGHT
-			else MutateFunction(aux.right_child, mutation_chance);
+			else MutateTerminal(aux.right_child);
 		}
 		
 	}
+	
+	public static void MutateFunction(BinaryTree aux, double mutation_chance) {
+		if(aux != null) {
+			// IS LEAF
+			if(aux.left_child == null && aux.right_child == null) {
+				// NOTHING======================================0
+			}
+			else {
+				double d = rand.nextDouble();
+				if(d < mutation_chance) {
+					int index = (int)(rand.nextDouble() * (node_functions.length - 1));
+	            	aux.root = node_functions[index];
+				}
+				else if (aux.left_child != null && aux.right_child != null) {
+					d = rand.nextDouble();
+					if(d <= 0.5)
+						MutateFunction(aux.left_child, mutation_chance);
+					else MutateFunction(aux.right_child, mutation_chance);
+				}
+				//LEFT
+				else if(aux.left_child != null)
+					MutateFunction(aux.left_child, mutation_chance);
+				//RIGHT
+				else MutateFunction(aux.right_child, mutation_chance);
+			}
+		}		
+	}
+	
+	public static void MutateSubTree(BinaryTree aux, double mutation_chance) {
+		if(aux != null) {
+			double d = rand.nextDouble();
+			//MUTATE
+			if(d < mutation_chance) {
+				if(aux.left_child == null && aux.right_child == null) {
+					aux.is_leaf = false;
+					aux.GrowInitalization(2); // 2??????????????? menor que max depth?????????????????
+				}
+				else if (aux.left_child != null && aux.right_child != null) {
+					d = rand.nextDouble();
+					if(d <= 0.5)
+						aux.left_child.GrowInitalization(2);
+					else aux.right_child.GrowInitalization(2);
+				}
+				else if (aux.left_child != null)
+					aux.left_child.GrowInitalization(2);
+				else aux.right_child.GrowInitalization(2);
+			}
+			//DOESN'T MUTATE
+			else {
+				if (aux.left_child != null && aux.right_child != null) {
+					d = rand.nextDouble();
+					if(d <= 0.5)
+						MutateSubTree(aux.left_child, mutation_chance);
+					else MutateSubTree(aux.right_child, mutation_chance);
+				}
+				else if (aux.left_child != null)
+					MutateSubTree(aux.left_child, mutation_chance);
+				else if (aux.right_child != null)
+					MutateSubTree(aux.right_child, mutation_chance);
+			}
+		}
+		
+	}
+	
+	
 }
