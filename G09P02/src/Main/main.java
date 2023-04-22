@@ -1,5 +1,6 @@
 package Main;
 import java.util.ArrayList;
+import java.util.function.Function;
 
 import Chromosomes.BinaryTree;
 import View.MainView;
@@ -16,7 +17,7 @@ public class main {
 		BinaryTree auxLeftLeft = new BinaryTree(false);
 		auxLeftLeft.setRoot("2");
 		BinaryTree auxLeftRight = new BinaryTree(false);
-		auxLeftRight.setRoot("1");
+		auxLeftRight.setRoot("x");
 		auxLeft.setLeftChild(auxLeftLeft);
 		auxLeft.setRightChild(auxLeftRight);
 		tree.setLeftChild(auxLeft);
@@ -25,7 +26,12 @@ public class main {
 		ArrayList<String> a = tree.toArray();
 		
 		System.out.println(a);
-		System.out.println("HOLAAAA");
-		new MainView();
+		
+		// 2x + 1
+		Function<Double, Double> function = tree.getFunction();
+		System.out.println(function.apply(1d)); // 3
+		System.out.println(function.apply(0.5)); // 2
+		System.out.println(function.apply(2d)); // 5
+		//new MainView();
 	}
 }

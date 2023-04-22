@@ -2,6 +2,7 @@ package Chromosomes;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.function.Function;
 
 public class BinaryTree {
 	Random rand = new Random();
@@ -129,5 +130,44 @@ public class BinaryTree {
 		}
 	}
 	
+	// Obtener función del arbol
+	public Function<Double, Double> getFunction() {
+		ArrayList<String> treeArray = toArray(); // obtener el árbol en formato de array en inorden
+	    Function<Double, Double> result = getFunctionHelper(treeArray, new int[]{0}); // llamar al helper con un índice inicial de 0
+	    return result;
+	}
+	
+	private boolean isLeaf(String node) {
+	    for (String terminal : leaf_terminals) {
+	        if (node.equals(terminal)) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
+	private Function<Double, Double> getFunctionHelper(ArrayList<String> tree, int[] index) {
+	    String current = tree.get(index[0]);
+	    index[0]++; // incrementar el índice para apuntar al siguiente elemento en el árbol
+	    
+	    if (isLeaf(current)) { // si el nodo actual es una hoja, devolver su valor numérico
+	        double val = Double.parseDouble(current);
+	        return x -> val;
+	    } else { // si el nodo actual es una función, crear una función que llame a sus hijos
+	        Function<Double, Double> left = getFunctionHelper(tree, index); // obtener la función del hijo izquierdo
+	        Function<Double, Double> right = getFunctionHelper(tree, index); // obtener la función del hijo derecho
+	        
+	        switch (current) {
+	            case "add":
+	                return x -> left.apply(x) + right.apply(x);
+	            case "sub":
+	                return x -> left.apply(x) - right.apply(x);
+	            case "mul":
+	                return x -> left.apply(x) * right.apply(x);
+	            default:
+	                throw new IllegalArgumentException("Función desconocida: " + current);
+	        }
+	    }
+	}
 
 }
