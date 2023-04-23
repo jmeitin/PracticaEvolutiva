@@ -15,7 +15,6 @@ public class BinaryTree {
 	
 	private int num_nodes = 0;
 	private int depth = 0;
-	private boolean useIF;
 	private boolean is_leaf = false;
 	private boolean is_root = false;
 	
@@ -286,8 +285,38 @@ public class BinaryTree {
 					MutateSubTree(aux.right_child, mutation_chance);
 			}
 		}
-		
 	}
 	
+	public BinaryTree getRandomNode(double mutation_chance) {
+		return GetRandomNodeAux(this, mutation_chance);
+	}
+	static public BinaryTree GetRandomNodeAux(BinaryTree aux, double mutation_chance) {
+		// If tree is null or leaf return null
+		if(aux == null || aux.left_child == null && aux.right_child == null)
+			return null;
+		
+		double d = rand.nextDouble();
+		BinaryTree aux2 = null;
+		if(d < mutation_chance)
+			return aux;
+		else if (aux.left_child != null)
+			aux2 = GetRandomNodeAux(aux.left_child, mutation_chance);
+		else if(aux.right_child != null && aux2 != null)
+			aux2 = GetRandomNodeAux(aux.right_child, mutation_chance);
+		
+		return aux2;		
+	}
+	
+	public void copyTree (BinaryTree aux) {
+    	root = aux.root;
+    	depth = aux.depth;
+    	is_root = aux.is_root;
+    	is_leaf = aux.is_leaf;
+    	
+    	if(aux.root != null) {
+    		left_child.copyTree(aux.left_child);
+    		right_child.copyTree(aux.right_child);
+    	}
+    }
 	
 }
