@@ -53,6 +53,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import View.Slider.RangeSlider;
 import javax.swing.JTabbedPane;
 import java.awt.FlowLayout;
+import javax.swing.border.EtchedBorder;
 
 public class MainView extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -666,6 +667,18 @@ public class MainView extends JFrame {
 				controller.setPoblationSizeRange(min, max);
 			}
 		});
+		
+		JPanel inicializationPane = new JPanel();
+		inicializationPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Inicializaci\u00F3n", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		inicializationPane.setLayout(new GridLayout(0, 2, 0, 0));
+		
+		JLabel inicializationTypeLabel = new JLabel("Tipo de inicialización");
+		inicializationTypeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		inicializationPane.add(inicializationTypeLabel);
+		
+		JComboBox inicializationTypeComboBox = new JComboBox();
+		inicializationTypeComboBox.setModel(new DefaultComboBoxModel(new String[] {"Creciente", "Completa", "Ramped and Half"}));
+		inicializationPane.add(inicializationTypeComboBox);
 
 		GroupLayout gl_westPanel = new GroupLayout(westPanel);
 		gl_westPanel.setHorizontalGroup(gl_westPanel.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING,
