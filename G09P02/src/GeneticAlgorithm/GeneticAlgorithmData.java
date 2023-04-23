@@ -14,6 +14,7 @@ public class GeneticAlgorithmData {
 	public double elitism_percentage;
 	public boolean maximize;
 	public int dimensions;
+	public String inicializationType;
 	public ChromosomeFactory chromosome_factory;
 	public SelectionAlgorithm selection_algorithm;
 	public CrossAlgorithm cross_algorithm;
@@ -30,6 +31,7 @@ public class GeneticAlgorithmData {
 		copy.elitism_percentage = elitism_percentage;
 		copy.maximize = maximize;
 		copy.dimensions = dimensions;
+		copy.inicializationType = inicializationType;
 		copy.chromosome_factory = chromosome_factory;
 		copy.selection_algorithm = selection_algorithm;
 		copy.cross_algorithm = cross_algorithm;

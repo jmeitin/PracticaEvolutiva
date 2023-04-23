@@ -300,6 +300,7 @@ public class MainView extends JFrame {
 		controller.setMutationRangeChance(mutationSlider.getValue(), mutationSlider.getUpperValue());
 		controller.setCrossRangeChance(crossSlider.getValue(), crossSlider.getUpperValue());
 		controller.setPoblationSizeRange(populationSlider.getValue(), populationSlider.getUpperValue());
+		controller.setInicializationType(inicializationTypeComboBox.getSelectedItem().toString().toUpperCase());
 		enableDisableTolerance(false);
 	}
 
@@ -319,6 +320,9 @@ public class MainView extends JFrame {
 			mutationTypeComboBox.setModel(p1Mutations);
 			controller.setMutationType(mutationTypeComboBox.getSelectedItem().toString().toUpperCase());
 		}
+		
+		if(inicializationPane != null)
+			inicializationPane.setVisible(false);
 	}
 
 	private void setModelsForP2() {
@@ -329,10 +333,12 @@ public class MainView extends JFrame {
 			mutationTypeComboBox.setModel(p2Mutations);
 			controller.setMutationType(mutationTypeComboBox.getSelectedItem().toString().toUpperCase());
 		}
+
+		if(inicializationPane != null)
+			inicializationPane.setVisible(false);
 	}
-	
-	private void setModelsForP3()
-	{
+
+	private void setModelsForP3() {
 		if (crossTypeComboBox != null)
 			crossTypeComboBox.setModel(p3Model);
 
@@ -340,12 +346,17 @@ public class MainView extends JFrame {
 			mutationTypeComboBox.setModel(p3Mutations);
 			controller.setMutationType(mutationTypeComboBox.getSelectedItem().toString().toUpperCase());
 		}
+
+		if(inicializationPane != null)
+			inicializationPane.setVisible(true);
 	}
 
 	private boolean slider_mode = false;
 	private JLabel toleranceLabel;
 	private JButton stopButton;
 	private Plot2DPanel graphicPlot;
+	private JPanel inicializationPane;
+	private JComboBox inicializationTypeComboBox;
 
 	private void toggleSliderMode() {
 		slider_mode = !slider_mode;
@@ -458,7 +469,7 @@ public class MainView extends JFrame {
 				new SelectableType("OX", true), new SelectableType("OX-PP", true), new SelectableType("OX-PO", true),
 				new SelectableType("CX", true), new SelectableType("ERX", true), new SelectableType("CO", true),
 				new SelectableType("ORIGINAL", true) });
-		p3Model = new DefaultComboBoxModel<>(new SelectableType[] {new SelectableType("Intercambio", true)});
+		p3Model = new DefaultComboBoxModel<>(new SelectableType[] { new SelectableType("Intercambio", true) });
 		setModelsForP1();
 		crossTypeComboBox.setRenderer(new ListCellRenderer<SelectableType>() {
 			private final DefaultListCellRenderer DEFAULT_RENDERER = new DefaultListCellRenderer();
@@ -506,7 +517,7 @@ public class MainView extends JFrame {
 		this.p1Mutations = new DefaultComboBoxModel(new String[] { "Básica" });
 		this.p2Mutations = new DefaultComboBoxModel(
 				new String[] { "Intercambio", "Inversion", "Insercion", "Heuristica", "Original" });
-		this.p3Mutations = new DefaultComboBoxModel(new String[] {"Terminal", "Subarbol", "Funcion"});
+		this.p3Mutations = new DefaultComboBoxModel(new String[] { "Terminal", "Subarbol", "Funcion" });
 		mutationTypeComboBox.setModel(p3Mutations);
 
 		JLabel mutationProbabilityLabel = new JLabel("% Mutación");
@@ -557,7 +568,7 @@ public class MainView extends JFrame {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					String selectedFunction = e.getItem().toString();
-					if(e.getItem().equals("P3"))
+					if (e.getItem().equals("P3"))
 						setModelsForP3();
 					else if (e.getItem().equals("P2"))
 						setModelsForP2();
@@ -565,8 +576,8 @@ public class MainView extends JFrame {
 						setModelsForP1();
 					// enabled or disable options "Aritmético" y "BLX-α"
 					enableCrossTypeOptions(selectedFunction.equals("P1 - Funcion 4B"));
-					enableDisableTolerance(
-							!(selectedFunction.equals("P1 - Funcion 4B") || selectedFunction.equals("P2") || selectedFunction.equals("P3")));
+					enableDisableTolerance(!(selectedFunction.equals("P1 - Funcion 4B") || selectedFunction.equals("P2")
+							|| selectedFunction.equals("P3")));
 					boolean dimensionsVisible = selectedFunction.equals("P1 - Funcion 4B")
 							|| selectedFunction.equals("P1 - Funcion 4A");
 					if (lblDimensions != null) {
@@ -667,17 +678,25 @@ public class MainView extends JFrame {
 				controller.setPoblationSizeRange(min, max);
 			}
 		});
-		
-		JPanel inicializationPane = new JPanel();
-		inicializationPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Inicializaci\u00F3n", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+
+		inicializationPane = new JPanel();
+		inicializationPane.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+				"Inicializaci\u00F3n", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		inicializationPane.setLayout(new GridLayout(0, 2, 0, 0));
-		
+
 		JLabel inicializationTypeLabel = new JLabel("Tipo de inicialización");
 		inicializationTypeLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		inicializationPane.add(inicializationTypeLabel);
-		
-		JComboBox inicializationTypeComboBox = new JComboBox();
-		inicializationTypeComboBox.setModel(new DefaultComboBoxModel(new String[] {"Creciente", "Completa", "Ramped and Half"}));
+
+		inicializationTypeComboBox = new JComboBox();
+		inicializationTypeComboBox
+				.setModel(new DefaultComboBoxModel(new String[] { "Creciente", "Completa", "Ramped and Half" }));
+		inicializationTypeComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.setInicializationType(inicializationTypeComboBox.getSelectedItem().toString().toUpperCase());
+			}
+		});
 		inicializationPane.add(inicializationTypeComboBox);
 
 		GroupLayout gl_westPanel = new GroupLayout(westPanel);
@@ -699,6 +718,8 @@ public class MainView extends JFrame {
 								.addComponent(mutationPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
 										Short.MAX_VALUE)
 								.addComponent(crossPanel, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+								.addComponent(inicializationPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
+										Short.MAX_VALUE)
 								.addComponent(selectionPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
 										Short.MAX_VALUE)
 								.addComponent(numGenTextField, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 282,
@@ -729,6 +750,9 @@ public class MainView extends JFrame {
 								GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addComponent(selectionPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(inicializationPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addComponent(crossPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
@@ -932,7 +956,6 @@ public class MainView extends JFrame {
 		graphicPlot.setFixedBounds(0, -5, 5);
 		graphicPlot.setFixedBounds(1, 0, 30);
 
-		
 		JPanel solutionPanel = new JPanel();
 		tabbedPane.addTab("Solution", solutionPanel);
 

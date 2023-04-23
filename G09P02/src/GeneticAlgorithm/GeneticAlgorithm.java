@@ -146,12 +146,12 @@ public class GeneticAlgorithm<T, U> {
 
 	public void initializePoblation() {
 		for (int i = 0; i < poblation_size; i++)
-			poblation[i] = createChromosome();
+			poblation[i] = createChromosome(i);
 	}
 
 	// Shorthand to ChromosomeFactory
-	private Chromosome<T, U> createChromosome() {
-		return chromosome_factory.createChromosome(tolerance, dimensions);
+	private Chromosome<T, U> createChromosome(int i) {
+		return chromosome_factory.createChromosome(tolerance, dimensions, i, poblation_size);
 	}
 
 	public void stop() {

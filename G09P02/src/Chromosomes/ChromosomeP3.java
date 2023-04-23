@@ -4,18 +4,14 @@ import java.util.Random;
 
 public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 	
-	private int min_depth = 2;
-	private int max_depth = 5;
 	Random rand = new Random();
 	private BinaryTree tree;
 	private String fenotype;
 	private String creation_type = "";
 	
-	public ChromosomeP3(double tolerance, String t) {
+	public ChromosomeP3(double tolerance, int depth, String t) {
 		super(10); // ????????????????
 		
-		//calculate random depth for tree
-		int depth = (int)(min_depth + (rand.nextDouble() * (max_depth - min_depth)));
 		//create tree
 		tree = new BinaryTree(true); //is root
 		
@@ -23,10 +19,10 @@ public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 		creation_type = t;
 		
 		switch(creation_type){
-		case "Full": 
+		case "COMPLETA": 
 			tree.FullInitalization(depth);
 		break;
-		case "Grow":
+		case "CRECIENTE":
 			tree.GrowInitalization(depth);
 		break;
 		default:
@@ -59,7 +55,7 @@ public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 
 	@Override
 	protected Chromosome getNewInstance() {
-		return new ChromosomeP3(this.tolerance, "Full");
+		return new ChromosomeP3(this.tolerance, 5 ,"COMPLETO");
 	}
 
 	@Override

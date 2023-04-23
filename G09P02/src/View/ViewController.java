@@ -15,6 +15,7 @@ import Chromosomes.ChromosomeP1F3;
 import Chromosomes.ChromosomeP1F4a;
 import Chromosomes.ChromosomeP1F4b;
 import Chromosomes.ChromosomeP2;
+import Chromosomes.ChromosomeP3;
 import CrossAlgorithms.P1.ArithmeticCross;
 import CrossAlgorithms.P1.BLXAlphaCross;
 import CrossAlgorithms.P1.MultiPointCross;
@@ -36,6 +37,9 @@ import MutationAlgorithm.P2.HeuristicMutation;
 import MutationAlgorithm.P2.InsertionMutation;
 import MutationAlgorithm.P2.InversionMutation;
 import MutationAlgorithm.P2.OriginalMutation;
+import MutationAlgorithm.P3.FunctionMutation;
+import MutationAlgorithm.P3.TerminalMutation;
+import MutationAlgorithm.P3.TreeSubTreeMutation;
 import SelectionAlgorithms.DeterministicTournamentSelection;
 import SelectionAlgorithms.ProbabilisticTournamentSelection;
 import SelectionAlgorithms.RemainderSelection;
@@ -57,11 +61,10 @@ public class ViewController implements Runnable {
 			return (algorithm.getCurrent_generation() * 100 / algorithm.getMax_gen_num());
 		}
 
-		public GeneticAlgorithmData getDataCopy()
-		{
+		public GeneticAlgorithmData getDataCopy() {
 			return data.getCopy();
 		}
-		
+
 		public ModelRunner(int poblation_size, double cross_chance, double mutation_chance) {
 			data = getFromRange(poblation_size, cross_chance, mutation_chance);
 			ranged = true;
@@ -84,7 +87,7 @@ public class ViewController implements Runnable {
 		}
 	}
 
-	private final boolean debugMode = false; // Enables debug mode
+	private final boolean debugMode = true; // Enables debug mode
 	private final MainView view; // View to be controlled
 	private GeneticAlgorithm geneticAlgorithm; // Genetic algorithm to be run
 	private GeneticAlgorithmData algorithmData; // Genetic algorithm data
@@ -201,21 +204,21 @@ public class ViewController implements Runnable {
 			}
 		}
 
-		// We order the models using a stream to get the one with the biggest or lower value
+		// We order the models using a stream to get the one with the biggest or lower
+		// value
 		// (depends on algorithmData.maximize field)
 		List<ModelRunner> modelList = Arrays.asList(models);
-		List<ModelRunner> sortedModels = modelList.stream()
-		        .sorted((model1, model2) -> {
-		            Chromosome bestChromosome1 = model1.algorithm.getBest_chromosome();
-		            Chromosome bestChromosome2 = model2.algorithm.getBest_chromosome();
-		            double bestValue1 = bestChromosome1.evaluate();
-		            double bestValue2 = bestChromosome2.evaluate();
-		            return getAlgorithmData().maximize ? Double.compare(bestValue2, bestValue1) : Double.compare(bestValue1, bestValue2);
-		        })
-		        .collect(Collectors.toList());
+		List<ModelRunner> sortedModels = modelList.stream().sorted((model1, model2) -> {
+			Chromosome bestChromosome1 = model1.algorithm.getBest_chromosome();
+			Chromosome bestChromosome2 = model2.algorithm.getBest_chromosome();
+			double bestValue1 = bestChromosome1.evaluate();
+			double bestValue2 = bestChromosome2.evaluate();
+			return getAlgorithmData().maximize ? Double.compare(bestValue2, bestValue1)
+					: Double.compare(bestValue1, bestValue2);
+		}).collect(Collectors.toList());
 
 		geneticAlgorithm = sortedModels.get(0).algorithm;
-		GeneticAlgorithmData model = sortedModels.get(0).getDataCopy(); 
+		GeneticAlgorithmData model = sortedModels.get(0).getDataCopy();
 		// Print poblation size, cross chance and mutation chance of the best model
 		log("Best model: " + model.poblation_size + " " + model.cross_chance + " " + model.mutation_chance);
 
@@ -412,43 +415,72 @@ public class ViewController implements Runnable {
 		ChromosomeFactory chromosome_factory;
 		switch (function) {
 		case "P1 - FUNCION 1":
-			chromosome_factory = (double tolerance, int dimensions) -> {
+			chromosome_factory = (double tolerance, int dimensions, int index, int poblation_size) -> {
 				return new ChromosomeP1F1(2, tolerance);
 			};
 			algorithmData.chromosome_factory = chromosome_factory;
 			algorithmData.maximize = true;
 			break;
 		case "P1 - FUNCION 2":
-			chromosome_factory = (double tolerance, int dimensions) -> {
+			chromosome_factory = (double tolerance, int dimensions, int index, int poblation_size) -> {
 				return new ChromosomeP1F2(2, tolerance);
 			};
 			algorithmData.chromosome_factory = chromosome_factory;
 			algorithmData.maximize = false;
 			break;
 		case "P1 - FUNCION 3":
-			chromosome_factory = (double tolerance, int dimensions) -> {
+			chromosome_factory = (double tolerance, int dimensions, int index, int poblation_size) -> {
 				return new ChromosomeP1F3(2, tolerance);
 			};
 			algorithmData.chromosome_factory = chromosome_factory;
 			algorithmData.maximize = false;
 			break;
 		case "P1 - FUNCION 4A":
-			chromosome_factory = (double tolerance, int dimensions) -> {
+			chromosome_factory = (double tolerance, int dimensions, int index, int poblation_size) -> {
 				return new ChromosomeP1F4a(algorithmData.dimensions, tolerance);
 			};
 			algorithmData.chromosome_factory = chromosome_factory;
 			algorithmData.maximize = false;
 			break;
 		case "P1 - FUNCION 4B":
-			chromosome_factory = (double tolerance, int dimensions) -> {
+			chromosome_factory = (double tolerance, int dimensions, int index, int poblation_size) -> {
 				return new ChromosomeP1F4b(algorithmData.dimensions, tolerance);
 			};
 			algorithmData.chromosome_factory = chromosome_factory;
 			algorithmData.maximize = false;
 			break;
 		case "P2":
-			chromosome_factory = (double tolerance, int dimensions) -> {
+			chromosome_factory = (double tolerance, int dimensions, int index, int poblation_size) -> {
 				return new ChromosomeP2(tolerance);
+			};
+			algorithmData.chromosome_factory = chromosome_factory;
+			algorithmData.maximize = false;
+			break;
+		case "P3":
+			chromosome_factory = (double tolerance, int dimensions, int index, int poblation_size) -> {
+				final int maxDepth = 5;
+				int depth = maxDepth; 
+				String inicializationType = algorithmData.inicializationType;
+				
+				if(inicializationType.equals("RAMPED AND HALF")) {
+					
+				    final int group_size = poblation_size / (maxDepth - 1);
+				    final int half_group_size = group_size / 2;
+				    final int subgroupIndex = (index / group_size);
+				    final int half_subgroup_index = subgroupIndex * group_size + half_group_size;
+				    
+				    depth = subgroupIndex + 2;
+				    
+				    if (index < half_subgroup_index) {
+				        inicializationType = "COMPLETA";
+				    } else {
+				        inicializationType = "CRECIENTE";
+				    }
+				}
+
+
+				
+				return new ChromosomeP3(tolerance, depth, inicializationType);
 			};
 			algorithmData.chromosome_factory = chromosome_factory;
 			algorithmData.maximize = false;
@@ -534,6 +566,9 @@ public class ViewController implements Runnable {
 		case "CO":
 			this.algorithmData.cross_algorithm = new COCross();
 			break;
+		case "INTERCAMBIO":
+
+			break;
 		}
 	}
 
@@ -564,6 +599,15 @@ public class ViewController implements Runnable {
 			break;
 		case "ORIGINAL":
 			this.algorithmData.mutation_algorithm = new OriginalMutation();
+			break;
+		case "TERMINAL":
+			this.algorithmData.mutation_algorithm = new TerminalMutation();
+			break;
+		case "SUBARBOL":
+			this.algorithmData.mutation_algorithm = new TreeSubTreeMutation();
+			break;
+		case "FUNCION":
+			this.algorithmData.mutation_algorithm = new FunctionMutation();
 			break;
 		}
 	}
@@ -608,6 +652,11 @@ public class ViewController implements Runnable {
 		log("Mutation chance min-max: :" + min + ", " + max);
 		this.mutation_range.min_value = min;
 		this.mutation_range.max_value = max;
+	}
+
+	public void setInicializationType(String inicializationType) {
+		log("Inicialization type: " + inicializationType);
+		this.algorithmData.inicializationType = inicializationType;
 	}
 
 	public void stop() {
