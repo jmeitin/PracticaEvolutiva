@@ -1,9 +1,5 @@
 package Main;
 
-import java.util.ArrayList;
-import java.util.function.Function;
-
-import Chromosomes.BinaryTree;
 import View.MainView;
 
 public class main {

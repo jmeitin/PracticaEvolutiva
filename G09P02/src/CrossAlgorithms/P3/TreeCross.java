@@ -1,11 +1,7 @@
 package CrossAlgorithms.P3;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import Chromosomes.BinaryTree;
 import Chromosomes.Chromosome;
-import Chromosomes.ChromosomeP2;
 import Chromosomes.ChromosomeP3;
 import CrossAlgorithms.CrossAlgorithm;
 

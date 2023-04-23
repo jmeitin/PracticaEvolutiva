@@ -3,7 +3,6 @@ package MutationAlgorithm.P3;
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeP3;
 import MutationAlgorithm.MutationAlgorithm;
-import Utils.RandomUtils;
 
 /* 
  *  Se selecciona al azar una función dentro del individuo, y se

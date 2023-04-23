@@ -1,6 +1,7 @@
 package Chromosomes;
 
 import java.util.Random;
+import java.util.function.Function;
 
 public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 	
@@ -8,6 +9,7 @@ public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 	private BinaryTree tree;
 	private String fenotype;
 	private String creation_type = "";
+	double[][] dataset = new double[100][2];
 	
 	public ChromosomeP3(double tolerance, int depth, String t) {
 		super(10); // ????????????????
@@ -42,14 +44,41 @@ public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 	
 	@Override
 	public void calculateFenotypes() {
-		
+		// Aqui inicializamos el dataset		
+		double stepSize = 2.0 / 100;
+
+		for (int i = 0; i < 100; i++) {
+		    double x = -1.0 + i * stepSize;
+		    x = Math.round(x * 100.0) / 100.0; // Redondea x a 2 decimales
+		    double y = getCorrectValue(x); // Reemplaza esto con la función que has generado dinámicamente
+		    dataset[i] = new double[]{x, y};
+		}
+
 	}
 	
-	
+	double getCorrectValue(double x)
+	{
+		return Math.pow(x, 4) + Math.pow(x, 3) + Math.pow(x, 2) + x + 1;
+	}
 
 	@Override
 	public double evaluate() {		
 		
+		Function<Double, Double> func = tree.getFunction();
+		brute_fitness = 0;
+		final int iterations = 100;
+		
+		for(int i = 0; i < iterations;i++)
+		{
+			final double estimated_value = func.apply(dataset[i][0]);
+			final double real_value = dataset[i][1];
+			final double cuadratic_difference = Math.pow(real_value - estimated_value, 2);
+			
+			brute_fitness += cuadratic_difference;
+		}
+		
+		
+		brute_fitness /= iterations;
 		return brute_fitness;
 	}
 
