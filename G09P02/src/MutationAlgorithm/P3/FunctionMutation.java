@@ -22,8 +22,9 @@ public class FunctionMutation extends MutationAlgorithm {
 			ChromosomeP3 chromosome = (ChromosomeP3) poblation[i].getCopy();
 			
 			//Mutate
-			chromosome.mutateFunction(mutation_chance);
-			
+			double d = rand.nextDouble();
+			if(d <= mutation_chance)
+				chromosome.mutateFunction(mutation_chance);			
 			
 			new_population[i] = chromosome.getCopy();
 		}

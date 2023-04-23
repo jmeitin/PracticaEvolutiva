@@ -22,7 +22,9 @@ public class TreeSubTreeMutation extends MutationAlgorithm {
 			ChromosomeP3 chromosome = (ChromosomeP3) poblation[i].getCopy();
 			
 			//Mutate
-			chromosome.mutateSubTree(mutation_chance);
+			double d = rand.nextDouble();
+			if(d <= mutation_chance)
+				chromosome.mutateSubTree(mutation_chance);
 			
 			
 			new_population[i] = chromosome.getCopy();

@@ -98,4 +98,8 @@ public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 			tree.MutateSubTree(tree, mutation_chance);
 		}
 	}
+	
+	public BinaryTree getTree() {
+		return tree;
+	}
 }

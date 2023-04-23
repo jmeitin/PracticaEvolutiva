@@ -21,8 +21,9 @@ public class TerminalMutation extends MutationAlgorithm {
 			ChromosomeP3 chromosome = (ChromosomeP3) poblation[i].getCopy();
 			
 			//Mutate
-			chromosome.mutateTerminal();
-			
+			double d = rand.nextDouble();
+			if(d <= mutation_chance)
+				chromosome.mutateTerminal();			
 			
 			new_population[i] = chromosome.getCopy();
 		}
