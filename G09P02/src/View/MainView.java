@@ -126,8 +126,10 @@ public class MainView extends JFrame {
 
 	private DefaultComboBoxModel p1Model;
 	private DefaultComboBoxModel p2Model;
+	private DefaultComboBoxModel p3Model;
 	private DefaultComboBoxModel p1Mutations;
 	private DefaultComboBoxModel p2Mutations;
+	private DefaultComboBoxModel p3Mutations;
 	private JProgressBar progressBar;
 	private RangeSlider populationSlider;
 	private RangeSlider mutationSlider;
@@ -327,6 +329,17 @@ public class MainView extends JFrame {
 			controller.setMutationType(mutationTypeComboBox.getSelectedItem().toString().toUpperCase());
 		}
 	}
+	
+	private void setModelsForP3()
+	{
+		if (crossTypeComboBox != null)
+			crossTypeComboBox.setModel(p3Model);
+
+		if (mutationTypeComboBox != null) {
+			mutationTypeComboBox.setModel(p3Mutations);
+			controller.setMutationType(mutationTypeComboBox.getSelectedItem().toString().toUpperCase());
+		}
+	}
 
 	private boolean slider_mode = false;
 	private JLabel toleranceLabel;
@@ -444,6 +457,7 @@ public class MainView extends JFrame {
 				new SelectableType("OX", true), new SelectableType("OX-PP", true), new SelectableType("OX-PO", true),
 				new SelectableType("CX", true), new SelectableType("ERX", true), new SelectableType("CO", true),
 				new SelectableType("ORIGINAL", true) });
+		p3Model = new DefaultComboBoxModel<>(new SelectableType[] {new SelectableType("Intercambio", true)});
 		setModelsForP1();
 		crossTypeComboBox.setRenderer(new ListCellRenderer<SelectableType>() {
 			private final DefaultListCellRenderer DEFAULT_RENDERER = new DefaultListCellRenderer();
@@ -491,7 +505,8 @@ public class MainView extends JFrame {
 		this.p1Mutations = new DefaultComboBoxModel(new String[] { "Básica" });
 		this.p2Mutations = new DefaultComboBoxModel(
 				new String[] { "Intercambio", "Inversion", "Insercion", "Heuristica", "Original" });
-		mutationTypeComboBox.setModel(p2Mutations);
+		this.p3Mutations = new DefaultComboBoxModel(new String[] {"Terminal", "Subarbol", "Funcion"});
+		mutationTypeComboBox.setModel(p3Mutations);
 
 		JLabel mutationProbabilityLabel = new JLabel("% Mutación");
 
@@ -541,14 +556,16 @@ public class MainView extends JFrame {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					String selectedFunction = e.getItem().toString();
-					if (e.getItem().equals("P2"))
+					if(e.getItem().equals("P3"))
+						setModelsForP3();
+					else if (e.getItem().equals("P2"))
 						setModelsForP2();
 					else
 						setModelsForP1();
 					// enabled or disable options "Aritmético" y "BLX-α"
 					enableCrossTypeOptions(selectedFunction.equals("P1 - Funcion 4B"));
 					enableDisableTolerance(
-							!(selectedFunction.equals("P1 - Funcion 4B") || selectedFunction.equals("P2")));
+							!(selectedFunction.equals("P1 - Funcion 4B") || selectedFunction.equals("P2") || selectedFunction.equals("P3")));
 					boolean dimensionsVisible = selectedFunction.equals("P1 - Funcion 4B")
 							|| selectedFunction.equals("P1 - Funcion 4A");
 					if (lblDimensions != null) {
@@ -562,8 +579,8 @@ public class MainView extends JFrame {
 			}
 		});
 		problemSelectionComboBox.setModel(new DefaultComboBoxModel(new String[] { "P1 - Funcion 1", "P1 - Funcion 2",
-				"P1 - Funcion 3", "P1 - Funcion 4A", "P1 - Funcion 4B", "P2" }));
-		problemSelectionComboBox.setSelectedIndex(5);
+				"P1 - Funcion 3", "P1 - Funcion 4A", "P1 - Funcion 4B", "P2", "P3" }));
+		problemSelectionComboBox.setSelectedIndex(6);
 
 		JPanel themePanel = new JPanel();
 		themePanel.setBorder(new TitledBorder("Tema"));
