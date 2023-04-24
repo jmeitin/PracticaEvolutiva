@@ -29,6 +29,7 @@ import CrossAlgorithms.P2.OXPOCross;
 import CrossAlgorithms.P2.OXPPCross;
 import CrossAlgorithms.P2.OriginalCross;
 import CrossAlgorithms.P2.PMXCross;
+import CrossAlgorithms.P3.TreeCross;
 import GeneticAlgorithm.GeneticAlgorithm;
 import GeneticAlgorithm.GeneticAlgorithmData;
 import MutationAlgorithm.BasicGenMutation;
@@ -567,7 +568,7 @@ public class ViewController implements Runnable {
 			this.algorithmData.cross_algorithm = new COCross();
 			break;
 		case "INTERCAMBIO":
-
+			this.algorithmData.cross_algorithm = new TreeCross();
 			break;
 		}
 	}
