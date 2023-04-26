@@ -19,6 +19,7 @@ public class GeneticAlgorithmData {
 	public SelectionAlgorithm selection_algorithm;
 	public CrossAlgorithm cross_algorithm;
 	public MutationAlgorithm mutation_algorithm;
+	public int tree_depth;
 	
 	public GeneticAlgorithmData getCopy()
 	{
@@ -36,6 +37,7 @@ public class GeneticAlgorithmData {
 		copy.selection_algorithm = selection_algorithm;
 		copy.cross_algorithm = cross_algorithm;
 		copy.mutation_algorithm = mutation_algorithm;
+		copy.tree_depth = tree_depth;
 		return copy;
 	}
 }

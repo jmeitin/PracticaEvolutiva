@@ -141,6 +141,9 @@ public class GeneticAlgorithm<T, U> {
 		this.selectionAlgorithm = algorithmData.selection_algorithm;
 		this.crossAlgorithm = algorithmData.cross_algorithm;
 		this.mutationAlgorithm = algorithmData.mutation_algorithm;
+		
+		//BinaryTree
+		TREE_DEPTH = algorithmData.tree_depth;
 
 		// Stats
 		average_fitnesses = new double[this.max_gen_num];

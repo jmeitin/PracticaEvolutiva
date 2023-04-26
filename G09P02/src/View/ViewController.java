@@ -421,6 +421,7 @@ public class ViewController implements Runnable {
 	public void setFunction(String function) {
 		log("Function Type: " + function);
 		ChromosomeFactory chromosome_factory;
+		algorithmData.tree_depth = 0;
 		switch (function) {
 		case "P1 - FUNCION 1":
 			chromosome_factory = (double tolerance, int dimensions, int index, int poblation_size) -> {
@@ -486,7 +487,8 @@ public class ViewController implements Runnable {
 				    }
 				}
 
-				GeneticAlgorithm.TREE_DEPTH = maxDepth;
+				//GeneticAlgorithm.TREE_DEPTH = maxDepth;
+				algorithmData.tree_depth = maxDepth;
 				
 				return new ChromosomeP3(tolerance, depth, inicializationType);
 			};
