@@ -65,7 +65,7 @@ public class ChromosomeP3 extends Chromosome<Integer, String> {
 	
 	public String getFunctionString()
 	{
-		return ArrayUtils.arrayToMathExpression(tree.toArray()) + "\n" + tree.toArray();
+		return ArrayUtils.arrayToMathExpression(tree.toArray()) + "\n" + tree.toArray() + "\nFitness bruto: " + evaluate();
 	}
 	
 	double getCorrectValue(double x)
@@ -73,6 +73,16 @@ public class ChromosomeP3 extends Chromosome<Integer, String> {
 		return Math.pow(x, 4) + Math.pow(x, 3) + Math.pow(x, 2) + x + 1;
 	}
 
+	public Function<Double, Double> getEstimatedFunction()
+	{
+		return tree.getFunction();
+	}
+	
+	public Function<Double, Double> getRealFunction()
+	{
+		return  x -> Math.pow(x, 4) + Math.pow(x, 3) + Math.pow(x, 2) + x + 1;
+	}
+	
 	@Override
 	public double evaluate() {		
 		

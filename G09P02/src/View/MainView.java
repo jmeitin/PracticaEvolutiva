@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.function.Function;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -234,7 +235,50 @@ public class MainView extends JFrame {
 		fitnessPlot.addLinePlot("Mejor Generación", isDarkTheme ? LIGHT_BLUE : DARK_BLUE, best_fitnesses);
 		fitnessPlot.addLinePlot("Media Generación", isDarkTheme ? LIGHT_GREEN : DARK_GREEN, average_fitnesses);
 	}
+	
+	private double getStep(double min, double max, int numElems)
+	{
+		return (max - min) / (double)(numElems - 1);
+	}
+	
+	public void plotGraph(Function<Double, Double> realFunction, Function<Double,Double> estimatedFunction)
+	{
+		graphicPlot.removeAllPlots();
+		double[] x = new double[301];
+		final double minX = -4;
+		double step = getStep(minX,4, x.length);
+		double[] yReal = new double[x.length];
+		double[] yEstimated = new double[x.length];
+		
+		for (int i = 0; i < x.length; i++) {
+			x[i] = minX + i * step;
+	        yReal[i] = realFunction.apply(x[i]);
+	        yEstimated[i] = estimatedFunction.apply(x[i]);
+		}
 
+		// Agregar la función al plot
+		graphicPlot.addLinePlot("Real", x, yReal);
+		graphicPlot.addLinePlot("Estimated", x, yEstimated);
+	}
+	
+	public void initGraphpicPlot()
+	{
+		Function<Double, Double> realFunction = x -> Math.pow(x, 4) + Math.pow(x, 3) + Math.pow(x, 2) + x + 1;
+		graphicPlot.removeAllPlots();
+		double[] x = new double[301];
+		final double minX = -4;
+		double step = getStep(minX,4,x.length);
+		double[] yReal = new double[x.length];
+		
+		for (int i = 0; i < x.length; i++) {
+			x[i] = minX + i * step;
+	        yReal[i] = realFunction.apply(x[i]);
+		}
+
+		// Agregar la función al plot
+		graphicPlot.addLinePlot("Real", x, yReal);
+	}
+	
 	/***
 	 * Method to enable/disable options "Aritmético" y "BLX-α"
 	 * 
@@ -938,22 +982,13 @@ public class MainView extends JFrame {
 		graphicPlot.plotCanvas.setBackground(UIManager.getColor("Button.light"));
 		graphicPlot.plotLegend.setBackground(UIManager.getColor("Button.light"));
 		graphicPlot.plotToolBar.setBackground(UIManager.getColor("Button.light"));
+		initGraphpicPlot();
 		tabbedPane.addTab("Graphic result", graphicPlot);
-
-		double[] x = new double[101];
-		double[] y = new double[101];
-		for (int i = 0; i <= 100; i++) {
-			x[i] = -5 + i * 0.1;
-			y[i] = x[i] * x[i];
-		}
-
-		// Agregar la función al plot
-		graphicPlot.addLinePlot("Función", x, y);
 
 		// Centrar el eje del plot
 		graphicPlot.setAxisLabels("X", "Y");
-		graphicPlot.setFixedBounds(0, -5, 5);
-		graphicPlot.setFixedBounds(1, 0, 30);
+		graphicPlot.setFixedBounds(0, -4, 4);
+		graphicPlot.setFixedBounds(1, -2, 30);
 
 		JPanel solutionPanel = new JPanel();
 		tabbedPane.addTab("Solution", solutionPanel);

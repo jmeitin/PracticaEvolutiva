@@ -344,7 +344,9 @@ public class ViewController implements Runnable {
 	
 	private void updateSolutionP3(Chromosome chromosome)
 	{
-		this.view.setSolutionText(((ChromosomeP3)chromosome).getFunctionString());
+		ChromosomeP3 result = (ChromosomeP3)chromosome;
+		this.view.setSolutionText(result.getFunctionString());
+		this.view.plotGraph(result.getRealFunction(), result.getEstimatedFunction());
 	}
 
 	/**
