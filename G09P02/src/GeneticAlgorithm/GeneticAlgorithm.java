@@ -289,20 +289,32 @@ public class GeneticAlgorithm<T, U> {
 		}
 
 		double fitness_sum = 0;
+		double min_adjusted_fitness = Double.MAX_VALUE;
 		for (int i = 0; i < poblation_size; i++) {
-			double adjusted_fitness = 0;
-			if (!maximize)
-				// Minimizar
+		    double adjusted_fitness = 0;
+		    if (!maximize)
+		    	// Minimizar
 				// extrene_value = max
-				adjusted_fitness = (1.05 * extreme_value) - poblation[i].getBruteFitness();
-			else
-				// Maximizar
+		        adjusted_fitness = extreme_value - poblation[i].getBruteFitness();
+		    else
+		    	// Maximizar
 				// extrene_value = min
-				adjusted_fitness = poblation[i].getBruteFitness() + Math.abs(extreme_value);
+		        adjusted_fitness = poblation[i].getBruteFitness() - extreme_value;
 
-			fitness_sum += adjusted_fitness;
-			poblation[i].setFitness(adjusted_fitness);
+		    if (adjusted_fitness < min_adjusted_fitness) {
+		        min_adjusted_fitness = adjusted_fitness;
+		    }
+
+		    poblation[i].setFitness(adjusted_fitness);
 		}
+
+		// Ensure all fitness values are positive (aptitude displacement)
+		for (int i = 0; i < poblation_size; i++) {
+		    double adjusted_fitness = poblation[i].getFitness() - min_adjusted_fitness;
+		    fitness_sum += adjusted_fitness;
+		    poblation[i].setFitness(adjusted_fitness);
+		}
+
 
 		return fitness_sum;
 	}
