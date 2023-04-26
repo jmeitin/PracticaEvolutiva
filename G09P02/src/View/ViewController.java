@@ -311,7 +311,9 @@ public class ViewController implements Runnable {
 		// more flexibility in the future.
 		if (chromosome instanceof ChromosomeP2) {
 			updateSolutionP2(chromosome);
-		} else
+		} else if(chromosome instanceof ChromosomeP3)
+			updateSolutionP3(chromosome);
+			else
 			updateSolutionP1(chromosome);
 
 	}
@@ -338,6 +340,11 @@ public class ViewController implements Runnable {
 		solutionText += "] | Distancia: " + chromosome.evaluate();
 
 		this.view.setSolutionText(solutionText);
+	}
+	
+	private void updateSolutionP3(Chromosome chromosome)
+	{
+		this.view.setSolutionText(((ChromosomeP3)chromosome).getFunctionString());
 	}
 
 	/**

@@ -1,8 +1,6 @@
 package Main;
 
-import Chromosomes.BinaryTree;
 import Chromosomes.ChromosomeP3;
-import CrossAlgorithms.P3.TreeCross;
 import View.MainView;
 
 public class main {

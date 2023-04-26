@@ -1,9 +1,10 @@
 package Chromosomes;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Function;
 
-public class ChromosomeP3 extends Chromosome<Integer, Integer> {
+public class ChromosomeP3 extends Chromosome<Integer, String> {
 	
 	Random rand = new Random();
 	private BinaryTree tree;
@@ -39,11 +40,6 @@ public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 	@Override
 	protected void initGenes() {
 		
-		
-	}
-	
-	@Override
-	public void calculateFenotypes() {
 		// Aqui inicializamos el dataset		
 		double stepSize = 2.0 / 100;
 
@@ -53,7 +49,34 @@ public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 		    double y = getCorrectValue(x); // Reemplaza esto con la función que has generado dinámicamente
 		    dataset[i] = new double[]{x, y};
 		}
+	}
+	
+	@Override
+	public void calculateFenotypes() {
+	
+	}
+	
+	
+	String arrayToMathExpression(ArrayList<String> arr) {
+		StringBuilder sb = new StringBuilder();
+	    for (String s : arr) {
+	        switch (s) {
+	            case "+":
+	            case "-":
+	            case "x":
+	                sb.append(" ").append(s).append(" ");
+	                break;
+	            default:
+	                sb.append(s);
+	        }
+	    }
+	    return sb.toString();
+	}
 
+	
+	public String getFunctionString()
+	{
+		return arrayToMathExpression(tree.toArray());
 	}
 	
 	double getCorrectValue(double x)
