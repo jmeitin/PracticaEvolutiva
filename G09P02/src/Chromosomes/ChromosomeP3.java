@@ -39,6 +39,10 @@ public class ChromosomeP3 extends Chromosome<Integer, String> {
 		calculateFenotypes();
 	}
 
+	public String getCreationType() {
+		return creation_type;
+	}
+	
 	@Override
 	protected void initGenes() {
 		

@@ -1,14 +1,20 @@
 package GeneticAlgorithm;
 
 import java.util.Arrays;
+import java.util.Random;
 
+import Chromosomes.BinaryTree;
 import Chromosomes.Chromosome;
 import Chromosomes.ChromosomeFactory;
+import Chromosomes.ChromosomeP3;
 import CrossAlgorithms.CrossAlgorithm;
 import MutationAlgorithm.MutationAlgorithm;
 import SelectionAlgorithms.SelectionAlgorithm;
 
 public class GeneticAlgorithm<T, U> {
+	static public int TREE_DEPTH = 5;
+
+	Random rand = new Random();
 	private Chromosome<T, U>[] poblation;
 	private double[] average_fitnesses;
 	private double[] best_absolute_fitnesses;
@@ -197,11 +203,17 @@ public class GeneticAlgorithm<T, U> {
 			select();
 			cross();
 			mutate();
+			
 
 			if (elitism)
 				insertElite();
 
+			// BLOATING 
+			if (poblation[0] instanceof ChromosomeP3) {
+				tarpeian();
+			}
 			evaluate(current_generation);
+			
 			current_generation++;
 
 			if (current_generation == max_gen_num)
@@ -211,6 +223,39 @@ public class GeneticAlgorithm<T, U> {
 		return current_generation != max_gen_num;
 	}
 
+	public void tarpeian() {
+		//actualizo la profundidad de cada nodo
+		int sumatorio = 0;
+		for (int i = 0; i < poblation.length; i++) {
+			ChromosomeP3 c = (ChromosomeP3)poblation[i];
+			BinaryTree tree = c.getTree();
+			tree.updateDepth();			
+			sumatorio += tree.getDepth();
+		}
+		
+		double average_depth = sumatorio / poblation.length;
+		
+		//comparo el depth de cada uno
+		for (int i = 0; i < poblation.length; i++) {
+			ChromosomeP3 c = (ChromosomeP3)poblation[i];
+			BinaryTree tree = c.getTree();
+			// 50% de borrarlo
+			if(tree.getDepth() > average_depth && rand.nextDouble() > 0.5) {
+				//SOBREESCRIBE EL ARBOL
+//				System.out.println(tree.getDepth());
+//				System.out.println(tree.toArray());
+				if(c.getCreationType() != "CRECIENTE")
+					tree.GrowInitalization(TREE_DEPTH);
+				else tree.FullInitalization(TREE_DEPTH);
+//				System.out.println(tree.toArray());
+//				System.out.println(tree.getDepth());
+			}
+			else {
+				//System.out.println("Sobrevive tarpeian");
+			}
+		}
+		
+	}
 	public void selectElite() {
 		Arrays.sort(poblation);
 

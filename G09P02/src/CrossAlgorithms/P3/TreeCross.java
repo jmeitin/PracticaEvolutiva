@@ -26,7 +26,7 @@ public class TreeCross extends CrossAlgorithm {
 			subB.copyTree(aux);
 		}
 		else {
-			System.out.println("No se selecciono ningun subarbol");
+			//System.out.println("No se selecciono ningun subarbol");
 		}
 		
 		parentA.setTree(treeA);

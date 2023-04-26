@@ -343,5 +343,24 @@ public class BinaryTree {
 		}
 		
 	}
+	
+	public void updateDepth() {
+		UpdateDepthAux(this);
+	}
 
+	static private int UpdateDepthAux(BinaryTree aux) {
+		if(aux == null)
+			return 0;
+		if(aux.left_child == null && aux.right_child == null) {
+			aux.is_leaf = true;
+			aux.depth = 1;
+			return 1;			
+		}
+		int left_depth = UpdateDepthAux(aux.left_child);
+		int right_depth = UpdateDepthAux(aux.right_child);
+		
+		aux.depth = 1 + Math.max(left_depth, right_depth);
+		
+		return aux.depth;			
+	}
 }

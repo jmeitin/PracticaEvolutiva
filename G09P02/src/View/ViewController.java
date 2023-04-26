@@ -486,7 +486,7 @@ public class ViewController implements Runnable {
 				    }
 				}
 
-
+				GeneticAlgorithm.TREE_DEPTH = maxDepth;
 				
 				return new ChromosomeP3(tolerance, depth, inicializationType);
 			};
