@@ -32,14 +32,14 @@ public class BinaryTree {
 			// IS LEAF/TERMINAL
 			if (profundidad == 1) {
 				is_leaf = true;
-				index = (int) (rand.nextDouble() * (leaf_terminals.length - 1));
+				index = rand.nextInt(leaf_terminals.length);
 				this.root = leaf_terminals[index];
 
 				return;
 			}
 
 			// IS FUNCTION/TERMINAL
-			index = (int) (rand.nextDouble() * (node_functions.length - 1));
+			index = rand.nextInt(node_functions.length);
 			this.root = node_functions[index];
 
 			// CREATE LEFT CHILD & RIGHT CHILD
@@ -59,14 +59,14 @@ public class BinaryTree {
 			// IS LEAF/TERMINAL
 			if (profundidad == 1) {
 				is_leaf = true;
-				index = (int) (rand.nextDouble() * (leaf_terminals.length - 1));
+				index = rand.nextInt(leaf_terminals.length);
 				this.root = leaf_terminals[index];
 
 				return;
 			}
 
 			// IS FUNCTION/TERMINAL
-			index = (int) (rand.nextDouble() * (node_functions.length - 1));
+			index = rand.nextInt(node_functions.length);
 			this.root = node_functions[index];
 
 			// CALCULATE DEPTHS:
@@ -248,7 +248,7 @@ public class BinaryTree {
 			} else {
 				double d = rand.nextDouble();
 				if (d < mutation_chance) {
-					int index = (int) (rand.nextDouble() * (node_functions.length - 1));
+					int index = rand.nextInt(node_functions.length);;
 					aux.root = node_functions[index];
 				} else if (aux.left_child != null && aux.right_child != null) {
 					d = rand.nextDouble();
