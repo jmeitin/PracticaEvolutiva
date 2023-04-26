@@ -128,7 +128,13 @@ public class ChromosomeP3 extends Chromosome<Integer, Integer> {
 		}
 	}
 	
+	public BinaryTree getTreeCopy() {
+		return tree.getCopy();
+	}
 	public BinaryTree getTree() {
 		return tree;
+	}
+	public void setTree(BinaryTree aux) {
+		tree = aux;
 	}
 }

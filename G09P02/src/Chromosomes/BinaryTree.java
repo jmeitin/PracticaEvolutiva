@@ -122,6 +122,9 @@ public class BinaryTree {
 
 	// GET ======================================================================
 	// Devuelve el arbol en forma de array
+	public String getRoot() {
+		return root;
+	}
 	public int getDepth() {
 		return depth;
 	}
@@ -314,7 +317,7 @@ public class BinaryTree {
 			return aux;
 		else if (aux.left_child != null)
 			aux2 = GetRandomNodeAux(aux.left_child, mutation_chance);
-		else if (aux.right_child != null && aux2 != null)
+		if (aux.right_child != null && aux2 != null)
 			aux2 = GetRandomNodeAux(aux.right_child, mutation_chance);
 
 		return aux2;
@@ -322,15 +325,18 @@ public class BinaryTree {
 
 	public void copyTree(BinaryTree aux) {
 		if(aux != null) {
-			root = aux.root;
+			//puede que este arbol tenga padre, por lo que aunque aux sea root, this seguira sin serlo
+			//root = aux.root; 
+			//is_root = aux.is_root;
 			
-			depth = aux.depth;
-			is_root = aux.is_root;
+			depth = aux.depth;			
 			is_leaf = aux.is_leaf;
 
-			if (aux.root != null) {
+			if (aux.left_child != null) {
 				left_child = new BinaryTree(false);
-				left_child.copyTree(aux.left_child);
+				left_child.copyTree(aux.left_child);				
+			}
+			if (aux.right_child != null) {
 				right_child = new BinaryTree(false);
 				right_child.copyTree(aux.right_child);
 			}
