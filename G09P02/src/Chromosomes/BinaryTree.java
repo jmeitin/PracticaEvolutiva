@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Function;
 
-import Utils.MathUtils;
-
 public class BinaryTree {
 	static Random rand = new Random();
 	static private String[] node_functions = { "add", "sub", "mul" };
@@ -127,6 +125,7 @@ public class BinaryTree {
 	public String getRoot() {
 		return root;
 	}
+
 	public int getDepth() {
 		return depth;
 	}
@@ -143,7 +142,7 @@ public class BinaryTree {
 		is_leaf = aux.is_leaf;
 		is_root = aux.is_root;
 		depth = aux.depth;
-		
+
 		if (aux.left_child != null) {
 			left_child = new BinaryTree(false);
 			left_child.getCopyAux(aux.left_child);
@@ -171,36 +170,44 @@ public class BinaryTree {
 			array.add(tree.root);
 			inorderTraversal(array, tree.right_child);
 			array.add(")");
-			
+
 		}
 	}
 
-	// Obtener función del arbol
-	public Function<Double, Double> getFunction() {
-		ArrayList<String> treeArray = toArray();
-
-		StringBuilder sb = new StringBuilder();
-		for (String s : treeArray) {
-			switch (s) {
-			case "mul":
-				sb.append("*");
-				break;
+	public double evaluate(double x) {
+		//if (is_leaf) {
+		if ((left_child == null && right_child == null)) {
+			// Si el nodo es una hoja y su valor es "x", devuelve el valor pasado como
+			// parámetro
+			if (root.equals("x")) {
+				return x;
+			} else {
+				return Double.parseDouble(root);
+			}
+		} else {
+			// Si el nodo es un operador, evalúa sus hijos y realiza la operación
+			// correspondiente
+			double izquierda = left_child.evaluate(x);
+			double derecha = right_child.evaluate(x);
+			switch (root) {
 			case "add":
-				sb.append("+");
-				break;
+				return izquierda + derecha;
 			case "sub":
-				sb.append("-");
-				break;
+				return izquierda - derecha;
+			case "mul":
+				return izquierda * derecha;
 			default:
-				sb.append(s);
-				break;
+				throw new IllegalArgumentException("Operador desconocido: " + root);
 			}
 		}
-		final String str = sb.toString();
-		
+	}
+
+
+	// Obtener función del arbol
+	public Function<Double, Double> getFunction() {
 		Function<Double, Double> result = x -> {
-			return MathUtils.eval(str.replaceAll("x", x.toString()));
-			
+			return evaluate(x);
+
 		};
 		return result;
 	}
@@ -246,7 +253,8 @@ public class BinaryTree {
 			} else {
 				double d = rand.nextDouble();
 				if (d < mutation_chance) {
-					int index = rand.nextInt(node_functions.length);;
+					int index = rand.nextInt(node_functions.length);
+					;
 					aux.root = node_functions[index];
 				} else if (aux.left_child != null && aux.right_child != null) {
 					d = rand.nextDouble();
@@ -322,43 +330,44 @@ public class BinaryTree {
 	}
 
 	public void copyTree(BinaryTree aux) {
-		if(aux != null) {
-			//puede que este arbol tenga padre, por lo que aunque aux sea root, this seguira sin serlo
-			root = aux.root; 
-			//is_root = aux.is_root;
-			
-			depth = aux.depth;			
+		if (aux != null) {
+			// puede que este arbol tenga padre, por lo que aunque aux sea root, this
+			// seguira sin serlo
+			root = aux.root;
+			// is_root = aux.is_root;
+
+			depth = aux.depth;
 			is_leaf = aux.is_leaf;
 
 			if (aux.left_child != null) {
 				left_child = new BinaryTree(false);
-				left_child.copyTree(aux.left_child);				
+				left_child.copyTree(aux.left_child);
 			}
 			if (aux.right_child != null) {
 				right_child = new BinaryTree(false);
 				right_child.copyTree(aux.right_child);
 			}
 		}
-		
+
 	}
-	
+
 	public void updateDepth() {
 		UpdateDepthAux(this);
 	}
 
 	static private int UpdateDepthAux(BinaryTree aux) {
-		if(aux == null)
+		if (aux == null)
 			return 0;
-		if(aux.left_child == null && aux.right_child == null) {
+		if (aux.left_child == null && aux.right_child == null) {
 			aux.is_leaf = true;
 			aux.depth = 1;
-			return 1;			
+			return 1;
 		}
 		int left_depth = UpdateDepthAux(aux.left_child);
 		int right_depth = UpdateDepthAux(aux.right_child);
-		
+
 		aux.depth = 1 + Math.max(left_depth, right_depth);
-		
-		return aux.depth;			
+
+		return aux.depth;
 	}
 }

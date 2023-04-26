@@ -1,20 +1,5 @@
 package Main;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.function.Function;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
-import Chromosomes.ChromosomeP3;
-import Utils.ArrayUtils;
-import Utils.MathUtils;
-import Utils.RandomUtils;
 import View.MainView;
 
 public class main {
@@ -46,6 +31,7 @@ public class main {
 //		 System.out.println(ArrayUtils.arrayToMathExpression(arr));
 		// El resultado qeu deberia dar (que aun no lo da porque no está completo) es
 		// -2x + 2
+	
 
 		new MainView();
 	}

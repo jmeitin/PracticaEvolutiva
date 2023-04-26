@@ -1,7 +1,6 @@
 package Utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ArrayUtils {
 	public static int indexOf(int[] array, int element) {
