@@ -135,6 +135,10 @@ public class BinaryTree {
 
 	private void getCopyAux(BinaryTree aux) {
 		root = aux.root;
+		is_leaf = aux.is_leaf;
+		is_root = aux.is_root;
+		depth = aux.depth;
+		
 		if (aux.left_child != null) {
 			left_child = new BinaryTree(false);
 			left_child.getCopyAux(aux.left_child);
@@ -317,15 +321,21 @@ public class BinaryTree {
 	}
 
 	public void copyTree(BinaryTree aux) {
-		root = aux.root;
-		depth = aux.depth;
-		is_root = aux.is_root;
-		is_leaf = aux.is_leaf;
+		if(aux != null) {
+			root = aux.root;
+			
+			depth = aux.depth;
+			is_root = aux.is_root;
+			is_leaf = aux.is_leaf;
 
-		if (aux.root != null) {
-			left_child.copyTree(aux.left_child);
-			right_child.copyTree(aux.right_child);
+			if (aux.root != null) {
+				left_child = new BinaryTree(false);
+				left_child.copyTree(aux.left_child);
+				right_child = new BinaryTree(false);
+				right_child.copyTree(aux.right_child);
+			}
 		}
+		
 	}
 
 }
