@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Function;
 
+import Utils.MathUtils;
+
 public class BinaryTree {
 	static Random rand = new Random();
 	static private String[] node_functions = { "add", "sub", "mul" };
@@ -164,46 +166,42 @@ public class BinaryTree {
 	// Aux Method for toArray
 	private void inorderTraversal(ArrayList<String> array, BinaryTree tree) {
 		if (tree != null) {
+			array.add("(");
 			inorderTraversal(array, tree.left_child);
 			array.add(tree.root);
 			inorderTraversal(array, tree.right_child);
+			array.add(")");
+			
 		}
 	}
 
 	// Obtener función del arbol
 	public Function<Double, Double> getFunction() {
 		ArrayList<String> treeArray = toArray();
-		Function<Double, Double> result = x -> {
-			double res = x;
-			if (treeArray.get(0) != "x")
-				res = Double.parseDouble(treeArray.get(0));
 
-			for (int i = 1; i < treeArray.size() - 1; i += 2) {
-				String current = treeArray.get(i);
-				String nextString = treeArray.get(i + 1);
-				double nextValue = 0;
-				if (nextString == "x")
-					nextValue = x;
-				else
-					nextValue = Double.parseDouble(nextString);
-
-				switch (current) {
-				case "add":
-					res += nextValue;
-					break;
-				case "sub":
-					res -= nextValue;
-					break;
-				case "mul":
-					res *= nextValue;
-					break;
-				default:
-					throw new IllegalArgumentException("Unknown operator: " + current);
-				}
+		StringBuilder sb = new StringBuilder();
+		for (String s : treeArray) {
+			switch (s) {
+			case "mul":
+				sb.append("*");
+				break;
+			case "add":
+				sb.append("+");
+				break;
+			case "sub":
+				sb.append("-");
+				break;
+			default:
+				sb.append(s);
+				break;
 			}
-			return res;
+		}
+		final String str = sb.toString();
+		
+		Function<Double, Double> result = x -> {
+			return MathUtils.eval(str.replaceAll("x", x.toString()));
+			
 		};
-
 		return result;
 	}
 

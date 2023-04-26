@@ -1,5 +1,8 @@
 package Utils;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+
 public class RandomUtils {
 
 	// Random number between 0 and max (both inclusive)
