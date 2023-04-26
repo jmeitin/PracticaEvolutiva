@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Function;
 
+import Utils.ArrayUtils;
+
 public class ChromosomeP3 extends Chromosome<Integer, String> {
 	
 	Random rand = new Random();
@@ -57,26 +59,9 @@ public class ChromosomeP3 extends Chromosome<Integer, String> {
 	}
 	
 	
-	String arrayToMathExpression(ArrayList<String> arr) {
-		StringBuilder sb = new StringBuilder();
-	    for (String s : arr) {
-	        switch (s) {
-	            case "+":
-	            case "-":
-	            case "x":
-	                sb.append(" ").append(s).append(" ");
-	                break;
-	            default:
-	                sb.append(s);
-	        }
-	    }
-	    return sb.toString();
-	}
-
-	
 	public String getFunctionString()
 	{
-		return arrayToMathExpression(tree.toArray());
+		return ArrayUtils.arrayToMathExpression(tree.toArray()) + "\n" + tree.toArray();
 	}
 	
 	double getCorrectValue(double x)

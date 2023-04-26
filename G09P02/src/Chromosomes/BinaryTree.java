@@ -326,7 +326,7 @@ public class BinaryTree {
 	public void copyTree(BinaryTree aux) {
 		if(aux != null) {
 			//puede que este arbol tenga padre, por lo que aunque aux sea root, this seguira sin serlo
-			//root = aux.root; 
+			root = aux.root; 
 			//is_root = aux.is_root;
 			
 			depth = aux.depth;			
