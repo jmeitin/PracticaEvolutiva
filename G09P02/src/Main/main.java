@@ -1,6 +1,5 @@
 package Main;
 
-import Chromosomes.ChromosomeP3opcional;
 import View.MainView;
 
 public class main {
