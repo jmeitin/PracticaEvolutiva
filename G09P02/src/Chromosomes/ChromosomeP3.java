@@ -11,6 +11,7 @@ public class ChromosomeP3 extends Chromosome<Integer, String> {
 	private BinaryTree tree;
 	private String fenotype;
 	private String creation_type = "";
+	private boolean must_penalize = false;
 	double[][] dataset = new double[100][2];
 	
 	public ChromosomeP3(double tolerance, int depth, String t) {
@@ -94,12 +95,16 @@ public class ChromosomeP3 extends Chromosome<Integer, String> {
 			final double estimated_value = func.apply(dataset[i][0]);
 			final double real_value = dataset[i][1];
 			final double cuadratic_difference = Math.pow(real_value - estimated_value, 2);
-			
+				
 			brute_fitness += cuadratic_difference;
 		}
 		
 		
 		brute_fitness /= iterations;
+		// DEEPER THAN AVERAGE && 50% CHANCE ==> PENALIZE
+		if (must_penalize)
+			brute_fitness *= 1.5; //MINIMIZE
+		
 		return brute_fitness;
 	}
 
@@ -157,5 +162,10 @@ public class ChromosomeP3 extends Chromosome<Integer, String> {
 	}
 	public void setTree(BinaryTree aux) {
 		tree = aux;
+	}
+
+	public void penalize(boolean b) {
+		must_penalize = b;
+		
 	}
 }

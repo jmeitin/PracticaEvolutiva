@@ -231,6 +231,7 @@ public class GeneticAlgorithm<T, U> {
 		int sumatorio = 0;
 		for (int i = 0; i < poblation.length; i++) {
 			ChromosomeP3 c = (ChromosomeP3)poblation[i];
+			c.penalize (false); //don't penalize by default
 			BinaryTree tree = c.getTree();
 			tree.updateDepth();			
 			sumatorio += tree.getDepth();
@@ -242,16 +243,10 @@ public class GeneticAlgorithm<T, U> {
 		for (int i = 0; i < poblation.length; i++) {
 			ChromosomeP3 c = (ChromosomeP3)poblation[i];
 			BinaryTree tree = c.getTree();
-			// 50% de borrarlo
+			// 50% de penalizarlo
 			if(tree.getDepth() > average_depth && rand.nextDouble() > 0.5) {
 				//SOBREESCRIBE EL ARBOL
-//				System.out.println(tree.getDepth());
-//				System.out.println(tree.toArray());
-				if(c.getCreationType() != "CRECIENTE")
-					tree.GrowInitalization(TREE_DEPTH);
-				else tree.FullInitalization(TREE_DEPTH);
-//				System.out.println(tree.toArray());
-//				System.out.println(tree.getDepth());
+				c.penalize(true); //too deep. Must penalize
 			}
 			else {
 				//System.out.println("Sobrevive tarpeian");
