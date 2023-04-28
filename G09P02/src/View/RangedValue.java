@@ -20,7 +20,7 @@ public class RangedValue<T extends Number> implements Iterable<T> {
 
     public int getNumSteps()
     {
-    	return num_steps;
+    	return Math.abs(min_value.doubleValue() - max_value.doubleValue()) < 0.01 ? 1 : num_steps;
     }
     
     public Iterator<T> iterator() {
@@ -35,7 +35,7 @@ public class RangedValue<T extends Number> implements Iterable<T> {
         public RangedValueIterator() {
             step = (max_value.doubleValue() - min_value.doubleValue()) / (double) (num_steps - 1);
             current = min_value.doubleValue();
-            remainingSteps = num_steps;
+            remainingSteps = Math.abs(min_value.doubleValue() - max_value.doubleValue()) < 0.01 ? 1 : num_steps;
         }
 
         public boolean hasNext() {
