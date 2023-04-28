@@ -33,8 +33,6 @@ public class main {
 		// El resultado qeu deberia dar (que aun no lo da porque no está completo) es
 		// -2x + 2
 	
-		ChromosomeP3opcional c = new ChromosomeP3opcional(10, 10, 3);
-		//new MainView();
-		System.out.println(c.evaluate());
+		new MainView();
 	}
 }

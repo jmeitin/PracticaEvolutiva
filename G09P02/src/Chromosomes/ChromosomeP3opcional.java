@@ -144,12 +144,11 @@ public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {
 			}
 		}
 		
-		System.out.println("FENOTTYPE: " + fenotype);
+		//System.out.println("FENOTTYPE: " + fenotype);
 	}
 
-	@Override
-	public double evaluate() {
-		calculateFenotypes();
+	public Function<Double, Double> getEstimatedFunction()
+	{
 		String result = fenotype.replace("mul", "*").replace("add", "+").replace("sub", "-");
 		Function<Double, Double> func = x -> {
 			try
@@ -158,9 +157,22 @@ public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {
 			}
 			catch(Exception e)
 			{
-				return Double.MAX_VALUE;
+				return 100.0;
 			}
 		};
+		return func;
+	}
+	
+	public Function<Double, Double> getRealFunction()
+	{
+		return  x -> Math.pow(x, 4) + Math.pow(x, 3) + Math.pow(x, 2) + x + 1;
+	}
+	
+	@Override
+	public double evaluate() {
+		calculateFenotypes();
+		Function<Double, Double> func = getEstimatedFunction();
+		
 		brute_fitness = 0;
 		final int iterations = 100;
 		
@@ -181,7 +193,8 @@ public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {
 	
 	public String getFunctionString()
 	{
-		return fenotype;
+		calculateFenotypes();
+		return fenotype + "\nFitness bruto: " + evaluate();
 	}
 	
 	@Override

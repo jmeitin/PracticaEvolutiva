@@ -235,50 +235,47 @@ public class MainView extends JFrame {
 		fitnessPlot.addLinePlot("Mejor Generación", isDarkTheme ? LIGHT_BLUE : DARK_BLUE, best_fitnesses);
 		fitnessPlot.addLinePlot("Media Generación", isDarkTheme ? LIGHT_GREEN : DARK_GREEN, average_fitnesses);
 	}
-	
-	private double getStep(double min, double max, int numElems)
-	{
-		return (max - min) / (double)(numElems - 1);
+
+	private double getStep(double min, double max, int numElems) {
+		return (max - min) / (double) (numElems - 1);
 	}
-	
-	public void plotGraph(Function<Double, Double> realFunction, Function<Double,Double> estimatedFunction)
-	{
+
+	public void plotGraph(Function<Double, Double> realFunction, Function<Double, Double> estimatedFunction) {
 		graphicPlot.removeAllPlots();
 		double[] x = new double[301];
 		final double minX = -4;
-		double step = getStep(minX,4, x.length);
+		double step = getStep(minX, 4, x.length);
 		double[] yReal = new double[x.length];
 		double[] yEstimated = new double[x.length];
-		
+
 		for (int i = 0; i < x.length; i++) {
 			x[i] = minX + i * step;
-	        yReal[i] = realFunction.apply(x[i]);
-	        yEstimated[i] = estimatedFunction.apply(x[i]);
+			yReal[i] = realFunction.apply(x[i]);
+			yEstimated[i] = estimatedFunction.apply(x[i]);
 		}
 
 		// Agregar la función al plot
 		graphicPlot.addLinePlot("Real", x, yReal);
 		graphicPlot.addLinePlot("Estimated", x, yEstimated);
 	}
-	
-	public void initGraphpicPlot()
-	{
+
+	public void initGraphpicPlot() {
 		Function<Double, Double> realFunction = x -> Math.pow(x, 4) + Math.pow(x, 3) + Math.pow(x, 2) + x + 1;
 		graphicPlot.removeAllPlots();
 		double[] x = new double[301];
 		final double minX = -4;
-		double step = getStep(minX,4,x.length);
+		double step = getStep(minX, 4, x.length);
 		double[] yReal = new double[x.length];
-		
+
 		for (int i = 0; i < x.length; i++) {
 			x[i] = minX + i * step;
-	        yReal[i] = realFunction.apply(x[i]);
+			yReal[i] = realFunction.apply(x[i]);
 		}
 
 		// Agregar la función al plot
 		graphicPlot.addLinePlot("Real", x, yReal);
 	}
-	
+
 	/***
 	 * Method to enable/disable options "Aritmético" y "BLX-α"
 	 * 
@@ -363,8 +360,8 @@ public class MainView extends JFrame {
 			mutationTypeComboBox.setModel(p1Mutations);
 			controller.setMutationType(mutationTypeComboBox.getSelectedItem().toString().toUpperCase());
 		}
-		
-		if(inicializationPane != null)
+
+		if (inicializationPane != null)
 			inicializationPane.setVisible(false);
 	}
 
@@ -377,7 +374,7 @@ public class MainView extends JFrame {
 			controller.setMutationType(mutationTypeComboBox.getSelectedItem().toString().toUpperCase());
 		}
 
-		if(inicializationPane != null)
+		if (inicializationPane != null)
 			inicializationPane.setVisible(false);
 	}
 
@@ -390,8 +387,21 @@ public class MainView extends JFrame {
 			controller.setMutationType(mutationTypeComboBox.getSelectedItem().toString().toUpperCase());
 		}
 
-		if(inicializationPane != null)
+		if (inicializationPane != null)
 			inicializationPane.setVisible(true);
+	}
+
+	private void setModelsForP3optional() {
+		if (crossTypeComboBox != null)
+			crossTypeComboBox.setModel(p1Model);
+
+		if (mutationTypeComboBox != null) {
+			mutationTypeComboBox.setModel(p1Mutations);
+			controller.setMutationType(mutationTypeComboBox.getSelectedItem().toString().toUpperCase());
+		}
+
+		if (inicializationPane != null)
+			inicializationPane.setVisible(false);
 	}
 
 	private boolean slider_mode = false;
@@ -575,6 +585,27 @@ public class MainView extends JFrame {
 		});
 		mutationProbabilityTextField.setColumns(10);
 
+		inicializationPane = new JPanel();
+		inicializationPane.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+				"Inicializaci\u00F3n", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		inicializationPane.setLayout(new GridLayout(0, 2, 0, 0));
+
+		JLabel inicializationTypeLabel = new JLabel("Tipo de inicialización");
+		inicializationTypeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		inicializationPane.add(inicializationTypeLabel);
+
+		inicializationTypeComboBox = new JComboBox();
+		inicializationTypeComboBox
+				.setModel(new DefaultComboBoxModel(new String[] { "Creciente", "Completa", "Ramped and Half" }));
+		inicializationTypeComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.setInicializationType(inicializationTypeComboBox.getSelectedItem().toString().toUpperCase());
+			}
+		});
+		inicializationPane.add(inicializationTypeComboBox);
+		inicializationPane.setVisible(false);
+		
 		JButton executeButton = new JButton("Ejecutar");
 		executeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -602,6 +633,20 @@ public class MainView extends JFrame {
 		JPanel problemPanel = new JPanel();
 		problemPanel.setBorder(new TitledBorder("Problema"));
 
+		lblDimensions = new JLabel("Dimensiones");
+		lblDimensions.setHorizontalAlignment(SwingConstants.LEFT);
+		lblDimensions.setVisible(false);
+		
+		dimensionsTextField = new JFormattedTextField(numberFormat);
+		dimensionsTextField.setText("2");
+		dimensionsTextField.setVisible(false);
+		dimensionsTextField.addPropertyChangeListener("value", evt -> {
+			String text = evt.getNewValue().toString();
+			int dimensions = Math.max(Integer.parseInt(text), 1);
+			dimensionsTextField.setText(Integer.toString(dimensions));
+			controller.setDimensions(dimensions);
+		});
+		
 		JLabel lblSeleccionaProblema = new JLabel("Selecciona problema");
 		lblSeleccionaProblema.setHorizontalAlignment(SwingConstants.LEFT);
 
@@ -611,7 +656,9 @@ public class MainView extends JFrame {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					String selectedFunction = e.getItem().toString();
-					if (e.getItem().equals("P3"))
+					if(e.getItem().equals("P3 - Opcional"))
+						setModelsForP3optional();
+					else if (e.getItem().equals("P3"))
 						setModelsForP3();
 					else if (e.getItem().equals("P2"))
 						setModelsForP2();
@@ -620,22 +667,25 @@ public class MainView extends JFrame {
 					// enabled or disable options "Aritmético" y "BLX-α"
 					enableCrossTypeOptions(selectedFunction.equals("P1 - Funcion 4B"));
 					enableDisableTolerance(!(selectedFunction.equals("P1 - Funcion 4B") || selectedFunction.equals("P2")
-							|| selectedFunction.equals("P3")));
+							|| selectedFunction.equals("P3") || selectedFunction.equals("P3 - Opcional")));
 					boolean dimensionsVisible = selectedFunction.equals("P1 - Funcion 4B")
-							|| selectedFunction.equals("P1 - Funcion 4A");
+							|| selectedFunction.equals("P1 - Funcion 4A") || selectedFunction.equals("P3 - Opcional");
+					
+					boolean p3Opcional = selectedFunction.equals("P3 - Opcional");
 					if (lblDimensions != null) {
 
 						lblDimensions.setVisible(dimensionsVisible);
 						dimensionsTextField.setVisible(dimensionsVisible);
+						
+						lblDimensions.setText(p3Opcional ? "Wrapping" : "Dimensiones");
 					}
 				}
 
 				controller.setFunction(e.getItem().toString().toUpperCase());
 			}
 		});
-		problemSelectionComboBox.setModel(new DefaultComboBoxModel(new String[] { "P1 - Funcion 1", "P1 - Funcion 2",
-				"P1 - Funcion 3", "P1 - Funcion 4A", "P1 - Funcion 4B", "P2", "P3" }));
-		problemSelectionComboBox.setSelectedIndex(6);
+		problemSelectionComboBox.setModel(new DefaultComboBoxModel(new String[] {"P1 - Funcion 1", "P1 - Funcion 2", "P1 - Funcion 3", "P1 - Funcion 4A", "P1 - Funcion 4B", "P2", "P3", "P3 - Opcional"}));
+		problemSelectionComboBox.setSelectedIndex(7);
 
 		JPanel themePanel = new JPanel();
 		themePanel.setBorder(new TitledBorder("Tema"));
@@ -721,27 +771,7 @@ public class MainView extends JFrame {
 				controller.setPoblationSizeRange(min, max);
 			}
 		});
-
-		inicializationPane = new JPanel();
-		inicializationPane.setBorder(new TitledBorder(
-				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
-				"Inicializaci\u00F3n", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		inicializationPane.setLayout(new GridLayout(0, 2, 0, 0));
-
-		JLabel inicializationTypeLabel = new JLabel("Tipo de inicialización");
-		inicializationTypeLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		inicializationPane.add(inicializationTypeLabel);
-
-		inicializationTypeComboBox = new JComboBox();
-		inicializationTypeComboBox
-				.setModel(new DefaultComboBoxModel(new String[] { "Creciente", "Completa", "Ramped and Half" }));
-		inicializationTypeComboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.setInicializationType(inicializationTypeComboBox.getSelectedItem().toString().toUpperCase());
-			}
-		});
-		inicializationPane.add(inicializationTypeComboBox);
-
+		
 		GroupLayout gl_westPanel = new GroupLayout(westPanel);
 		gl_westPanel.setHorizontalGroup(gl_westPanel.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING,
 				gl_westPanel.createSequentialGroup().addGroup(gl_westPanel.createParallelGroup(Alignment.TRAILING)
@@ -914,19 +944,6 @@ public class MainView extends JFrame {
 												GroupLayout.PREFERRED_SIZE)))));
 		crossPanel.setLayout(gl_crossPanel);
 
-		lblDimensions = new JLabel("Dimensiones");
-		lblDimensions.setHorizontalAlignment(SwingConstants.LEFT);
-		lblDimensions.setVisible(false);
-
-		dimensionsTextField = new JFormattedTextField(numberFormat);
-		dimensionsTextField.setText("2");
-		dimensionsTextField.setVisible(false);
-		dimensionsTextField.addPropertyChangeListener("value", evt -> {
-			String text = evt.getNewValue().toString();
-			int dimensions = Math.max(Integer.parseInt(text), 1);
-			dimensionsTextField.setText(Integer.toString(dimensions));
-			controller.setDimensions(dimensions);
-		});
 		GroupLayout gl_problemPanel = new GroupLayout(problemPanel);
 		gl_problemPanel.setHorizontalGroup(gl_problemPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_problemPanel.createSequentialGroup()

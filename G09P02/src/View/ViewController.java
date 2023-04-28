@@ -16,6 +16,7 @@ import Chromosomes.ChromosomeP1F4a;
 import Chromosomes.ChromosomeP1F4b;
 import Chromosomes.ChromosomeP2;
 import Chromosomes.ChromosomeP3;
+import Chromosomes.ChromosomeP3opcional;
 import CrossAlgorithms.P1.ArithmeticCross;
 import CrossAlgorithms.P1.BLXAlphaCross;
 import CrossAlgorithms.P1.MultiPointCross;
@@ -309,11 +310,13 @@ public class ViewController implements Runnable {
 		// so we decided to do two similar methods. We know we could have done one
 		// parametriced but this approach gives are
 		// more flexibility in the future.
-		if (chromosome instanceof ChromosomeP2) {
+		if (chromosome instanceof ChromosomeP2)
 			updateSolutionP2(chromosome);
-		} else if(chromosome instanceof ChromosomeP3)
+		else if (chromosome instanceof ChromosomeP3)
 			updateSolutionP3(chromosome);
-			else
+		else if (chromosome instanceof ChromosomeP3opcional)
+			updateSolutionP3optional(chromosome);
+		else
 			updateSolutionP1(chromosome);
 
 	}
@@ -341,10 +344,15 @@ public class ViewController implements Runnable {
 
 		this.view.setSolutionText(solutionText);
 	}
-	
-	private void updateSolutionP3(Chromosome chromosome)
-	{
-		ChromosomeP3 result = (ChromosomeP3)chromosome;
+
+	private void updateSolutionP3(Chromosome chromosome) {
+		ChromosomeP3 result = (ChromosomeP3) chromosome;
+		this.view.setSolutionText(result.getFunctionString());
+		this.view.plotGraph(result.getRealFunction(), result.getEstimatedFunction());
+	}
+
+	private void updateSolutionP3optional(Chromosome chromosome) {
+		ChromosomeP3opcional result = (ChromosomeP3opcional) chromosome;
 		this.view.setSolutionText(result.getFunctionString());
 		this.view.plotGraph(result.getRealFunction(), result.getEstimatedFunction());
 	}
@@ -470,29 +478,36 @@ public class ViewController implements Runnable {
 		case "P3":
 			chromosome_factory = (double tolerance, int dimensions, int index, int poblation_size) -> {
 				final int maxDepth = 5;
-				int depth = maxDepth; 
+				int depth = maxDepth;
 				String inicializationType = algorithmData.inicializationType;
-				
-				if(inicializationType.equals("RAMPED AND HALF")) {
-					
-				    final int group_size = poblation_size / (maxDepth - 1);
-				    final int half_group_size = group_size / 2;
-				    final int subgroupIndex = (index / group_size);
-				    final int half_subgroup_index = subgroupIndex * group_size + half_group_size;
-				    
-				    depth = subgroupIndex + 2;
-				    
-				    if (index < half_subgroup_index) {
-				        inicializationType = "COMPLETA";
-				    } else {
-				        inicializationType = "CRECIENTE";
-				    }
+
+				if (inicializationType.equals("RAMPED AND HALF")) {
+
+					final int group_size = poblation_size / (maxDepth - 1);
+					final int half_group_size = group_size / 2;
+					final int subgroupIndex = (index / group_size);
+					final int half_subgroup_index = subgroupIndex * group_size + half_group_size;
+
+					depth = subgroupIndex + 2;
+
+					if (index < half_subgroup_index) {
+						inicializationType = "COMPLETA";
+					} else {
+						inicializationType = "CRECIENTE";
+					}
 				}
 
-				//GeneticAlgorithm.TREE_DEPTH = maxDepth;
+				// GeneticAlgorithm.TREE_DEPTH = maxDepth;
 				algorithmData.tree_depth = maxDepth;
-				
+
 				return new ChromosomeP3(tolerance, depth, inicializationType);
+			};
+			algorithmData.chromosome_factory = chromosome_factory;
+			algorithmData.maximize = false;
+			break;
+		case "P3 - OPCIONAL":
+			chromosome_factory = (double tolerance, int dimensions, int index, int poblation_size) -> {
+				return new ChromosomeP3opcional(30, tolerance, dimensions);
 			};
 			algorithmData.chromosome_factory = chromosome_factory;
 			algorithmData.maximize = false;
