@@ -4,10 +4,12 @@ import java.util.Random;
 
 public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {	
 	private String fenotype = "";
-	
+	int NUM_WRAPS = 3;
 	//CHROMOSOME LENGTH ES CONFIGURABLE DESDE EL EDITOR	
 	public ChromosomeP3opcional(int chromosomeLenght, double tolerance) {
 		super(chromosomeLenght, tolerance);
+		
+		
 		//Chromosome calls initGenes & calculateFenotypes
 	}
 	
@@ -27,89 +29,196 @@ public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {
 		// Random init each gene
 		for (int i = 0; i < this.num_of_genes; i++) {
 			this.genes[i] = new Gene<Integer>(tam_genes_x);
-			
+			int a = rand.nextInt(256);
+			System.out.print(a+ "+");
 			for (int j = 0; j < this.genes[i].getLenght(); j++) {
 				//Each genes has only 1 allele
-				this.genes[i].setAllele(j, rand.nextInt(256)); // [0, 255]
+				this.genes[i].setAllele(j, a); // [0, 255]
 			}
 		}
+	}
+	
+	public void INIT() {
+		System.out.println("INIT PUBLICO PARA PROBAR ====================0");
+		System.out.println("GENES========================");
+		for(int i = 0; i < num_of_genes; i++) {
+			System.out.print(genes[i].getAllele(0) + " ");
+		}
+		
+		//==============================================================
+		System.out.println(genes.length);
+		int index = genes[0].getAllele(0) % start.length;
+		fenotype = start[index];
+		boolean finished = false;
+
+		String solution = "";
+		String first_half = "";
+		String chosen_array = "";
+		char letter = ' ';
+		int w = 0;
+		
+		while(!finished && w < NUM_WRAPS) {
+			w++;
+			for (int g = 1; g < num_of_genes && !finished; g++) {
+				// SEARCH FOR < ============================================
+				int j = 0;			
+				first_half ="";
+				solution = "";
+				while (j < fenotype.length() &&  fenotype.charAt(j) != '<') {		
+					letter = fenotype.charAt(j);
+					if (letter != '<')
+						first_half += letter;
+					j++;
+				}
+				System.out.println("FIRST HALF: " + solution);
+				
+				// SEAR FOR RULE BETWEEN <>==================================
+				if(j < fenotype.length()) {
+					j++; // skip "<"
+					chosen_array = "";
+					while (j < fenotype.length() && fenotype.charAt(j) != '>') {
+						letter = fenotype.charAt(j);
+						chosen_array += letter;
+						j++;
+					}
+					System.out.println("CHOSEN: " + chosen_array);
+					
+					if (j < fenotype.length()) { //found >
+						j++; // skip ">"
+						int c = genes[g].getAllele(0);
+						int r = 1;
+						String value = "";
+						switch(chosen_array) {
+						case "expr":
+							r = expr.length;
+							value = expr[c % r];
+							break;
+						case "op":
+							r = op.length;
+							value = op[c % r];
+							break;
+						case "term":
+							r = term.length;
+							value = term[c % r];
+							break;
+						case "digit":
+							r = term.length;
+							value = digit[c % r];
+							break;
+						default:
+							//System.out.println("Error in calculateFenotypes" + fenotype);
+							break;
+						}
+						
+						System.out.println("RULE: " +value);
+						solution = first_half + value;
+					}
+					
+					// FILL SOLUTION WITH TEXT AFTER >=======================================0
+					while (j < fenotype.length()) {
+						solution += fenotype.charAt(j);;
+						j++;
+					}
+					System.out.println("FINAL SOLUTION: " + solution);
+					fenotype = solution;
+				}
+				else finished = true;
+			}
+		}
+		
+		System.out.println("FENOTTYPE: " + fenotype);
+		System.out.println("--------------");
+				
 	}
 
 	@Override
 	public void calculateFenotypes() {
+		System.out.println();
+		System.out.println("CALCULATE FENOTYPES ===============================0");
+		
+		//==============================================================
 		System.out.println(genes.length);
 		int index = genes[0].getAllele(0) % start.length;
 		fenotype = start[index];
-		boolean full = false;
+		boolean finished = false;
+
 		String solution = "";
+		String first_half = "";
 		String chosen_array = "";
 		char letter = ' ';
+		int w = 0;
 		
-		for (int g = 1; g < num_of_genes && !full; g++) {
-			// SEARCH FOR < ============================================
-			int j = 0;			
-			letter = fenotype.charAt(j);
-			while (j < fenotype.length() &&  letter != '<') {
-				letter = fenotype.charAt(j);
-				
-				if (letter != '<')
-					solution += letter;
-				j++;
-			}
-			
-			// SEAR FOR RULE BETWEEN <>==================================
-			if(j < fenotype.length()) {
-				j++; // skip "<"
-				letter = fenotype.charAt(j);
-				while (j < fenotype.length() && letter != '>') {
+		while(!finished && w < NUM_WRAPS) {
+			w++;
+			for (int g = 1; g < num_of_genes && !finished; g++) {
+				// SEARCH FOR < ============================================
+				int j = 0;			
+				first_half ="";
+				solution = "";
+				while (j < fenotype.length() &&  fenotype.charAt(j) != '<') {		
 					letter = fenotype.charAt(j);
-					chosen_array += letter;
+					if (letter != '<')
+						first_half += letter;
 					j++;
 				}
+				System.out.println("FIRST HALF: " + solution);
 				
-				if (j < fenotype.length()) { //found >
-					j++; // skip ">"
-					int c = genes[g].getAllele(0);
-					int r = 1;
-					String value = "";
-					switch(chosen_array) {
-					case "expr":
-						r = expr.length;
-						value = expr[c % r];
-						break;
-					case "op":
-						r = op.length;
-						value = op[c % r];
-						break;
-					case "term":
-						r = term.length;
-						value = term[c % r];
-						break;
-					case "digit":
-						r = term.length;
-						value = digit[c % r];
-						break;
-					default:
-						System.out.println("Error in calculateFenotypes" + fenotype);
-						break;
+				// SEAR FOR RULE BETWEEN <>==================================
+				if(j < fenotype.length()) {
+					j++; // skip "<"
+					chosen_array = "";
+					while (j < fenotype.length() && fenotype.charAt(j) != '>') {
+						letter = fenotype.charAt(j);
+						chosen_array += letter;
+						j++;
+					}
+					System.out.println("CHOSEN: " + chosen_array);
+					
+					if (j < fenotype.length()) { //found >
+						j++; // skip ">"
+						int c = genes[g].getAllele(0);
+						int r = 1;
+						String value = "";
+						switch(chosen_array) {
+						case "expr":
+							r = expr.length;
+							value = expr[c % r];
+							break;
+						case "op":
+							r = op.length;
+							value = op[c % r];
+							break;
+						case "term":
+							r = term.length;
+							value = term[c % r];
+							break;
+						case "digit":
+							r = term.length;
+							value = digit[c % r];
+							break;
+						default:
+							//System.out.println("Error in calculateFenotypes" + fenotype);
+							break;
+						}
+						
+						System.out.println("RULE: " +value);
+						solution = first_half + value;
 					}
 					
-					System.out.println(value);
-					solution += value;
+					// FILL SOLUTION WITH TEXT AFTER >=======================================0
+					while (j < fenotype.length()) {
+						solution += fenotype.charAt(j);;
+						j++;
+					}
+					System.out.println("FINAL SOLUTION: " + solution);
+					fenotype = solution;
 				}
-				
-				// FILL SOLUTION WITH TEXT AFTER >=======================================0
-				while (j < fenotype.length()) {
-					solution += fenotype.charAt(j);;
-					j++;
-				}
-					
+				else finished = true;
 			}
-			else full = true;
 		}
 		
-		System.out.println("FENOTTYPE");
-		System.out.println(fenotype);
+		System.out.println("FENOTTYPE: " + fenotype);
+		System.out.println("--------------");
 		
 		//HABRIA QUE METER EL WRAPPING =====================================================
 		

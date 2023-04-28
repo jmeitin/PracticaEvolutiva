@@ -1,5 +1,6 @@
 package Main;
 
+import Chromosomes.ChromosomeP3opcional;
 import View.MainView;
 
 public class main {
@@ -32,8 +33,9 @@ public class main {
 		// El resultado qeu deberia dar (que aun no lo da porque no está completo) es
 		// -2x + 2
 	
-		//ChromosomeP3opcional c = new ChromosomeP3opcional(10, 10);
-		new MainView();
+		ChromosomeP3opcional c = new ChromosomeP3opcional(10, 10);
+		c.INIT();
+		//new MainView();
 		System.out.println("HOLAAAAAAA");
 	}
 }
