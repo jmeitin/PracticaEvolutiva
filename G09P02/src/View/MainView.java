@@ -109,6 +109,8 @@ public class MainView extends JFrame {
 	private final Color DARK_BLUE = new Color(25, 111, 160);
 	private final Color DARK_GREEN = new Color(39, 160, 25);
 	private final Color DARK_RED = new Color(160, 36, 25);
+	private final Color BLACK = new Color(0,0,0);
+	private final Color WHITE = new Color(255,255,255);
 	private boolean isDarkTheme = false;
 	private final ViewController controller = new ViewController(this);
 
@@ -242,9 +244,10 @@ public class MainView extends JFrame {
 
 	public void plotGraph(Function<Double, Double> realFunction, Function<Double, Double> estimatedFunction) {
 		graphicPlot.removeAllPlots();
-		double[] x = new double[301];
-		final double minX = -4;
-		double step = getStep(minX, 4, x.length);
+		double[] x = new double[50];
+		final double maxX = 4;
+		final double minX = -maxX;
+		double step = getStep(minX, maxX, x.length);
 		double[] yReal = new double[x.length];
 		double[] yEstimated = new double[x.length];
 
@@ -255,8 +258,15 @@ public class MainView extends JFrame {
 		}
 
 		// Agregar la función al plot
-		graphicPlot.addLinePlot("Real", x, yReal);
-		graphicPlot.addLinePlot("Estimated", x, yEstimated);
+		graphicPlot.addLinePlot("Real",isDarkTheme ? LIGHT_RED : DARK_RED, x, yReal);
+		graphicPlot.addLinePlot("Estimated", isDarkTheme ? LIGHT_BLUE : DARK_BLUE, x, yEstimated);
+		
+		graphicPlot.addLinePlot("0", isDarkTheme ? WHITE : BLACK, new double[] {0,0,0}, new double[] {-3,60, 120});
+		graphicPlot.addLinePlot("-1",isDarkTheme ? WHITE : BLACK, new double[] {-1,-1,-1}, new double[] {-3,60, 120});
+		graphicPlot.addLinePlot("1", isDarkTheme ? WHITE : BLACK,new double[] {1,1,1}, new double[] {-3,60, 120});
+		
+		graphicPlot.setFixedBounds(0, -3, 3);
+		graphicPlot.setFixedBounds(1, -1, 8);
 	}
 
 	public void initGraphpicPlot() {
@@ -273,7 +283,13 @@ public class MainView extends JFrame {
 		}
 
 		// Agregar la función al plot
-		graphicPlot.addLinePlot("Real", x, yReal);
+		graphicPlot.addLinePlot("Real",isDarkTheme ? LIGHT_RED : DARK_RED, x, yReal);
+		graphicPlot.addLinePlot("0",isDarkTheme ? WHITE : BLACK, new double[] {0,0,0}, new double[] {-3,60, 120});
+		graphicPlot.addLinePlot("-1",isDarkTheme ? WHITE : BLACK, new double[] {-1,-1,-1}, new double[] {-3,60, 120});
+		graphicPlot.addLinePlot("1",isDarkTheme ? WHITE : BLACK, new double[] {1,1,1}, new double[] {-3,60, 120});
+		
+		graphicPlot.setFixedBounds(0, -3, 3);
+		graphicPlot.setFixedBounds(1, -1, 8);
 	}
 
 	/***
@@ -605,7 +621,7 @@ public class MainView extends JFrame {
 		});
 		inicializationPane.add(inicializationTypeComboBox);
 		inicializationPane.setVisible(false);
-		
+
 		JButton executeButton = new JButton("Ejecutar");
 		executeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -636,7 +652,7 @@ public class MainView extends JFrame {
 		lblDimensions = new JLabel("Dimensiones");
 		lblDimensions.setHorizontalAlignment(SwingConstants.LEFT);
 		lblDimensions.setVisible(false);
-		
+
 		dimensionsTextField = new JFormattedTextField(numberFormat);
 		dimensionsTextField.setText("2");
 		dimensionsTextField.setVisible(false);
@@ -646,7 +662,7 @@ public class MainView extends JFrame {
 			dimensionsTextField.setText(Integer.toString(dimensions));
 			controller.setDimensions(dimensions);
 		});
-		
+
 		JLabel lblSeleccionaProblema = new JLabel("Selecciona problema");
 		lblSeleccionaProblema.setHorizontalAlignment(SwingConstants.LEFT);
 
@@ -656,7 +672,7 @@ public class MainView extends JFrame {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					String selectedFunction = e.getItem().toString();
-					if(e.getItem().equals("P3 - Opcional"))
+					if (e.getItem().equals("P3 - Opcional"))
 						setModelsForP3optional();
 					else if (e.getItem().equals("P3"))
 						setModelsForP3();
@@ -670,13 +686,13 @@ public class MainView extends JFrame {
 							|| selectedFunction.equals("P3") || selectedFunction.equals("P3 - Opcional")));
 					boolean dimensionsVisible = selectedFunction.equals("P1 - Funcion 4B")
 							|| selectedFunction.equals("P1 - Funcion 4A") || selectedFunction.equals("P3 - Opcional");
-					
+
 					boolean p3Opcional = selectedFunction.equals("P3 - Opcional");
 					if (lblDimensions != null) {
 
 						lblDimensions.setVisible(dimensionsVisible);
 						dimensionsTextField.setVisible(dimensionsVisible);
-						
+
 						lblDimensions.setText(p3Opcional ? "Wrapping" : "Dimensiones");
 					}
 				}
@@ -684,7 +700,8 @@ public class MainView extends JFrame {
 				controller.setFunction(e.getItem().toString().toUpperCase());
 			}
 		});
-		problemSelectionComboBox.setModel(new DefaultComboBoxModel(new String[] {"P1 - Funcion 1", "P1 - Funcion 2", "P1 - Funcion 3", "P1 - Funcion 4A", "P1 - Funcion 4B", "P2", "P3", "P3 - Opcional"}));
+		problemSelectionComboBox.setModel(new DefaultComboBoxModel(new String[] { "P1 - Funcion 1", "P1 - Funcion 2",
+				"P1 - Funcion 3", "P1 - Funcion 4A", "P1 - Funcion 4B", "P2", "P3", "P3 - Opcional" }));
 		problemSelectionComboBox.setSelectedIndex(7);
 
 		JPanel themePanel = new JPanel();
@@ -771,7 +788,7 @@ public class MainView extends JFrame {
 				controller.setPoblationSizeRange(min, max);
 			}
 		});
-		
+
 		GroupLayout gl_westPanel = new GroupLayout(westPanel);
 		gl_westPanel.setHorizontalGroup(gl_westPanel.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING,
 				gl_westPanel.createSequentialGroup().addGroup(gl_westPanel.createParallelGroup(Alignment.TRAILING)
@@ -1004,8 +1021,8 @@ public class MainView extends JFrame {
 
 		// Centrar el eje del plot
 		graphicPlot.setAxisLabels("X", "Y");
-		graphicPlot.setFixedBounds(0, -4, 4);
-		graphicPlot.setFixedBounds(1, -2, 30);
+		graphicPlot.setFixedBounds(0, -3, 3);
+		graphicPlot.setFixedBounds(1, -1, 8);
 
 		JPanel solutionPanel = new JPanel();
 		tabbedPane.addTab("Solution", solutionPanel);
