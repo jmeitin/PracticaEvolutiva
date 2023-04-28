@@ -3,14 +3,23 @@ package Chromosomes;
 import java.util.Random;
 
 public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {	
+	// P3 OPCIONAL
+	final protected String[] start = {"<expr> <op> <expr>", "<expr>"};
+	final protected String[] expr = {"<term> <op> <term>", "(<term> <op> <term>)", "<digit> <op> <expr>", "(<digit> <op> <expr>)"};
+	final protected String[] op = {"add", "sub", "mul"};
+	final protected String[] term = {"x"};
+	final protected String[] digit = {"-2", "-1", "0", "1", "2"};
+	
 	private String fenotype = "";
-	int NUM_WRAPS = 3;
+	int NUM_WRAPS;
 	//CHROMOSOME LENGTH ES CONFIGURABLE DESDE EL EDITOR	
-	public ChromosomeP3opcional(int chromosomeLenght, double tolerance) {
-		super(chromosomeLenght, tolerance);
+	public ChromosomeP3opcional(int chromosomeLenght, double tolerance, int numWraps) {
+		super(chromosomeLenght);
 		
-		
-		//Chromosome calls initGenes & calculateFenotypes
+		NUM_WRAPS = numWraps;
+
+		initGenes();
+		calculateFenotypes();
 	}
 	
 	@Override
@@ -36,99 +45,6 @@ public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {
 				this.genes[i].setAllele(j, a); // [0, 255]
 			}
 		}
-	}
-	
-	public void INIT() {
-		System.out.println("INIT PUBLICO PARA PROBAR ====================0");
-		System.out.println("GENES========================");
-		for(int i = 0; i < num_of_genes; i++) {
-			System.out.print(genes[i].getAllele(0) + " ");
-		}
-		
-		//==============================================================
-		System.out.println(genes.length);
-		int index = genes[0].getAllele(0) % start.length;
-		fenotype = start[index];
-		boolean finished = false;
-
-		String solution = "";
-		String first_half = "";
-		String chosen_array = "";
-		char letter = ' ';
-		int w = 0;
-		
-		while(!finished && w < NUM_WRAPS) {
-			w++;
-			for (int g = 1; g < num_of_genes && !finished; g++) {
-				// SEARCH FOR < ============================================
-				int j = 0;			
-				first_half ="";
-				solution = "";
-				while (j < fenotype.length() &&  fenotype.charAt(j) != '<') {		
-					letter = fenotype.charAt(j);
-					if (letter != '<')
-						first_half += letter;
-					j++;
-				}
-				System.out.println("FIRST HALF: " + solution);
-				
-				// SEAR FOR RULE BETWEEN <>==================================
-				if(j < fenotype.length()) {
-					j++; // skip "<"
-					chosen_array = "";
-					while (j < fenotype.length() && fenotype.charAt(j) != '>') {
-						letter = fenotype.charAt(j);
-						chosen_array += letter;
-						j++;
-					}
-					System.out.println("CHOSEN: " + chosen_array);
-					
-					if (j < fenotype.length()) { //found >
-						j++; // skip ">"
-						int c = genes[g].getAllele(0);
-						int r = 1;
-						String value = "";
-						switch(chosen_array) {
-						case "expr":
-							r = expr.length;
-							value = expr[c % r];
-							break;
-						case "op":
-							r = op.length;
-							value = op[c % r];
-							break;
-						case "term":
-							r = term.length;
-							value = term[c % r];
-							break;
-						case "digit":
-							r = term.length;
-							value = digit[c % r];
-							break;
-						default:
-							//System.out.println("Error in calculateFenotypes" + fenotype);
-							break;
-						}
-						
-						System.out.println("RULE: " +value);
-						solution = first_half + value;
-					}
-					
-					// FILL SOLUTION WITH TEXT AFTER >=======================================0
-					while (j < fenotype.length()) {
-						solution += fenotype.charAt(j);;
-						j++;
-					}
-					System.out.println("FINAL SOLUTION: " + solution);
-					fenotype = solution;
-				}
-				else finished = true;
-			}
-		}
-		
-		System.out.println("FENOTTYPE: " + fenotype);
-		System.out.println("--------------");
-				
 	}
 
 	@Override
@@ -262,7 +178,7 @@ public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {
 
 	@Override
 	protected Chromosome getNewInstance() {
-		return new ChromosomeP3opcional(this.num_of_genes, this.tolerance);
+		return new ChromosomeP3opcional(this.num_of_genes, this.tolerance, this.NUM_WRAPS);
 	}
 
 	

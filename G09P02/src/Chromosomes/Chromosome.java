@@ -10,13 +10,6 @@ import java.util.Random;
  * @param <U> Fenotype type
  */
 public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
-	// P3 OPCIONAL
-	final protected String[] start = {"<expr> <op> <expr>", "<expr>"};
-	final protected String[] expr = {"<term> <op> <term>", "(<term> <op> <term>)", "<digit> <op> <expr>", "(<digit> <op> <expr>)"};
-	final protected String[] op = {"add", "sub", "mul"};
-	final protected String[] term = {"x"};
-	final protected String[] digit = {"-2", "-1", "0", "1", "2"};
-	
 	//==============================================================================
 	protected Gene<T>[] genes;
 	protected U[] fenotypes;
@@ -43,6 +36,7 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 	public Chromosome(int geneLenght) {
 		this.num_of_genes = geneLenght;
 		this.tolerance = 0.001;
+		genes = (Gene<T>[]) new Gene[geneLenght];
 	}
 	
 	// OVERRIDE METHODS------------------------------------------------
