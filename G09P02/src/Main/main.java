@@ -35,6 +35,6 @@ public class main {
 	
 		ChromosomeP3opcional c = new ChromosomeP3opcional(10, 10, 3);
 		//new MainView();
-		System.out.println("HOLAAAAAAA");
+		System.out.println(c.evaluate());
 	}
 }

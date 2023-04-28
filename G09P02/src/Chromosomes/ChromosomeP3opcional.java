@@ -1,6 +1,10 @@
 package Chromosomes;
 
 import java.util.Random;
+import java.util.function.Function;
+
+import Utils.ArrayUtils;
+import Utils.MathUtils;
 
 public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {	
 	// P3 OPCIONAL
@@ -9,6 +13,7 @@ public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {
 	final protected String[] op = {"add", "sub", "mul"};
 	final protected String[] term = {"x"};
 	final protected String[] digit = {"-2", "-1", "0", "1", "2"};
+	double[][] dataset = new double[100][2];
 	
 	private String fenotype = "";
 	int NUM_WRAPS;
@@ -39,21 +44,31 @@ public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {
 		for (int i = 0; i < this.num_of_genes; i++) {
 			this.genes[i] = new Gene<Integer>(tam_genes_x);
 			int a = rand.nextInt(256);
-			System.out.print(a+ "+");
 			for (int j = 0; j < this.genes[i].getLenght(); j++) {
 				//Each genes has only 1 allele
 				this.genes[i].setAllele(j, a); // [0, 255]
 			}
 		}
+		
+		// Aqui inicializamos el dataset		
+		double stepSize = 2.0 / 100;
+
+		for (int i = 0; i < 100; i++) {
+		    double x = -1.0 + i * stepSize;
+		    x = Math.round(x * 100.0) / 100.0; // Redondea x a 2 decimales
+		    double y = getCorrectValue(x); // Reemplaza esto con la función que has generado dinámicamente
+		    dataset[i] = new double[]{x, y};
+		}
+	}
+	
+	double getCorrectValue(double x)
+	{
+		return Math.pow(x, 4) + Math.pow(x, 3) + Math.pow(x, 2) + x + 1;
 	}
 
 	@Override
 	public void calculateFenotypes() {
-		System.out.println();
-		System.out.println("CALCULATE FENOTYPES ===============================0");
-		
 		//==============================================================
-		System.out.println(genes.length);
 		int index = genes[0].getAllele(0) % start.length;
 		fenotype = start[index];
 		boolean finished = false;
@@ -77,7 +92,6 @@ public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {
 						first_half += letter;
 					j++;
 				}
-				System.out.println("FIRST HALF: " + solution);
 				
 				// SEAR FOR RULE BETWEEN <>==================================
 				if(j < fenotype.length()) {
@@ -88,7 +102,6 @@ public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {
 						chosen_array += letter;
 						j++;
 					}
-					System.out.println("CHOSEN: " + chosen_array);
 					
 					if (j < fenotype.length()) { //found >
 						j++; // skip ">"
@@ -117,7 +130,6 @@ public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {
 							break;
 						}
 						
-						System.out.println("RULE: " +value);
 						solution = first_half + value;
 					}
 					
@@ -126,7 +138,6 @@ public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {
 						solution += fenotype.charAt(j);;
 						j++;
 					}
-					System.out.println("FINAL SOLUTION: " + solution);
 					fenotype = solution;
 				}
 				else finished = true;
@@ -134,31 +145,43 @@ public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {
 		}
 		
 		System.out.println("FENOTTYPE: " + fenotype);
-		System.out.println("--------------");
-		
-		//HABRIA QUE METER EL WRAPPING =====================================================
-		
-//		fenotypes = new Integer[num_of_genes];
-//		
-//		for (int i = 0; i < num_of_genes; i++) {
-//			// EACH GENE CONTAINS ONLY 1 ALLELE. FENOTYPE = VALUE IN ALLELE
-//			fenotypes[i] = genes[i].getAllele(0);
-//		}
 	}
 
 	@Override
 	public double evaluate() {
-//		if (fenotypes.length == num_of_genes) { 
-//			brute_fitness = 0;
-//			
-//			// RELLENAR-----------------------------------
-//			
-//		} else {
-//			brute_fitness = Double.MAX_VALUE; // default value,if fails, wortst value
-//			System.out.println("Ejer 4: Wrong number of fitness params.");
-//		}
+		calculateFenotypes();
+		String result = fenotype.replace("mul", "*").replace("add", "+").replace("sub", "-");
+		Function<Double, Double> func = x -> {
+			try
+			{
+				return MathUtils.eval(result.replace("x", x.toString()));
+			}
+			catch(Exception e)
+			{
+				return Double.MAX_VALUE;
+			}
+		};
 		brute_fitness = 0;
+		final int iterations = 100;
+		
+		for(int i = 0; i < iterations;i++)
+		{
+			final double estimated_value = func.apply(dataset[i][0]);
+			final double real_value = dataset[i][1];
+			final double cuadratic_difference = Math.pow(real_value - estimated_value, 2);
+				
+			brute_fitness += cuadratic_difference;
+		}
+		
+		
+		brute_fitness /= iterations;
+		
 		return brute_fitness;
+	}
+	
+	public String getFunctionString()
+	{
+		return fenotype;
 	}
 	
 	@Override
