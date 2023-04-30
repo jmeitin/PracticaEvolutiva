@@ -1,5 +1,6 @@
 package Chromosomes;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -83,24 +84,38 @@ public class ChromosomeP3 extends Chromosome<Integer, String> {
 		return  x -> Math.pow(x, 4) + Math.pow(x, 3) + Math.pow(x, 2) + x + 1;
 	}
 	
+	
+	// Usamos error absoluto mediano (MAD en inglés) porque da mejores resultados
+	// También probamos MAE (error absoluto medio) y coeficiente de correlacion (R^2). Pero no daban buenos resultados
 	@Override
 	public double evaluate() {		
 		
 		Function<Double, Double> func = tree.getFunction();
-		brute_fitness = 0;
+		double[] errors = new double[100];
 		final int iterations = 100;
-		
-		for(int i = 0; i < iterations;i++)
-		{
-			final double estimated_value = func.apply(dataset[i][0]);
-			final double real_value = dataset[i][1];
-			final double cuadratic_difference = Math.pow(real_value - estimated_value, 2);
-				
-			brute_fitness += cuadratic_difference;
+
+		// Guardamos los errores absolutos de cada punto
+		for(int i = 0; i < iterations; i++) {
+		    final double estimated_value = func.apply(dataset[i][0]);
+		    final double real_value = dataset[i][1];
+		    final double error = Math.abs(real_value - estimated_value);
+		    errors[i] = error;
 		}
+
+		// Ordenamos los errores y encontramos la mediana
+		Arrays.sort(errors);
+		double mad;
+		if (errors.length % 2 == 0) {
+		    double median1 = errors[errors.length/2];
+		    double median2 = errors[errors.length/2 - 1];
+		    mad = (median1 + median2) / 2.0;
+		} else {
+		    mad = errors[errors.length/2];
+		}
+
 		
+		brute_fitness = mad;
 		
-		brute_fitness /= iterations;
 		// DEEPER THAN AVERAGE && 50% CHANCE ==> PENALIZE
 		if (must_penalize)
 			brute_fitness *= 1.5; //MINIMIZE
