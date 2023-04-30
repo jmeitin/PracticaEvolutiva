@@ -10,7 +10,7 @@ import Utils.MathUtils;
 public class ChromosomeP3opcional extends Chromosome<Integer, Integer> {	
 	// P3 OPCIONAL
 	final protected String[] start = {"<expr> <op> <expr>", "<expr>"};
-	final protected String[] expr = {"<term> <op> <term>", "(<term> <op> <term>)", "<digit> <op> <expr>", "(<digit> <op> <expr>)"};
+	final protected String[] expr = {"<term> <op> <term>", "(<term> <op> <term>)", "<digit> <op> <expr>", "(<expr> <op> <term>)"};
 	final protected String[] op = {"add", "sub", "mul"};
 	final protected String[] term = {"x"};
 	final protected String[] digit = {"-2", "-1", "0", "1", "2"};

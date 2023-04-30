@@ -122,7 +122,7 @@ public class ChromosomeP3 extends Chromosome<Integer, String> {
 		
 		return brute_fitness;
 	}
-
+	
 	@Override
 	protected Chromosome getNewInstance() {
 		return new ChromosomeP3(this.tolerance, 5 ,"COMPLETO");

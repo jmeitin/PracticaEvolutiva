@@ -58,7 +58,7 @@ public class ChromosomeP1F1 extends Chromosome<Boolean, Double> {
 	@Override
 	public boolean mutateGene(int pos, Random rand, double mutation_chance) {
 		boolean cambios = false;
-		System.out.println(mutation_chance);
+		//System.out.println(mutation_chance);
 		
 		if(0 <= pos && pos < num_of_genes){
 			//Random rand = new Random();
