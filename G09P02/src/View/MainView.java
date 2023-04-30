@@ -654,7 +654,7 @@ public class MainView extends JFrame {
 		lblDimensions.setVisible(false);
 
 		dimensionsTextField = new JFormattedTextField(numberFormat);
-		dimensionsTextField.setText("2");
+		dimensionsTextField.setText("3");
 		dimensionsTextField.setVisible(false);
 		dimensionsTextField.addPropertyChangeListener("value", evt -> {
 			String text = evt.getNewValue().toString();

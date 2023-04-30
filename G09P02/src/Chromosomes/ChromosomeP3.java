@@ -66,7 +66,7 @@ public class ChromosomeP3 extends Chromosome<Integer, String> {
 	
 	public String getFunctionString()
 	{
-		return ArrayUtils.arrayToMathExpression(tree.toArray()) + "\n" + tree.toArray() + "\nFitness bruto: " + evaluate();
+		return ArrayUtils.arrayToMathExpression(tree.toArray());
 	}
 	
 	double getCorrectValue(double x)
