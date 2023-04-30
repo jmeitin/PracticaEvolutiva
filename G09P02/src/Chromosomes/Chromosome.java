@@ -23,6 +23,8 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 	protected double tolerance;
 	protected double adaptation;
 	protected double escalation;
+	
+	protected boolean maximize;
 
 	public Chromosome(int geneLenght, double tolerance) {
 		this.num_of_genes = geneLenght;
@@ -59,7 +61,11 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 		// if other < this ==> -1
 		// if == ==> 0
 		// if other > this ==> 1
-		return Double.compare(other.fitness,  this.fitness);
+		if(maximize)
+			return Double.compare(other.fitness,  this.fitness);
+		else
+			return Double.compare(this.fitness, other.fitness);
+		
 	}
 	
 	//Converts the chromosome to its decimal representation.
@@ -213,4 +219,8 @@ public abstract class Chromosome<T,U> implements Comparable<Chromosome> {
 	public double getAccumulatedScore() { return scoreAccumulated; }
 
 	public void setAccumulatedScore(double scoreAccumulated) { this.scoreAccumulated = scoreAccumulated; }
+	
+	public void setMaximize(boolean maximize) { this.maximize = maximize; }
+	
+	public boolean getMaximize() {return maximize; }
 }

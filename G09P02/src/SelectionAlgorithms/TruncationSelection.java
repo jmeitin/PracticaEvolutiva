@@ -4,6 +4,7 @@
 package SelectionAlgorithms;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import Chromosomes.Chromosome;
 
@@ -17,7 +18,7 @@ public class TruncationSelection extends SelectionAlgorithm {
 	@Override
 	public Chromosome[] select(Chromosome[] poblation, int poblation_size) {
 		// ORDER POBLATION
-		Arrays.sort(poblation);
+		Arrays.sort(poblation, Collections.reverseOrder());
 		
 		Chromosome[] new_population = new Chromosome[poblation_size];
 		

@@ -438,7 +438,7 @@ public class ViewController implements Runnable {
 				return new ChromosomeP1F1(2, tolerance);
 			};
 			algorithmData.chromosome_factory = chromosome_factory;
-			algorithmData.maximize = true;
+			algorithmData.maximize = false;
 			break;
 		case "P1 - FUNCION 2":
 			chromosome_factory = (double tolerance, int dimensions, int index, int poblation_size) -> {
